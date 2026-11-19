@@ -71,19 +71,20 @@ button{cursor:pointer}
 .ring>div{width:88px;height:88px;border-radius:50%;background:var(--paper);display:grid;place-items:center;text-align:center}
 .ring strong{font-size:26px;font-weight:800;line-height:1}
 .ring span{font-size:12px;color:var(--muted)}
-.score{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.score{font-size:44px;font-weight:800;letter-spacing:0;line-height:1}
 .score small{font-size:18px;font-weight:600;color:var(--muted);margin-left:4px}
 .rank{margin-top:6px;font-weight:600;color:var(--forest)}
 .next{font-size:13px;color:var(--muted)}
 
 /* Actions */
-.actions{margin-top:22px;display:grid;gap:10px}
+.actions{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
 .go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:18px;
   padding:18px;background:var(--forest);color:#fff;font-weight:800;font-size:18px;box-shadow:0 6px 0 color-mix(in srgb,var(--forest) 55%,#000)}
 .go:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--forest) 55%,#000)}
 .go[disabled]{opacity:.6;cursor:wait}
 .code{display:flex;gap:8px}
 .code input{flex:1;min-width:0;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;text-transform:uppercase}
+.code input::placeholder{text-transform:none;color:var(--muted)}
 .btn2{border:2px solid var(--ink);background:transparent;border-radius:14px;padding:10px 16px;font-weight:600}
 .status{min-height:22px;font-size:14px;color:var(--muted);margin:2px 2px 0}
 
@@ -245,6 +246,46 @@ h3{font-size:15px;font-weight:600;color:var(--muted);margin:22px 2px 10px;displa
 #pdlg .pcard{border:0;border-radius:0}
 #pdlg form{padding:0 16px 16px}
 
+
+/* Icônes maison */
+.svgi{display:inline-grid;place-items:center;line-height:0}
+.svgi svg{width:100%;height:100%}
+.ico .svgi{width:30px;height:30px;color:var(--muted)}
+.row-a.on .ico .svgi{color:#3A2B00}
+.row-a.off .ico{filter:none;opacity:1}
+.cb .svgi{width:18px;height:18px;flex:none}
+.toast .medal .svgi{width:28px;height:28px;color:#3A2B00}
+.toast.err .medal .svgi{color:#F4F7F2}
+.vit i .svgi{width:28px;height:28px;color:var(--ink)}
+
+
+/* ===== Finitions UX ===== */
+.go{position:relative}
+.go .gi{width:22px;height:22px;display:inline-block;background:currentColor;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z'/%3E%3Ccircle cx='12' cy='9' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z'/%3E%3Ccircle cx='12' cy='9' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat}
+.go.busy .gi{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.go[disabled]{cursor:progress}
+.status:empty{min-height:0}
+.book{margin-top:16px}
+.ring span{font-size:11px;line-height:1.15;max-width:70px}
+@media (max-width:420px){.brand small{display:none}.who small{max-width:120px}}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 4px}
+.seg{display:inline-flex;background:var(--locked);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:7px 12px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.search{flex:1;min-width:140px;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;font-size:15px}
+.more{display:block;width:100%;margin-top:8px;border:2px dashed var(--line);background:transparent;border-radius:12px;padding:10px;font-weight:600;color:var(--muted)}
+.more:hover{border-color:var(--muted);color:var(--ink)}
+.cb,.go,.btn2,.more,.seg button,.row-a.has-crit{transition:transform .12s ease,background-color .15s ease}
+.cb:active,.btn2:active,.more:active,.seg button:active{transform:scale(.97)}
+.row-a.has-crit:active{transform:scale(.99)}
+.pane>*{animation:fadein .22s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.toast{cursor:pointer}
+@media (prefers-reduced-motion: reduce){.pane>*{animation:none}.go.busy .gi{animation:none}.cb,.go,.btn2,.more,.seg button{transition:none}}
+
 /* Notification de haut fait : le moment fort */
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;
   transform:translate(-50%,160%);transition:transform .45s cubic-bezier(.2,1.4,.4,1);
@@ -278,7 +319,7 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
   </div>
 
   <div class="player">
-    <div class="ring" id="ring"><div><strong id="pct">0 %</strong><span>complété</span></div></div>
+    <div class="ring" id="ring"><div><strong id="pct">0 %</strong><span id="pctl">vers le rang suivant</span></div></div>
     <div>
       <div class="score"><span class="shield big" aria-hidden="true"></span><span id="score">0</span><small>points de haut fait</small></div>
       <div class="rank" id="rank">Touriste</div>
@@ -287,7 +328,7 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
   </div>
 
   <div class="actions">
-    <button class="go" id="checkin" type="button">📍 Valider ma position</button>
+    <button class="go" id="checkin" type="button"><span class="gi"></span><span class="gl">Valider ma position</span></button>
     <form class="code" id="codeForm" autocomplete="off">
       <input id="codeInput" placeholder="Code d'un lieu partenaire" aria-label="Code d'un lieu partenaire" maxlength="60">
       <button class="btn2" type="submit">Valider</button>
@@ -303,7 +344,7 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
   <div class="foot">Ta progression est enregistrée sur cet appareil.<br><button id="reset" type="button">Tout réinitialiser</button></div>
 </div>
 
-<div class="toast" id="toast" aria-live="assertive">
+<div class="toast" id="toast" aria-live="assertive" onclick="this.classList.remove('show')">
   <div class="medal" id="tIcon">🏆</div>
   <div><div class="l1" id="tL1">Haut fait débloqué</div><div class="l2" id="tL2"></div></div>
   <div class="l3" id="tL3"></div>
@@ -412,7 +453,8 @@ const safeAvatar=a=>AVATARS.includes(a)?a:"🧭";
 let S=load();
 let venues=[];          // lieux partenaires (base partagée)
 let board=[];           // classement
-let tab="recap";
+let tab=(()=>{try{return sessionStorage.getItem("dehors_tab")||"recap"}catch(e){return"recap"}})();
+let filt="tous",query="",openSecs={};
 let db=null,user=null,uid=null,canEdit=false,boardReadOnly=false,pendingTag=null;
 
 function load(){try{const f=fresh(),o=Object.assign(f,JSON.parse(localStorage.getItem(KEY)||"{}"));o.profile=Object.assign(fresh().profile,o.profile||{});return o}catch(e){return fresh()}}
@@ -429,6 +471,99 @@ function ago(t){const m=Math.round((Date.now()-t)/60000);if(m<1)return"à l'inst
 function status(msg){$("status").textContent=msg||""}
 
 /* ---------- Catalogue des hauts faits ---------- */
+
+
+/* ---------- Icônes maison (trait 24×24, couleur héritée) ---------- */
+const ICONS={
+ compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+ city:'<path d="M3 21h18M5 21V9l5-3v15M10 21V4l6 3v14M16 21v-9l3 1.5V21M7 11h1M7 14h1M13 9h1M13 12h1M13 15h1"/>',
+ columns:'<path d="M3 21h18M12 3 3 8h18zM4 18h16M6 9v9M10 9v9M14 9v9M18 9v9"/>',
+ flag:'<path d="M5 21V4M5 4h12l-2.5 4L17 12H5"/>',
+ map:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/>',
+ globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 4 6 4 9s-1 6-4 9c-3-3-4-6-4-9s1-6 4-9z"/>',
+ plane:'<path d="M22 3 2 11l7 3 3 7z"/><path d="m9 14 13-11"/>',
+ tree:'<path d="M12 3 6 11h3l-4 6h14l-4-6h3zM12 17v4"/>',
+ pin:'<path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+ qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v.01M14 21h.01M17 21h4v-4"/>',
+ monument:'<path d="M12 2v3M9.5 21 10.5 7h3l1 14M6 21h12M10 13h4"/>',
+ mountain:'<path d="M2 20 9 7l4 7 2.5-3.5L22 20z"/><path d="m7.3 10.2 1.7 1.3 1.5-1.4"/>',
+ stadium:'<ellipse cx="12" cy="10" rx="9" ry="4"/><path d="M3 10v6c0 2.2 4 4 9 4s9-1.8 9-4v-6"/><ellipse cx="12" cy="10" rx="4" ry="1.5"/>',
+ diamond:'<path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3 8 9l4 12 4-12-1-6"/>',
+ bowl:'<path d="M3 11h18a9 9 0 0 1-18 0zM7 21h10M9 3c-1 2 1 3 0 5M13 3c-1 2 1 3 0 5"/>',
+ cutlery:'<path d="M6 3v6a3 3 0 0 0 6 0V3M9 3v18M18 21V3c-2.5 1.5-3.5 5-3.5 9H18"/>',
+ mask:'<path d="M4 5c5 2 11 2 16 0v6a8 8 0 0 1-16 0z"/><path d="M8 10h2M14 10h2M9 15c2 1.5 4 1.5 6 0"/>',
+ book:'<path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+ leaf:'<path d="M5 19C5 10 10 5 20 4c-1 10-6 15-15 15zM5 19l9-9"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>',
+ moon:'<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>',
+ snow:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 4l3 2 3-2M9 20l3-2 3 2"/>',
+ flower:'<circle cx="12" cy="9" r="2"/><path d="M12 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM14 9a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM12 11a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM10 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM12 15v6M12 19c2-2 4-2 5-2"/>',
+ wave:'<path d="M2 8c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 13c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 18c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/>',
+ coin:'<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2s1.3 1.7 3 2 3 .9 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6v2M12 16v2"/>',
+ card:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/>',
+ house:'<path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-5h4v5"/>',
+ chart:'<path d="M3 20h18M5 16l4-4 3 3 6-7M14 8h4v4"/>',
+ briefcase:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+ play:'<rect x="3" y="5" width="18" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
+ camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+ people:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+ heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/>',
+ lotus:'<path d="M12 20c-4 0-8-2-9-6 3-.5 6 .5 9 3 3-2.5 6-3.5 9-3-1 4-5 6-9 6z"/><path d="M12 17c-2-2-3-5-3-8 1.5.5 2.5 1.5 3 3 .5-1.5 1.5-2.5 3-3 0 3-1 6-3 8z"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+ flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-3-1.5 2-2 4-2 7 0 4 3 7 7 7z"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l2 2M15 8l2 2"/>',
+ lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5zM5 19h14"/>',
+ trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8M10 18h4"/>',
+ star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
+ shoe:'<path d="M3 17c0-3 1-6 2-9l4 1c0 2 2 3 4 3l5 1c2 .5 3 2 3 4v1H3zM3 18h18M9 12l1.5-1.5M12 13l1.5-1.5"/>',
+ bike:'<circle cx="5.5" cy="16" r="3.5"/><circle cx="18.5" cy="16" r="3.5"/><path d="M5.5 16 9 9h6l3.5 7M9 9l3 7H5.5M15 9l-1-3h-2"/>',
+ dumbbell:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
+ glove:'<path d="M7 20h9v-4c2-1 3-3 3-5V7a3 3 0 0 0-3-3h-5a4 4 0 0 0-4 4v3a3 3 0 0 0 0 5zM11 9h5"/>',
+ ball:'<circle cx="12" cy="12" r="9"/><path d="m12 7.5 4 3-1.5 4.5h-5L8 10.5zM12 3v4.5M21 10.5h-5M3 10.5h5M16.5 20l-2-5M7.5 20l2-5"/>',
+ racket:'<circle cx="14.5" cy="9.5" r="6"/><path d="m10.3 13.7-6 6 .9.9 6-6M11 6l7 7M14 4l6 6"/>',
+ parachute:'<path d="M3 11a9 9 0 0 1 18 0zM3 11l9 8 9-8M12 11v8"/><rect x="10" y="19" width="4" height="3" rx="1"/>',
+ stopwatch:'<circle cx="12" cy="14" r="7"/><path d="M12 14v-4M10 2h4M18 7l1.5-1.5"/>',
+ spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
+ alert:'<path d="M12 3 2 20h20zM12 10v4M12 17v.01"/>'
+};
+function svgIcon(k){const sp=document.createElement("span");sp.className="svgi";sp.setAttribute("aria-hidden","true");
+  sp.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||ICONS.trophy)+'</svg>';return sp}
+const CAT_ICON={recap:"trophy",profil:"user",voyage:"compass",nature:"leaf",food:"bowl",culture:"mask",social:"heart",sport:"shoe",mental:"lotus",defis:"bolt",carriere:"briefcase",createurs:"play",argent:"coin",luxe:"diamond",secrets:"lock",communaute:"people"};
+const SEASON_SVG={hiver:"snow",printemps:"flower",ete:"sun",automne:"leaf"};
+const SUB_ICON={"Course":"shoe","Vélo":"bike","Eau":"wave","Glisse":"snow","Montagne et marche":"mountain","Salle et fitness":"dumbbell","Combat":"glove","Sports collectifs":"ball","Raquettes":"racket","Sensations fortes":"parachute","Endurance":"stopwatch","Découverte":"spark",
+ "YouTube":"play","TikTok":"play","Instagram":"camera","Twitch":"play","LinkedIn":"briefcase","Viralité":"chart","Business":"briefcase","Débuts":"camera"};
+function iconKey(a){
+  const id=a.id,k=id.split(":").pop(),has=(...w)=>w.some(x=>k.startsWith(x));
+  if(id.startsWith("ville:"))return(a.desc||"").startsWith("Capitale")?"columns":"city";
+  if(id.startsWith("pays:"))return"flag";
+  if(id.startsWith("site:"))return{culture:"monument",nature:"mountain",sport:"stadium",luxe:"diamond",food:"bowl"}[a.cat]||"monument";
+  if(id.startsWith("villes:"))return"map";if(id.startsWith("paysN:"))return"globe";if(id.startsWith("dist:"))return"plane";if(id==="offmap")return"tree";
+  if(id.startsWith("lieu:"))return"pin";if(id.startsWith("lieux:"))return"qr";if(id.startsWith("meta:"))return"crown";
+  if(id.startsWith("long:"))return has("serie")?"flame":has("actif","semaines")?"calendar":has("saisons")?"leaf":has("paysan")?"flag":"clock";
+  if(id.startsWith("saison:")){const m={explo:"compass",globe:"globe",assidu:"calendar",inarretable:"flame",mythe:"monument",chelem:"trophy"};return m[k]||SEASON_SVG[id.split(":")[1].split("-")[0]]||"leaf"}
+  const sec={levetot:"sun",noctambule:"moon",collection25:"star",cent:"crown",minuit:"clock",vendredi13:"key",nouvelan:"spark",valentin:"heart",anniv:"bolt",rafale:"bolt",mille:"star",dixmille:"trophy",weekend:"calendar",marathon:"city",serie7:"flame"};
+  if(sec[id])return sec[id];
+  if(id.startsWith("honneur:")){
+    if(SUB_ICON[a.sub])return SUB_ICON[a.sub];
+    switch(a.cat){
+      case"food":return has("etoile","3etoiles")?"star":has("vin","huitres","caviar","truffe")?"cutlery":"bowl";
+      case"culture":return has("livre","10livres","bibli","culture_g")?"book":has("concert","festival","instrument","opera")?"mic":has("chateau","unesco","merveille","visite")?"monument":"mask";
+      case"nature":return has("lever","coucher")?"sun":has("etoiles","aurore")?"moon":has("volcan","glacier","desert")?"mountain":has("ocean","dauphin","baleine","lac","ile")?"wave":has("foret","arbre","bivouac","camping")?"tree":has("neige")?"snow":"leaf";
+      case"argent":return has("dep")?"card":has("immo","locatif")?"house":has("invest","pea","dividende","passif","ca")?"chart":has("1m","10m","100m","1md","500k","liberte")?"diamond":"coin";
+      case"carriere":return has("augmentation","promo")?"chart":has("conference")?"mic":has("code","app","site")?"spark":"briefcase";
+      case"social":return has("benevolat","don","compliment","aide")?"heart":"people";
+      case"mental":return has("sommeil")?"moon":has("matin")?"sun":has("objectif")?"star":"lotus";
+      case"luxe":return has("jet","business","first","helico")?"plane":has("yacht","croisiere")?"wave":has("montre")?"clock":has("villa","ile_privee","palace","suite")?"house":"diamond";
+      case"defis":return has("continent","5continents","hemisphere","equateur")?"globe":has("avion","train","autostop")?"plane":has("passeport")?"flag":has("nuit","soleil")?"moon":"bolt";
+    }
+  }
+  return CAT_ICON[a.cat]||"trophy";
+}
 
 /* ---------- Saisons ---------- */
 const SEASON_NAMES={hiver:"Hiver",printemps:"Printemps",ete:"Été",automne:"Automne"};
@@ -613,15 +748,15 @@ function chime(){
   try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}
 }
 function showToast(icon,l1,l2,l3,err){
-  const t=$("toast");t.classList.toggle("err",!!err);$("tIcon").textContent=icon;$("tL1").textContent=l1;$("tL2").textContent=l2;$("tL3").textContent=l3||"";
+  const t=$("toast");t.classList.toggle("err",!!err);$("tIcon").textContent="";$("tIcon").append(svgIcon(icon));$("tL1").textContent=l1;$("tL2").textContent=l2;$("tL3").textContent=l3||"";
   t.classList.remove("show");void t.offsetWidth;t.classList.add("show");
 }
 function runToasts(){
   if(toastBusy||!toastQ.length)return;toastBusy=true;
-  const a=toastQ.shift();chime();showToast(a.icon,"Haut fait débloqué",a.title,"+"+a.pts+" pts");
+  const a=toastQ.shift();chime();showToast(iconKey(a),"Haut fait débloqué",a.title,"+"+a.pts+" pts");
   setTimeout(()=>{$("toast").classList.remove("show");setTimeout(()=>{toastBusy=false;runToasts()},450)},3200);
 }
-function fail(msg){showToast("⚠️","Pas cette fois",msg,"",true);setTimeout(()=>$("toast").classList.remove("show"),3600)}
+function fail(msg){showToast("alert","Pas cette fois",msg,"",true);setTimeout(()=>$("toast").classList.remove("show"),3600)}
 
 /* ---------- Position ---------- */
 function locate(){
@@ -630,8 +765,8 @@ function locate(){
     navigator.geolocation.getCurrentPosition(p=>res(p.coords),e=>rej(e.code===1?"Autorise la localisation dans ton navigateur pour valider tes découvertes.":"Position introuvable. Réessaie dehors, loin des murs épais."),{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
   });
 }
-async function checkin(){
-  const b=$("checkin");b.disabled=true;b.textContent="📡 Localisation…";status("");
+async function checkin(auto){
+  const b=$("checkin");b.disabled=true;b.classList.add("busy");b.querySelector(".gl").textContent="Localisation…";if(!auto)status("");
   try{
     const c=await locate(),L=catalog(),now=Date.now();
     let best=null,bd=1e9;CITIES.forEach(x=>{const d=km(c.latitude,c.longitude,x[2],x[3]);if(d<=x[4]&&d<bd){bd=d;best=x}});
@@ -653,8 +788,8 @@ async function checkin(){
     if(toastQ.length===before&&!toastBusy)status(best?"Déjà découvert : "+best[0]+". Va voir plus loin 👀":"Aucune ville répertoriée ici, mais ta position est enregistrée.");
     else status(best?"Tu es à "+best[0]+".":"");
     if(nearHint)setTimeout(()=>status(nearHint),toastQ.length*3700+600);
-  }catch(e){fail(typeof e==="string"?e:"Impossible de te localiser.")}
-  b.disabled=false;b.textContent="📍 Valider ma position";
+  }catch(e){const m=typeof e==="string"?e:"Impossible de te localiser.";if(auto)status(m);else fail(m)}
+  b.disabled=false;b.classList.remove("busy");b.querySelector(".gl").textContent="Valider ma position";
 }
 
 /* ---------- Lieux partenaires (tags) ---------- */
@@ -683,8 +818,9 @@ function render(){
   $("hAv").textContent=safeAvatar(S.profile.avatar);$("who").style.setProperty("--pc",safeColor(S.profile.color));
   $("hTitle").textContent=S.profile.title&&S.unlocked[S.profile.title]?(TITLES.find(t=>t[0]===S.profile.title)||[,""])[1]:"";
   $("score").textContent=fmt(T.pts);
-  $("pct").textContent=T.pct+" %";$("ring").style.setProperty("--p",T.pct);
   let cur=RANKS[0],nxt=null;RANKS.forEach((r,i)=>{if(T.pts>=r[0]){cur=r;nxt=RANKS[i+1]||null}});
+  const rp=nxt?Math.floor((T.pts-cur[0])/(nxt[0]-cur[0])*100):100;
+  $("pct").textContent=rp+" %";$("pctl").textContent=nxt?"vers "+nxt[1]:"rang max";$("ring").style.setProperty("--p",rp);
   $("rank").textContent=cur[1]+" · "+T.got+" / "+T.total+" hauts faits";
   $("next").textContent=nxt?"Encore "+fmt(nxt[0]-T.pts)+" points pour devenir "+nxt[1]:"Rang maximum atteint";
   // Colonne des catégories
@@ -695,24 +831,36 @@ function render(){
   entries.forEach(c=>{
     if(c==="hr"){side.append(el("hr"));return}
     const b=el("button","cb"+(c.season?" season":""));b.type="button";b.setAttribute("aria-current",tab===c.id);
-    b.append(c.label);
+    b.append(svgIcon(c.season?SEASON_SVG[si.type]:(CAT_ICON[c.id]||"trophy")),c.label);
     if(!["recap","communaute","profil"].includes(c.id)){const all=L.filter(a=>a.cat===c.id&&!a.legacy);b.append(el("em",null,all.filter(a=>S.unlocked[a.id]).length+"/"+all.length))}
-    b.onclick=()=>{tab=c.id;render();if(innerWidth<820)$("view").scrollIntoView({behavior:"smooth",block:"start"})};side.append(b);
+    b.onclick=()=>{tab=c.id;query="";try{sessionStorage.setItem("dehors_tab",tab)}catch(e){};render();if(innerWidth<820)$("view").scrollIntoView({behavior:"smooth",block:"start"})};side.append(b);
   });
   const v=$("view");v.textContent="";
   if(tab==="communaute")return renderCommunity(v);
   if(tab==="recap")return renderRecap(v,L,T,F,byId);
   if(tab==="profil")return renderProfile(v,L,T,byId);
   const c=CATS.find(x=>x.id===tab)||CATS[0];
-  const items=L.filter(a=>a.cat===c.id);
+  const allItems=L.filter(a=>a.cat===c.id);
   v.append(el("h2","ph",c.id==="saison"?si.label:c.label));
   if(c.id==="saison"){
     const left=Math.max(0,Math.ceil((si.end-Date.now())/864e5));
     v.append(el("p","pd","Ces défis ne sont disponibles que pendant la saison. Il reste "+left+" jour"+(left>1?"s":"")+" : une fois la saison terminée, ceux que tu as obtenus rejoignent tes archives, les autres sont perdus."));
-  }else{const all=items.filter(a=>!a.legacy);v.append(el("p","pd",all.filter(a=>S.unlocked[a.id]).length+" sur "+all.length+" hauts faits obtenus"))}
+  }else{const all=allItems.filter(a=>!a.legacy);v.append(el("p","pd",all.filter(a=>S.unlocked[a.id]).length+" sur "+all.length+" hauts faits obtenus"))}
+  // Barre d'outils : filtre + recherche
+  const tb=el("div","toolbar");
+  const seg=el("div","seg");seg.setAttribute("role","group");seg.setAttribute("aria-label","Filtrer");
+  [["tous","Tous"],["afaire","À faire"],["obtenus","Obtenus"]].forEach(([k,l])=>{const b=el("button",null,l);b.type="button";b.setAttribute("aria-pressed",filt===k);b.onclick=()=>{filt=k;render()};seg.append(b)});
+  const sr=el("input","search");sr.type="search";sr.placeholder="Rechercher";sr.setAttribute("aria-label","Rechercher un haut fait");sr.value=query;
+  sr.oninput=()=>{query=sr.value;const pos=sr.selectionStart;render();const n=document.querySelector(".search");if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}};
+  tb.append(seg,sr);v.append(tb);
+  const q=query.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const items=allItems.filter(a=>{const on=!!S.unlocked[a.id];if(filt==="afaire"&&on)return false;if(filt==="obtenus"&&!on)return false;
+    if(q){if(a.hidden&&!on)return false;return norm(a.title).includes(q)||norm(a.desc).includes(q)}return true});
+  if(!items.length){v.append(el("div","empty",q?"Aucun haut fait ne correspond à « "+query.trim()+" ».":filt==="obtenus"?"Rien d'obtenu ici pour l'instant. Le premier est souvent le plus facile : regarde l'onglet « À faire ».":"Tout est obtenu ici. Bravo !"));return}
   const order=["Grands accomplissements","Lieux mythiques · validés par GPS","Lieux partenaires","Jalons","Au long cours","Rythme"];
   const subs=[...new Set(items.map(a=>a.sub))].sort((x,y)=>{const i=order.indexOf(x),j=order.indexOf(y);return(i<0?99:i)-(j<0?99:j)});
-  if(["food","sport","culture","nature","luxe"].includes(c.id)&&!items.some(a=>a.sub==="Lieux partenaires")){
+  if(!q&&filt!=="obtenus"&&["food","sport","culture","nature","luxe"].includes(c.id)&&!items.some(a=>a.sub==="Lieux partenaires")){
     const sec=el("section","sec"),h=el("div","sh");h.append(el("b",null,"Lieux partenaires"));sec.append(h);
     sec.append(el("div","empty","Aucun établissement partenaire dans cette catégorie pour l'instant. Scanne le QR code d'un lieu Dehors pour débloquer son haut fait."));v.append(sec);
   }
@@ -720,15 +868,19 @@ function render(){
     const list=items.filter(a=>a.sub===sb);const got=list.filter(a=>S.unlocked[a.id]).length;
     const sec=el("section","sec"),h=el("div","sh");h.append(el("b",null,sb),el("span",null,got+" / "+list.length));sec.append(h);
     const ls=el("div","list");
-    list.sort((x,y)=>{const ox=!!S.unlocked[x.id],oy=!!S.unlocked[y.id];if(ox!==oy)return oy-ox;if(ox)return S.unlocked[y.id].at-S.unlocked[x.id].at;return(x.tier||0)-(y.tier||0)})
-      .forEach(a=>ls.append(row(a,F,byId)));
-    sec.append(ls);v.append(sec);
+    list.sort((x,y)=>{const ox=!!S.unlocked[x.id],oy=!!S.unlocked[y.id];if(ox!==oy)return oy-ox;if(ox)return S.unlocked[y.id].at-S.unlocked[x.id].at;return(x.tier||0)-(y.tier||0)});
+    const key=c.id+"|"+sb,LIM=8,shown=(q||openSecs[key])?list:list.slice(0,LIM);
+    shown.forEach(a=>ls.append(row(a,F,byId)));
+    sec.append(ls);
+    if(shown.length<list.length){const more=el("button","more","Voir les "+(list.length-LIM)+" autres");more.type="button";more.onclick=()=>{openSecs[key]=true;render()};sec.append(more)}
+    else if(openSecs[key]&&list.length>LIM){const less=el("button","more","Réduire");less.type="button";less.onclick=()=>{openSecs[key]=false;render();sec.scrollIntoView({block:"start"})};sec.append(less)}
+    v.append(sec);
   });
 }
 function row(a,F,byId){
   const on=!!S.unlocked[a.id],hide=a.hidden&&!on;
   const r=el("div","row-a "+(on?"on":"off")+(a.crit?" has-crit":""));
-  r.append(el("div","ico",hide?"❔":a.icon));
+  {const ic=el("div","ico");ic.append(svgIcon(hide?"lock":iconKey(a)));r.append(ic)}
   const mid=el("div");
   mid.append(el("div","t",hide?"Haut fait secret":a.title),el("div","d",hide?"Continue d'explorer pour le révéler.":a.desc));
   if(!hide){
@@ -762,7 +914,7 @@ function row(a,F,byId){
 /* ---------- Profils ---------- */
 function myPublicProfile(L,T,byId){
   const pr=S.profile,tt=pr.title&&S.unlocked[pr.title]?(TITLES.find(t=>t[0]===pr.title)||[,""])[1]:"";
-  const show=(pr.showcase||[]).filter(id=>S.unlocked[id]&&byId[id]).slice(0,3).map(id=>({t:byId[id].title,icon:byId[id].icon,pts:byId[id].pts}));
+  const show=(pr.showcase||[]).filter(id=>S.unlocked[id]&&byId[id]).slice(0,3).map(id=>({t:byId[id].title,icon:iconKey(byId[id]),pts:byId[id].pts}));
   let rank=RANKS[0][1];RANKS.forEach(r=>{if(T.pts>=r[0])rank=r[1]});
   return{pseudo:S.pseudo,avatar:safeAvatar(pr.avatar),color:safeColor(pr.color),title:tt,bio:(pr.bio||"").slice(0,90),showcase:show,points:T.pts,count:T.got,rank,since:S.days.length?[...S.days].sort()[0]:null};
 }
@@ -776,7 +928,7 @@ function profileCard(p){
   [[fmt(p.points||0),"points"],[String(p.count||0),"hauts faits"],[p.rank||"—","rang"]].forEach(([x,y])=>{const d=el("div");d.append(el("b",null,x),el("span",null,y));st.append(d)});
   b.append(st);
   const vt=el("div","vitrine"),sh=(p.showcase||[]).slice(0,3);
-  for(let i=0;i<3;i++){const x=sh[i];if(x){const d=el("div","vit");d.append(el("i",null,String(x.icon||"🏆").slice(0,4)),String(x.t||"").slice(0,60));vt.append(d)}else vt.append(el("div","vit empty2","Emplacement libre"))}
+  for(let i=0;i<3;i++){const x=sh[i];if(x){const d=el("div","vit");{const ii=el("i");ii.append(svgIcon(ICONS[x.icon]?x.icon:"trophy"));d.append(ii,String(x.t||"").slice(0,60))};vt.append(d)}else vt.append(el("div","vit empty2","Emplacement libre"))}
   b.append(vt);
   if(p.since)b.append(el("p","pbio","Chasseur depuis le "+new Date(p.since+"T12:00").toLocaleDateString("fr-FR")));
   return c;
@@ -804,7 +956,7 @@ function renderProfile(v,L,T,byId){
   const mine=Object.keys(S.unlocked).filter(id=>byId[id]).sort((a,b)=>byId[b].pts-byId[a].pts);
   for(let i=0;i<3;i++){
     const se=el("select");se.setAttribute("aria-label","Vitrine "+(i+1));const o=el("option",null,mine.length?"Emplacement libre":"Débloque un haut fait pour l'exposer");o.value="";se.append(o);
-    mine.forEach(id=>{const op=el("option",null,byId[id].icon+" "+byId[id].title+" ("+byId[id].pts+" pts)");op.value=id;if((S.profile.showcase||[])[i]===id)op.selected=true;se.append(op)});
+    mine.forEach(id=>{const op=el("option",null,byId[id].title+" ("+byId[id].pts+" pts)");op.value=id;if((S.profile.showcase||[])[i]===id)op.selected=true;se.append(op)});
     se.onchange=()=>{const sc=(S.profile.showcase||[]).slice(0,3);while(sc.length<3)sc.push("");sc[i]=se.value;S.profile.showcase=sc;saveProfile()};ed.append(se);
   }
   ed.append(el("p","pbio","Ton pseudo est définitif : "+(S.pseudo||"—")+"."));
@@ -934,13 +1086,13 @@ async function autoLocate(force){
     if(!force&&navigator.permissions){const st=await navigator.permissions.query({name:"geolocation"});if(st.state==="denied"){status("Active la localisation pour débloquer automatiquement tes découvertes.");return}}
   }catch(e){}
   if(Date.now()-lastAuto<5*60000&&!force)return;lastAuto=Date.now();
-  checkin();
+  checkin(true);
 }
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)autoLocate()});
 setInterval(()=>{if(!document.hidden)autoLocate()},10*60000);
 
 /* ---------- Démarrage ---------- */
-$("checkin").onclick=checkin;
+$("checkin").onclick=()=>checkin(false);
 $("who").onclick=()=>{tab="profil";render();$("view").scrollIntoView({behavior:"smooth",block:"start"})};
 $("codeForm").onsubmit=e=>{e.preventDefault();const v=$("codeInput").value;$("codeInput").value="";useTag(v)};
 $("welcomeForm").onsubmit=()=>{if(S.pseudo)return;const v=$("pseudoInput").value.trim().slice(0,20);if(v){const first=!S.pseudo;S.pseudo=v;lastBoardJSON="";saveLocal();render();sync();if(first)setTimeout(()=>autoLocate(true),400)}};
