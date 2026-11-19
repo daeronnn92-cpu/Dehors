@@ -31,7 +31,7 @@ var t=p;if(t!=="light"&&t!=="dark"){var h=r.getAttribute("data-theme");t=(h==="l
   --bg:#000;--s1:#121212;--s2:#1D1D1C;--s3:#2C2C2A;
   --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.14);
   --ink:#F5F5F2;--ink2:#E6E6E2;--muted:#9C9C97;--faint:#64645F;
-  --on:#0A0A0A;--act:#F5F5F2;--act-ink:#0A0A0A;--hold:#F5F5F2;--lemon:#F3EF5C;
+  --on:#0A0A0A;--act:#F5F5F2;--act-ink:#0A0A0A;--hold:#F5F5F2;--lemon:#F3EF5C;--err:#FF8A7A;
   --gold-txt:#F3EF5C;--silver:#E4E4E0;--bronze:#E39A5C;--me-bg:rgba(243,239,92,.08);
   --tint:rgba(255,255,255,.08);--ring:rgba(255,255,255,.3);--edge:0 0 0 0 transparent;
   --bar-bg:rgba(0,0,0,.86);--tab-bg:rgba(24,24,23,.94);--tab-ink:#8C8C87;
@@ -48,7 +48,7 @@ var t=p;if(t!=="light"&&t!=="dark"){var h=r.getAttribute("data-theme");t=(h==="l
   --bg:#E7E5DF;--s1:#F4F3EF;--s2:#E1DFD8;--s3:#D3D0C8;
   --line:rgba(0,0,0,.07);--line2:rgba(0,0,0,.13);
   --ink:#161614;--ink2:#2A2A27;--muted:#6E6C66;--faint:#9C9A93;
-  --act:#161614;--act-ink:#F4F3EF;--hold:#FFFFFF;
+  --act:#161614;--act-ink:#F4F3EF;--hold:#FFFFFF;--err:#B3261E;
   --gold-txt:#857300;--silver:#8E8E88;--bronze:#B25F27;--me-bg:rgba(200,190,40,.18);
   --tint:rgba(0,0,0,.06);--ring:rgba(0,0,0,.16);--edge:inset 0 0 0 1px rgba(0,0,0,.07);
   --bar-bg:rgba(231,229,223,.9);--tab-bg:rgba(247,246,242,.94);--tab-ink:#8A877F;
@@ -297,6 +297,18 @@ dialog input::placeholder{color:var(--faint)}
 .appear .seg{margin:0}
 .appear .note{margin-top:10px}
 
+.ferr{margin:-4px 0 12px;color:var(--err);font-size:14px;font-weight:600;line-height:1.4}
+.ferr:empty{display:none}
+#welcomeForm .linkbtn{margin-top:4px}
+.acct{margin-top:12px}
+.note0{margin:0 0 12px;font-size:14px;line-height:1.45;color:var(--muted)}
+.keybox{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--s2);border-radius:18px;padding:12px}
+.keybox code{grid-column:1/-1;text-align:center;font:600 17px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em;color:var(--ink);padding:4px 0 2px;-webkit-user-select:all;user-select:all}
+.keybox .mini{height:40px;background:var(--s3);color:var(--ink);font-weight:600;font-size:14px;border-radius:12px}
+.pro label.ck input{width:22px;height:22px;flex:none;margin:0;padding:0;accent-color:var(--act)}
+.board.mine{margin-top:8px}
+.board.mine .row .n{color:var(--muted)}
+
 /* ===== Accueil des nouveaux ===== */
 #welcome{text-align:center;padding:26px 24px 22px}
 .obstep h2{font-weight:800;font-size:25px;line-height:1.15;margin:12px 0 8px}
@@ -441,13 +453,26 @@ dialog input::placeholder{color:var(--faint)}
   <button class="linkbtn" type="button" onclick="this.closest('dialog').close()">Annuler</button>
 </dialog>
 
+<dialog id="restoreDlg" aria-label="Retrouver mon compte">
+  <h2>Retrouver mon compte</h2>
+  <p>Entre ton code de récupération. Il se trouve dans l'onglet Profil, sur l'appareil où tu as commencé.</p>
+  <form id="restoreForm" autocomplete="off" novalidate>
+    <input id="restoreInput" placeholder="XXXX-XXXX-XXXX-XXXX" aria-label="Code de récupération" aria-describedby="restoreErr" maxlength="24" autocapitalize="characters" autocorrect="off" spellcheck="false">
+    <p class="ferr" id="restoreErr" role="alert"></p>
+    <button class="big" type="submit" id="restoreGo">Retrouver ma progression</button>
+  </form>
+  <button class="linkbtn" type="button" onclick="this.closest('dialog').close()">Annuler</button>
+</dialog>
+
 <dialog id="welcome" aria-label="Bienvenue" tabindex="-1">
   <div class="dots" id="obDots"><i></i><i></i><i></i></div>
   <div class="obstep" data-s="0"><div class="obart" id="ob0"></div><h2>Le monde réel a ses trophées</h2><p>Chaque ville, chaque lieu, chaque sortie te rapporte un haut fait. À toi de les collectionner.</p></div>
   <div class="obstep" data-s="1" hidden><div class="obart" id="ob1"></div><h2>Ta position fait le travail</h2><p>Autorise la localisation : ce qui t'entoure se débloque tout seul, sans rien remplir.</p></div>
-  <form method="dialog" id="welcomeForm" class="obstep" data-s="2" hidden><div class="obart" id="ob2"></div><h2>Ton nom de chasseur</h2><p>Il apparaîtra au classement. Choisis-le bien : il ne pourra plus être changé.</p>
-    <input id="pseudoInput" maxlength="20" placeholder="Ton pseudo" required aria-label="Ton pseudo" autocomplete="nickname">
-    <button class="big" type="submit">C'est parti</button>
+  <form id="welcomeForm" class="obstep" data-s="2" hidden novalidate><div class="obart" id="ob2"></div><h2 id="obH">Ton nom de chasseur</h2><p id="obP">Il apparaîtra au classement. Choisis-le bien : il ne pourra plus être changé.</p>
+    <input id="pseudoInput" maxlength="20" placeholder="Ton pseudo" aria-label="Ton pseudo" aria-describedby="obErr" autocomplete="nickname" autocapitalize="words" spellcheck="false">
+    <p class="ferr" id="obErr" role="alert"></p>
+    <button class="big" type="submit" id="obGo">C'est parti</button>
+    <button class="linkbtn" type="button" id="obRestore" hidden>J'ai déjà un compte</button>
   </form>
   <button class="big" id="obNext" type="button">Suivant</button>
 </dialog>
@@ -456,6 +481,12 @@ dialog input::placeholder{color:var(--faint)}
 <script>
 // Lien public de l'app (sert aux QR codes des établissements)
 const ARTIFACT_URL = "https://claude.ai/artifact/JTyR9aHngpQQftDaXaFv4G";
+// Site public et sa base de données (Supabase). La clé publiable ne donne accès qu'au classement,
+// aux lieux partenaires et aux fonctions prévues : chaque écriture exige le code secret du joueur.
+const SITE_URL = "https://dehors-sandy.vercel.app/";
+const SUPA_URL = "";
+const SUPA_KEY = "";
+const SUPA_ON = !!(SUPA_URL && SUPA_KEY) && !(window.claude && window.claude.use);
 
 /* ---------- Données ---------- */
 // [ville, pays, lat, lng, rayon km, capitale]
@@ -837,7 +868,11 @@ function cascade(){
   const L=catalog();let changed=true,guard=0;
   while(changed&&guard++<10){changed=false;const f=facts(L);L.forEach(a=>{if(a.test&&!S.unlocked[a.id]&&a.test(f)){unlock(a.id,L);changed=true}})}
 }
-function commit(){cascade();{const rk=rankInfo(totals(catalog()).pts);if(S.rankSeen!=null&&rk.i>S.rankSeen&&toastQ.length)toastQ.push({_rank:true,title:rk.cur[1]});S.rankSeen=rk.i}saveLocal();render();runToasts();sync()}
+let renderLater=false;
+function typingNow(){const a=document.activeElement;return!!(a&&/^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)&&$("view").contains(a))}
+function bgRender(){if(typingNow()){renderLater=true;return}render()}
+document.addEventListener("focusout",()=>setTimeout(()=>{if(renderLater&&!typingNow())render()},300));
+function commit(bg){cascade();{const rk=rankInfo(totals(catalog()).pts);if(S.rankSeen!=null&&rk.i>S.rankSeen&&toastQ.length)toastQ.push({_rank:true,title:rk.cur[1]});S.rankSeen=rk.i}saveLocal();if(bg)bgRender();else render();runToasts();sync()}
 
 /* ---------- Notification ---------- */
 let audio=null;
@@ -889,7 +924,7 @@ async function checkin(auto){
      if(dd.getMonth()===10&&dd.getDate()===19)unlock("anniv",L);}
     const k=dayKey(now);if(!S.days.includes(k))S.days.push(k);
     const gotSome=toastQ.length>before;
-    commit();
+    commit(auto);
     if(!auto&&!gotSome)status(best?"Tu es à "+best[0]+", déjà dans ta collection. Va voir plus loin !":"Position enregistrée. Aucune ville connue ici, mais l'aventure continue.");
   }catch(e){const m=typeof e==="string"?e:"Impossible de te localiser.";if(m.startsWith("Autorise"))geoState="denied";if(auto)render();else fail(m)}
   setLocating(false);
@@ -897,10 +932,19 @@ async function checkin(auto){
 
 /* ---------- Lieux partenaires (tags) ---------- */
 async function useTag(raw){
-  const code=String(raw||"").trim().toLowerCase();if(!code)return;
-  if(!db&&!venues.length){pendingTag=code;status("Chargement des lieux partenaires…");return}
-  const v=venues.find(x=>x.code===code);
-  if(!v)return fail("Ce code ne correspond à aucun lieu partenaire.");
+  const input=String(raw||"").trim();if(!input)return;
+  let v;
+  if(SUPA_ON){
+    status("Recherche du lieu…");
+    try{v=await rpc("venue_find",{p_secret:input})}catch(e){return fail("Connexion impossible. Réessaie dans un instant.")}
+    if(!v||!v.code)return fail("Ce code ne correspond à aucun lieu partenaire.");
+    if(!venues.some(x=>x.code===v.code))venues.push(v);
+  }else{
+    const code=input.toLowerCase();
+    if(!db&&!venues.length){pendingTag=code;status("Chargement des lieux partenaires…");return}
+    v=venues.find(x=>x.code===code);
+    if(!v)return fail("Ce code ne correspond à aucun lieu partenaire.");
+  }
   const L=catalog();
   if(S.unlocked["lieu:"+v.code])return status("Tu as déjà découvert "+v.name+".");
   if(typeof v.lat==="number"){
@@ -932,10 +976,10 @@ function bar(r){const pb=el("div","pbar"),i=el("i");i.style.width=Math.max(0,Mat
 function setLocating(v){locating=v;document.querySelectorAll("[data-locate]").forEach(b=>{b.classList.toggle("busy",v);b.disabled=v})}
 function solidPin(col,sz){const m=el("span","md on");setCol(m,col);m.style.setProperty("--sz",sz+"px");m.append(svgIcon("pin",true));return m}
 function locateBtn(label){const b=el("button","big");b.type="button";b.dataset.locate="1";b.append(svgIcon("pin",true),label);if(locating){b.classList.add("busy");b.disabled=true}b.onclick=()=>checkin(false);return b}
-function go(t){const prev=tab;tab=t;if(t!==prev){query="";filt="tous"}if(t!=="profil")editOpen=false;
-  try{sessionStorage.setItem("dehors_tab",t)}catch(e){};render();window.scrollTo(0,0)}
+function go(t){const prev=tab;tab=t;if(t!==prev){query="";filt="tous"}if(t!=="profil"){editOpen=false;showKey=false}
+  try{sessionStorage.setItem("dehors_tab",t)}catch(e){};render();window.scrollTo(0,0);if(t==="communaute")loadBoard()}
 
-function render(){
+function render(){renderLater=false;
   const L=catalog(),T=totals(L),F=facts(L),byId={};L.forEach(a=>byId[a.id]=a);
   const R=rankInfo(T.pts);
   $("pseudo").textContent=S.pseudo||"Chasseur";
@@ -1313,20 +1357,49 @@ function renderProfile(v,L,T,byId){
   ed.append(el("p","pbio","Ton pseudo est définitif : "+(S.pseudo||"—")+"."));
   v.append(ed);
   }
+  if(SUPA_ON)v.append(accountCard());
   const ap=el("section","card appear");ap.append(el("div","ctitle","Apparence"));
   const sg=el("div","seg");sg.setAttribute("role","group");sg.setAttribute("aria-label","Apparence");
   [["auto","Auto"],["dark","Sombre"],["light","Clair"]].forEach(([k,l])=>{const b=el("button",null,l);b.type="button";b.setAttribute("aria-pressed",themePref()===k);b.onclick=()=>setTheme(k);sg.append(b)});
   ap.append(sg,el("p","note","« Auto » suit le réglage de ton téléphone."));v.append(ap);
-  const ft=el("div","foot");ft.append(el("div",null,FOOT_TXT));const rb=el("button",null,"Tout réinitialiser");rb.type="button";
+  const ft=el("div","foot");ft.append(el("div",null,footTxt()));const rb=el("button",null,"Tout réinitialiser");rb.type="button";
   rb.onclick=()=>{if(confirm("Effacer toute ta progression ?")){const p=S.pseudo;S=fresh();S.pseudo=p;saveLocal();render();lastProgJSON="";lastBoardJSON="";sync()}};
-  ft.append(rb);v.append(ft);
+  ft.append(rb);
+  if(SUPA_ON&&acctOk){const xb=el("button",null,"Supprimer mon compte");xb.type="button";xb.onclick=deleteAccount;ft.append(xb)}
+  v.append(ft);
 }
 const FOOT_TXT="Ta progression est enregistrée sur cet appareil.";
+function footTxt(){return SUPA_ON&&acctOk?"Ta progression est sauvegardée en ligne et sur cet appareil.":FOOT_TXT}
+let showKey=false;
+function accountCard(){
+  const ac=el("section","card acct");ac.append(el("div","ctitle","Ton compte"));
+  if(acctOk&&acctKey){
+    ac.append(el("p","note0","Ton code de récupération ramène ta progression sur un autre téléphone, ou dans l'app ajoutée à ton écran d'accueil. Garde-le pour toi."));
+    const kb=el("div","keybox");kb.append(el("code",null,showKey?fmtKey(acctKey):"••••-••••-••••-••••"));
+    const sh=el("button","mini",showKey?"Masquer":"Afficher");sh.type="button";sh.onclick=()=>{showKey=!showKey;render()};
+    const cp=el("button","mini","Copier");cp.type="button";
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText(fmtKey(acctKey));status("Code copié. Range-le en lieu sûr.")}catch(e){showKey=true;render();status("Copie impossible : note le code affiché.")}};
+    kb.append(sh,cp);ac.append(kb);
+  }else ac.append(el("p","note0",netDown?"Hors connexion pour l'instant : ta progression reste sur ce téléphone et partira en ligne dès que possible.":"Ton compte se prépare…"));
+  return ac;
+}
+async function deleteAccount(){
+  if(!confirm("Supprimer ton compte ? Ton pseudo, ton profil et ta progression seront effacés partout, définitivement."))return;
+  let r=null;try{r=await rpc("delete_account",{p_key:acctKey})}catch(e){return fail("Connexion impossible. Réessaie dans un instant.")}
+  if(!r||!r.ok)return fail("Suppression impossible pour l'instant.");
+  const old=uid;acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";canEdit=false;saveAcct();
+  board=board.filter(x=>x.id!==old);S=fresh();lastBoardJSON="";lastProgJSON="";saveLocal();editOpen=false;showKey=false;
+  go("recap");openWelcome();status("Ton compte a été supprimé.");
+}
 function openProfile(p){const b=$("pdlgBody");b.textContent="";b.append(profileCard(p));$("pdlg").showModal();try{$("pdlg").focus({preventScroll:true})}catch(e){}}
 
 function renderCommunity(v){
   v.append(el("h2","ph","Classement"),el("p","pd","Les chasseurs les plus actifs. Touche un nom pour voir son profil."));
-  if(!db){v.append(el("div","empty","Le classement des chasseurs arrive très bientôt. En attendant, débloque un max de hauts faits : ta progression est gardée sur ton téléphone."));return}
+  if(!online){v.append(el("div","empty","Le classement des chasseurs arrive très bientôt. En attendant, débloque un max de hauts faits : ta progression est gardée sur ton téléphone."));return}
+  if(online==="supa"&&!board.length){
+    if(boardErr){const e=el("div","empty","Le classement n'a pas pu être chargé. Vérifie ta connexion.");const rb=el("button","ghost wide","Réessayer");rb.type="button";rb.style.marginTop="14px";rb.onclick=()=>{boardErr=false;boardAt=0;render();loadBoard(true)};e.append(rb);v.append(e);return}
+    if(!boardAt){v.append(el("div","empty","Chargement du classement…"));return}
+  }
   const top=[...board].sort((a,b)=>b.points-a.points).slice(0,30);
   if(!top.length){v.append(el("div","empty","Personne au classement pour l'instant. Débloque un haut fait pour ouvrir le bal."))}
   else{const bd=el("div","board");top.forEach((r,i)=>{const row=el("div","row"+(r.id===uid?" me":""));
@@ -1335,6 +1408,13 @@ function renderCommunity(v){
     const op=()=>{let rk=RANKS[0][1];RANKS.forEach(x=>{if((r.points||0)>=x[0])rk=x[1]});openProfile(Object.assign({},r,{rank:rk}))};
     row.onclick=op;row.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();op()}};
     row.append(el("div","n",String(i+1)),nm,el("div","pts",fmt(r.points)+" pts"));bd.append(row)});v.append(bd)}
+  if(online==="supa"&&acctOk&&uid&&S.pseudo&&!top.some(r=>r.id===uid)){
+    const T=totals(catalog()),k=board.findIndex(r=>r.id===uid),pos=(myPos&&myPos.pos)||(k>=0?k+1:0);
+    if(pos){const bm=el("div","board mine"),row=el("div","row me"),nm=el("div","nm");
+      nm.append(el("span","avs",safeAvatar(S.profile.avatar)),S.pseudo+" (toi)");
+      nm.append(el("span","sub",T.got+" hauts faits"+(myPos&&myPos.total>1?" · "+fmt(myPos.total)+" chasseurs":"")));
+      row.append(el("div","n",fmt(pos)),nm,el("div","pts",fmt(T.pts)+" pts"));bm.append(row);v.append(bm)}
+  }
   if(boardReadOnly)v.append(el("p","status","Ton accès à cette app est en lecture seule : ton score n'apparaît pas au classement."));
   const recent=board.filter(r=>r.last&&r.last.at).sort((a,b)=>b.last.at-a.last.at).slice(0,8);
   if(recent.length){const h2=el("h3");h2.append(el("span",null,"Derniers hauts faits"));v.append(h2);
@@ -1343,13 +1423,25 @@ function renderCommunity(v){
 }
 
 /* ---------- Espace établissements (propriétaire) ---------- */
-function tagLink(code){return (ARTIFACT_URL||"[lien de l'app]")+"#tag-"+code}
+function tagLink(code){return (SUPA_ON?SITE_URL:(ARTIFACT_URL||"[lien de l'app]"))+"#tag-"+code}
+async function venueSave(doc){
+  if(!SUPA_ON)return db.doc("lieux/"+doc.code).set(doc);
+  const r=await rpc("venue_add",{p_key:acctKey,p_venue:doc});
+  if(!r||!r.ok)throw (r&&r.error==="exists")?"Ce lieu existe déjà.":"Création impossible pour l'instant.";
+  adminVenues=[r.venue,...(adminVenues||[])];const pub=Object.assign({},r.venue);delete pub.secret;venues=[pub,...venues.filter(x=>x.code!==pub.code)];bgRender();
+}
+async function venueRemove(v){
+  if(!SUPA_ON)return db.doc("lieux/"+v.code).delete();
+  const r=await rpc("venue_delete",{p_key:acctKey,p_code:v.code});if(!r||!r.ok)throw 0;
+  adminVenues=(adminVenues||[]).filter(x=>x.code!==v.code);venues=venues.filter(x=>x.code!==v.code);bgRender();
+}
+async function loadAdminVenues(){try{adminVenues=(await rpc("venue_admin_list",{p_key:acctKey}))||[]}catch(e){adminVenues=[]}bgRender()}
 function proPanel(){
   const p=el("section","pro");p.append(el("h2",null,"Espace établissements"),el("p",null,"Ajoute un lieu partenaire : il obtient un code et un QR code à afficher sur place. Chaque nouveau visiteur qui le scanne débloque un haut fait."));
   const f=el("form");f.autocomplete="off";
   const name=el("input");name.placeholder="Nom du lieu";name.required=true;name.maxLength=50;
   const city=el("input");city.placeholder="Ville";city.maxLength=40;
-  const cat=el("select");[["food","Food"],["sport","Sport"],["culture","Culture"]].forEach(([v,l])=>{const o=el("option",null,l);o.value=v;cat.append(o)});
+  const cat=el("select");[["food","Food"],["sport","Sport"],["culture","Culture"],["nature","Nature"],["luxe","Luxe"]].forEach(([v,l])=>{const o=el("option",null,l);o.value=v;cat.append(o)});
   const lab=el("label","ck");const geo=el("input");geo.type="checkbox";lab.append(geo," Exiger la présence sur place (ta position actuelle, 300 m)");
   const sub=el("button","go","Créer le lieu");sub.type="submit";
   f.append(name,city,cat,lab,sub);
@@ -1357,16 +1449,18 @@ function proPanel(){
     try{const code=cat.value+"-"+slug(name.value)+"-"+Math.random().toString(36).slice(2,5);
       const doc={code,name:name.value.trim(),city:city.value.trim(),cat:cat.value,createdAt:Date.now()};
       if(geo.checked){const c=await locate();doc.lat=+c.latitude.toFixed(6);doc.lng=+c.longitude.toFixed(6)}
-      await db.doc("lieux/"+code).set(doc);f.reset();status("Lieu créé : "+doc.name);
+      await venueSave(doc);f.reset();status("Lieu créé : "+doc.name);
     }catch(err){fail(typeof err==="string"?err:"Création impossible pour l'instant.")}
     sub.disabled=false};
   p.append(f);
-  [...venues].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).forEach(v=>{
-    const r=el("div","venue");const info=el("div");info.append(el("b",null,v.name),el("div",null,(CATS.find(c=>c.id===v.cat)||{}).label+(v.city?" · "+v.city:"")+(typeof v.lat==="number"?" · présence exigée":"")),el("code",null,"Code : "+v.code.toUpperCase()));
+  if(SUPA_ON&&adminVenues===null){adminVenues=undefined;loadAdminVenues()}
+  if(SUPA_ON&&!Array.isArray(adminVenues))p.append(el("p",null,"Chargement de tes lieux…"));
+  [...(SUPA_ON?(adminVenues||[]):venues)].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).forEach(v=>{
+    const r=el("div","venue");const info=el("div");info.append(el("b",null,v.name),el("div",null,(CATS.find(c=>c.id===v.cat)||{}).label+(v.city?" · "+v.city:"")+(typeof v.lat==="number"?" · présence exigée":"")),el("code",null,"Code : "+(SUPA_ON?fmtKey(v.secret):v.code.toUpperCase())));
     const bx=el("div");const qb=el("button","mini","QR code");qb.type="button";const del=el("button","mini","Supprimer");del.type="button";bx.append(qb," ",del);
     const qr=el("div","qr");r.append(info,bx,qr);
-    qb.onclick=()=>{if(!qr.dataset.done&&window.QRCode){new QRCode(qr,{text:tagLink(v.code),width:180,height:180});qr.dataset.done=1}qr.classList.toggle("open")};
-    del.onclick=async()=>{if(confirm("Supprimer "+v.name+" ?")){try{await db.doc("lieux/"+v.code).delete()}catch(e){fail("Suppression impossible.")}}};
+    qb.onclick=()=>{if(!qr.dataset.done&&window.QRCode){new QRCode(qr,{text:tagLink(SUPA_ON?v.secret:v.code),width:180,height:180});qr.dataset.done=1}qr.classList.toggle("open")};
+    del.onclick=async()=>{if(confirm("Supprimer "+v.name+" ?")){try{await venueRemove(v)}catch(e){fail("Suppression impossible.")}}};
     p.append(r);
   });
   return p;
@@ -1376,6 +1470,7 @@ function proPanel(){
 let syncT=null,lastBoardJSON="",lastProgJSON="";
 function sync(){clearTimeout(syncT);syncT=setTimeout(doSync,900)}
 async function doSync(){
+  if(SUPA_ON)return syncSupa();
   if(!db||!uid)return;
   const prog=JSON.stringify(S);
   if(prog!==lastProgJSON){try{await db.doc("data/users/"+uid+"/progress").set({state:prog});lastProgJSON=prog}catch(e){}}
@@ -1388,26 +1483,134 @@ async function doSync(){
   try{await db.doc("chasseurs/"+uid).set(row);lastBoardJSON=j}catch(e){if(e&&e.code==="invalid_argument"){boardReadOnly=true;render()}}
 }
 function merge(remote){
-  try{const r=JSON.parse(remote);
+  try{const r=typeof remote==="string"?JSON.parse(remote):(remote||{});
     Object.entries(r.unlocked||{}).forEach(([k,v])=>{if(!S.unlocked[k]||v.at<S.unlocked[k].at)S.unlocked[k]=v});
     const seen=new Set(S.checkins.map(c=>c.at));(r.checkins||[]).forEach(c=>{if(!seen.has(c.at))S.checkins.push(c)});
-    S.checkins.sort((a,b)=>a.at-b.at);
+    S.checkins.sort((a,b)=>a.at-b.at);if(S.checkins.length>300)S.checkins=S.checkins.slice(-300);
     S.days=[...new Set([...(S.days||[]),...(r.days||[])])];
     if(!S.home&&r.home)S.home=r.home;if(r.profile&&(r.profile._t||0)>((S.profile&&S.profile._t)||0))S.profile=Object.assign(fresh().profile,r.profile);if(!S.pseudo&&r.pseudo)S.pseudo=r.pseudo;
   }catch(e){}
 }
 async function connect(){
-  if(!window.claude||!window.claude.use){commit();return}
+  if(window.claude&&window.claude.use)return connectClaude();
+  if(SUPA_ON)return connectSupa();
+  commit();
+}
+async function connectClaude(){
   try{user=await window.claude.use("user")}catch(e){}
   try{db=await window.claude.use("db")}catch(e){}
   if(user){try{uid=await user.id()}catch(e){}try{canEdit=!!(await user.canEdit())}catch(e){}}
   if(!db){commit();return}
+  online="claude";
   if(uid){try{const s=await db.doc("data/users/"+uid+"/progress").get();if(s.exists){merge(s.data().state);if(S.pseudo)$("welcome").open&&$("welcome").close()}}catch(e){}}
-  db.collection("lieux").onSnapshot(q=>{venues=q.docs.map(d=>d.data()).filter(v=>v&&v.code);render();if(pendingTag){const t=pendingTag;pendingTag=null;useTag(t)}},()=>{});
-  db.collection("chasseurs").orderBy("points","desc").limit(50).onSnapshot(q=>{board=q.docs.map(d=>Object.assign({id:d.id},d.data()));if(tab==="communaute")render()},()=>{});
-  saveLocal();commit();
+  db.collection("lieux").onSnapshot(q=>{venues=q.docs.map(d=>d.data()).filter(v=>v&&v.code);bgRender();if(pendingTag){const t=pendingTag;pendingTag=null;useTag(t)}},()=>{});
+  db.collection("chasseurs").orderBy("points","desc").limit(50).onSnapshot(q=>{board=q.docs.map(d=>Object.assign({id:d.id},d.data()));if(tab==="communaute")bgRender()},()=>{});
+  saveLocal();commit(true);
 }
 
+
+/* ---------- Compte en ligne (site public, Supabase) ---------- */
+// Pas d'e-mail ni de mot de passe : le téléphone crée une clé secrète (le code de récupération),
+// la base n'en garde qu'une empreinte. Les positions envoyées sont arrondies à ~1 km.
+let online=SUPA_ON?"supa":null,acctKey=null,acctOk=false,acctHash="",progRev=null,netDown=false,pseudoFix=false;
+let boardAt=0,boardErr=false,myPos=null,adminVenues=null,regTry=0,acctAt=0,syncing=false,syncAgain=false,mergedRemote=false,conflicts=0;
+const KEY_ABC="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+function newKey(){const b=new Uint8Array(16);crypto.getRandomValues(b);let k="";b.forEach(x=>{k+=KEY_ABC[x%32]});return k}
+function normKey(x){return String(x||"").toUpperCase().replace(/[^0-9A-Z]/g,"").replace(/O/g,"0").replace(/[IL]/g,"1").replace(/U/g,"V")}
+function fmtKey(k){return String(k||"").replace(/(.{4})(?=.)/g,"$1-")}
+function hashStr(x){let h=2166136261;for(let i=0;i<x.length;i++){h^=x.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)+"."+x.length}
+function loadAcct(){try{const a=JSON.parse(localStorage.getItem("dehors_acct")||"null");
+  if(a&&/^[0-9A-HJKMNP-TV-Z]{16}$/.test(a.k)){acctKey=a.k;acctOk=!!a.ok;progRev=typeof a.rev==="number"?a.rev:null;uid=a.id||null;acctHash=a.h||""}}catch(e){}}
+function saveAcct(){try{if(acctKey)localStorage.setItem("dehors_acct",JSON.stringify({k:acctKey,ok:acctOk,rev:progRev,id:uid,h:acctHash}));else localStorage.removeItem("dehors_acct")}catch(e){}}
+async function sb(path,body){
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const r=await fetch(SUPA_URL+"/rest/v1/"+path,{method:body?"POST":"GET",headers:body?{apikey:SUPA_KEY,"Content-Type":"application/json"}:{apikey:SUPA_KEY},
+      body:body?JSON.stringify(body):undefined,cache:"no-store",signal:ctl.signal});
+    const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){}
+    if(!r.ok){const er=new Error((j&&j.message)||("HTTP "+r.status));er.status=r.status;throw er}
+    netDown=false;return j;
+  }catch(e){if(!e.status)netDown=true;throw e}
+  finally{clearTimeout(tm)}
+}
+function rpc(fn,args){return sb("rpc/"+fn,args||{})}
+function serverState(){const o=JSON.parse(JSON.stringify(S)),r2=x=>Math.round(x*100)/100;
+  if(o.home&&typeof o.home.lat==="number")o.home={lat:r2(o.home.lat),lng:r2(o.home.lng)};
+  (o.checkins||[]).forEach(c=>{if(typeof c.lat==="number"&&typeof c.lng==="number"){c.lat=r2(c.lat);c.lng=r2(c.lng)}});return o}
+async function register(pseudo){
+  if(!acctKey||acctOk){acctKey=newKey();acctOk=false;progRev=null;uid=null;acctHash="";saveAcct()}
+  let r=null;try{r=await rpc("register",{p_key:acctKey,p_pseudo:pseudo})}catch(e){return{ok:false,error:"net"}}
+  if(r&&r.ok){acctOk=true;uid=r.id;progRev=typeof r.rev==="number"?r.rev:null;acctAt=Date.now();saveAcct();return{ok:true,pseudo:r.pseudo}}
+  if(r&&r.error==="taken"){ // peut-être notre propre demande, arrivée sans que la réponse revienne
+    try{const me=await rpc("me",{p_key:acctKey});if(me){acctOk=true;uid=me.id;progRev=null;acctAt=Date.now();saveAcct();return{ok:true,pseudo:me.pseudo}}}catch(e){}}
+  return{ok:false,error:(r&&r.error)||"net"};
+}
+async function ensureRegistered(){
+  if(!S.pseudo||acctOk)return acctOk;regTry=Date.now();
+  const r=await register(S.pseudo);
+  if(r.ok){if(r.pseudo)S.pseudo=r.pseudo;lastBoardJSON="";acctHash="";saveLocal();bgRender();sync();return true}
+  if(r.error!=="net"){pseudoFix=true;openWelcome(2,r.error==="taken"
+    ?"« "+S.pseudo+" » est déjà pris par un autre chasseur. Choisis ton pseudo pour de bon : ta progression est gardée."
+    :"« "+S.pseudo+" » ne peut pas aller au classement. Choisis-en un autre : ta progression est gardée.")}
+  return false;
+}
+async function openAccount(){
+  let me;try{me=await rpc("me",{p_key:acctKey,p_rev:progRev})}catch(e){return false}
+  acctAt=Date.now();
+  if(!me){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";saveAcct();return ensureRegistered()}
+  uid=me.id;canEdit=!!me.admin;
+  if(me.state){merge(me.state);acctHash=""}
+  progRev=me.rev;if(me.pseudo)S.pseudo=me.pseudo;saveAcct();saveLocal();return true;
+}
+async function refreshAccount(){if(!SUPA_ON||!acctOk||syncing||Date.now()-acctAt<120000)return;if(await openAccount())commit(true)}
+async function connectSupa(){
+  loadAcct();loadVenues();
+  if(acctKey&&acctOk)await openAccount();else if(S.pseudo)await ensureRegistered();
+  if(tab==="communaute")loadBoard(true);
+  saveLocal();commit(true);
+}
+async function syncSupa(){
+  if(!acctOk||!acctKey){if(S.pseudo&&!pseudoFix&&Date.now()-regTry>60000)ensureRegistered();return}
+  if(syncing){syncAgain=true;return}
+  syncing=true;
+  try{
+    const L=catalog(),T=totals(L),byId={};L.forEach(a=>byId[a.id]=a);const pp=myPublicProfile(L,T,byId);
+    const player={avatar:pp.avatar,color:pp.color,title:pp.title,bio:pp.bio,showcase:pp.showcase,points:T.pts,count:T.got,since:pp.since};
+    if(lastUnlock)player.last=lastUnlock;
+    const pj=JSON.stringify(player),sj=JSON.stringify(S),sh=hashStr(sj),args={p_key:acctKey};
+    if(pj!==lastBoardJSON)args.p_player=player;
+    if(sh!==acctHash){args.p_state=serverState();args.p_rev=progRev}
+    if(!args.p_player&&!args.p_state)return;
+    const r=await rpc("save",args);
+    if(r&&r.ok){conflicts=0;
+      if(args.p_state){progRev=r.rev;acctHash=sh}
+      if(args.p_player){lastBoardJSON=pj;const mine=board.find(x=>x.id===uid);if(mine)Object.assign(mine,player,{pseudo:S.pseudo})}
+      saveAcct();
+    }else if(r&&r.error==="conflict"&&conflicts<4){conflicts++;merge(r.state);progRev=r.rev;saveAcct();mergedRemote=true;syncAgain=true}
+    else if(r&&r.error==="key"){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";saveAcct();regTry=0;syncAgain=true}
+  }catch(e){}
+  finally{syncing=false;if(syncAgain){syncAgain=false;if(mergedRemote){mergedRemote=false;commit(true)}else sync()}}
+}
+async function loadBoard(force){
+  if(!SUPA_ON||(!force&&Date.now()-boardAt<20000))return;
+  boardAt=Date.now();
+  try{
+    const rows=await sb("players?select=id,pseudo,avatar,color,title,bio,showcase,points,got,last_unlock,since&order=points.desc,points_at.asc&limit=50");
+    board=(rows||[]).map(r=>({id:r.id,pseudo:r.pseudo,avatar:r.avatar,color:r.color,title:r.title,bio:r.bio,showcase:Array.isArray(r.showcase)?r.showcase:[],
+      points:r.points||0,count:r.got||0,last:r.last_unlock||null,since:r.since||null}));
+    boardErr=false;myPos=null;
+    if(acctOk&&uid&&!board.slice(0,30).some(r=>r.id===uid)){try{myPos=await rpc("board_position",{p_points:totals(catalog()).pts})}catch(e){}}
+  }catch(e){boardErr=true}
+  if(tab==="communaute")bgRender();
+}
+async function loadVenues(){
+  try{const rows=await sb("venues?select=code,name,city,cat,lat,lng,created_at&order=created_at.desc");
+    const known=new Set((rows||[]).map(v=>v.code));
+    venues=(rows||[]).map(v=>({code:v.code,name:v.name,city:v.city||"",cat:v.cat,lat:v.lat,lng:v.lng,createdAt:Date.parse(v.created_at)||0}))
+      .concat(venues.filter(v=>!known.has(v.code)));bgRender();
+  }catch(e){}
+}
+setInterval(()=>{if(SUPA_ON&&tab==="communaute"&&!document.hidden)loadBoard()},60000);
 
 /* ---------- Géolocalisation automatique ---------- */
 let lastAuto=0;
@@ -1419,7 +1622,7 @@ async function autoLocate(force){
   if(Date.now()-lastAuto<5*60000&&!force)return;lastAuto=Date.now();
   checkin(true);
 }
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)autoLocate()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){autoLocate();if(SUPA_ON){refreshAccount();if(tab==="communaute")loadBoard()}}});
 setInterval(()=>{if(!document.hidden)autoLocate()},10*60000);
 
 /* ---------- Thème ---------- */
@@ -1439,15 +1642,49 @@ $("ob0").append(fakeMedal("monument",CAT_COL.culture,74,"m1"),fakeMedal("city",C
 $("ob2").append(el("span","av","🧭"));
 let obStep=0;
 function obShow(i){obStep=i;document.querySelectorAll("#welcome .obstep").forEach(x=>{x.hidden=+x.dataset.s!==i});document.querySelectorAll("#obDots i").forEach((d,k)=>d.classList.toggle("on",k===i));$("obNext").hidden=i===2;if(i===2)setTimeout(()=>{try{$("pseudoInput").focus()}catch(e){}},80)}
-function openWelcome(){obShow(0);$("welcome").showModal();try{$("welcome").focus({preventScroll:true})}catch(e){}}
+const OB_H="Ton nom de chasseur",OB_P="Il apparaîtra au classement. Choisis-le bien : il ne pourra plus être changé.";
+function openWelcome(at,msg){obShow(at||0);$("obH").textContent=msg?"Choisis un nouveau pseudo":OB_H;$("obP").textContent=msg||OB_P;$("obErr").textContent="";
+  $("obRestore").hidden=!SUPA_ON;if(!$("welcome").open)$("welcome").showModal();try{$("welcome").focus({preventScroll:true})}catch(e){}}
 $("obNext").onclick=()=>obShow(Math.min(2,obStep+1));
-$("welcome").addEventListener("cancel",e=>{if(!S.pseudo)e.preventDefault()});
+$("welcome").addEventListener("cancel",e=>{if(!S.pseudo||pseudoFix)e.preventDefault()});
 $("who").onclick=()=>go("profil");
 document.querySelectorAll("#tabbar [data-tab]").forEach(b=>{b.prepend(svgIcon(b.dataset.ic));b.onclick=()=>go(b.dataset.tab)});
 $("fab").append(svgIcon("pin",true));$("fab").onclick=()=>checkin(false);
 $("codeForm").onsubmit=e=>{e.preventDefault();const v=$("codeInput").value;$("codeInput").value="";$("codeDlg").close();useTag(v)};
-$("welcomeForm").onsubmit=()=>{if(S.pseudo)return;const v=$("pseudoInput").value.trim().slice(0,20);if(v){const first=!S.pseudo;S.pseudo=v;lastBoardJSON="";saveLocal();render();sync();if(first)setTimeout(()=>autoLocate(true),400)}};
-["sheet","pdlg","codeDlg"].forEach(id=>{const d=$(id);d.addEventListener("click",e=>{if(e.target!==d||e.detail===0)return;const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()})});
+const PSEUDO_RE=/^[A-Za-z0-9À-ÖØ-öø-ÿĀ-ž][A-Za-z0-9À-ÖØ-öø-ÿĀ-ž _.'-]*$/;
+function pseudoError(v,code){
+  if(code==="taken")return"« "+v+" » est déjà pris. Essaie une variante !";
+  if(code==="net")return"Connexion impossible. Vérifie ton réseau et réessaie.";
+  if(code==="length"||v.length<2||v.length>20)return"Ton pseudo doit faire entre 2 et 20 caractères.";
+  if(code==="chars"||!PSEUDO_RE.test(v))return"Lettres, chiffres, espaces et _ . ' - seulement (pas d'emoji).";
+  return code?"Ce pseudo n'est pas possible. Essaie autre chose.":"";
+}
+let obBusy=false;
+$("welcomeForm").onsubmit=async e=>{e.preventDefault();if(obBusy)return;
+  if(S.pseudo&&!pseudoFix){$("welcome").close();return}
+  const v=$("pseudoInput").value.trim().replace(/\s+/g," "),err=pseudoError(v);if(err){$("obErr").textContent=err;return}
+  let final=v;
+  if(SUPA_ON){const b=$("obGo");obBusy=true;b.disabled=true;b.textContent="Réservation…";$("obErr").textContent="";
+    const r=await register(v);obBusy=false;b.disabled=false;b.textContent="C'est parti";
+    if(r.ok)final=r.pseudo||v;
+    else if(!(r.error==="net"&&!pseudoFix)){$("obErr").textContent=pseudoError(v,r.error);return}}
+  const first=!S.pseudo;S.pseudo=final;pseudoFix=false;lastBoardJSON="";saveLocal();$("welcome").close();render();sync();loadBoard(true);
+  if(first)setTimeout(()=>autoLocate(true),400);
+};
+$("obRestore").onclick=()=>{$("restoreErr").textContent="";$("restoreInput").value="";$("restoreDlg").showModal()};
+$("restoreForm").onsubmit=async e=>{e.preventDefault();
+  const k=normKey($("restoreInput").value),er=$("restoreErr"),b=$("restoreGo");
+  if(k.length!==16){er.textContent="Le code compte 16 caractères (les tirets sont facultatifs).";return}
+  b.disabled=true;b.textContent="Recherche…";er.textContent="";
+  let me=null,netErr=false;try{me=await rpc("me",{p_key:k})}catch(x){netErr=true}
+  b.disabled=false;b.textContent="Retrouver ma progression";
+  if(!me){er.textContent=netErr?"Connexion impossible. Vérifie ton réseau et réessaie.":"Ce code ne correspond à aucun compte.";return}
+  acctKey=k;acctOk=true;uid=me.id;canEdit=!!me.admin;progRev=me.rev;acctHash="";acctAt=Date.now();
+  if(me.state)merge(me.state);S.pseudo=me.pseudo;pseudoFix=false;lastBoardJSON="";saveAcct();saveLocal();
+  $("restoreDlg").close();if($("welcome").open)$("welcome").close();
+  commit();loadBoard(true);status("Bon retour, "+me.pseudo+" !");setTimeout(()=>autoLocate(true),600);
+};
+["sheet","pdlg","codeDlg","restoreDlg"].forEach(id=>{const d=$(id);d.addEventListener("click",e=>{if(e.target!==d||e.detail===0)return;const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()})});
 addEventListener("scroll",()=>$("topbar").classList.toggle("scrolled",scrollY>6),{passive:true});
 window.addEventListener("hashchange",readHash);
 render();
