@@ -54,6 +54,7 @@ button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:8px}
 .wrap{max-width:560px;margin:0 auto;padding:18px 16px 120px}
+@media (min-width:820px){.wrap{max-width:1060px}}
 
 /* En-tête */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -140,6 +141,110 @@ h3{font-size:15px;font-weight:600;color:var(--muted);margin:22px 2px 10px;displa
 .venue .qr.open{display:block}
 .mini{border:1px solid var(--line);background:transparent;border-radius:10px;padding:6px 10px;font-size:13px}
 
+
+/* ===== Panneau de hauts faits (façon WoW, revisité) ===== */
+.score{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score small{flex-basis:100%;margin:0;font-size:13px}
+.book{display:grid;gap:14px;margin-top:24px}
+.side{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);margin:0 -16px;padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+.cb{flex:none;display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;font-weight:600;font-size:15px;white-space:nowrap;text-align:left}
+.cb em{font-style:normal;font-weight:400;font-size:12px;color:var(--muted);margin-left:auto;padding-left:8px}
+.cb[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.cb[aria-current="true"] em{color:inherit;opacity:.75}
+.cb.season{border-color:var(--sky)}
+@media (min-width:820px){
+ .book{grid-template-columns:240px 1fr;align-items:start}
+ .side{position:sticky;top:12px;flex-direction:column;overflow:visible;margin:0;padding:10px;border:2px solid var(--line);border-radius:18px;background:var(--card)}
+ .cb{border-color:transparent;background:transparent;width:100%}
+ .cb:hover{background:var(--locked)}
+ .cb[aria-current="true"]:hover{background:var(--ink)}
+ .side hr{border:0;border-top:1px solid var(--line);margin:4px 0;width:100%}
+}
+.side hr{display:none}
+@media (min-width:820px){.side hr{display:block}}
+.pane h2.ph{font-size:24px;letter-spacing:-.02em;margin:4px 0 2px}
+.pane p.pd{margin:0 0 6px;color:var(--muted);font-size:14px}
+.sec{margin-top:20px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 8px}
+.sh b{font-size:16px}
+.sh span{font-size:13px;color:var(--muted)}
+.list{display:grid;gap:8px}
+.row-a{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:10px 12px 10px 10px;border-radius:14px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--line)}
+.row-a.on{border-left-color:var(--gold);background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 20%,var(--card)),var(--card) 75%)}
+.row-a.has-crit{cursor:pointer}
+.ico{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:var(--locked);box-shadow:inset 0 0 0 2px var(--line)}
+.row-a.on .ico{background:radial-gradient(circle at 35% 30%,#FFF4C7,#F2C94C 72%);box-shadow:inset 0 0 0 2px #C99A00}
+.row-a.off .ico{filter:grayscale(1);opacity:.55}
+.row-a .t{font-weight:800;line-height:1.2}
+.row-a.off .t{color:var(--muted)}
+.row-a .d{font-size:13px;color:var(--muted);line-height:1.3;margin-top:2px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--locked);color:var(--muted)}
+.tag.t3{background:color-mix(in srgb,var(--sky) 20%,var(--card));color:var(--sky)}
+.tag.t4{background:color-mix(in srgb,#8B5CF6 22%,var(--card));color:#8B5CF6}
+.tag.t5{background:color-mix(in srgb,#F97316 24%,var(--card));color:#E25F0A}
+.pbar{height:8px;border-radius:99px;background:var(--locked);overflow:hidden;margin-top:7px;max-width:320px}
+.pbar i{display:block;height:100%;background:var(--forest);border-radius:99px}
+.ptxt{font-size:12px;color:var(--muted);margin-top:3px}
+.rt{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.shield{--c:var(--gold);width:42px;height:48px;clip-path:polygon(50% 0,100% 13%,100% 58%,50% 100%,0 58%,0 13%);background:var(--c);display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--gold-ink);padding-bottom:6px}
+.row-a.off .shield{--c:var(--locked);color:var(--muted)}
+.shield.big{width:38px;height:44px;padding:0;background:radial-gradient(circle at 40% 30%,#FFE58A,var(--gold) 65%)}
+.when{font-size:11px;color:var(--muted);text-align:center;white-space:nowrap}
+.crit{grid-column:1/-1;display:none;margin:4px 0 2px 68px;font-size:13px;columns:2;column-gap:18px}
+.row-a.open .crit{display:block}
+.crit div{padding:2px 0;color:var(--muted);break-inside:avoid}
+.crit div.ok{color:var(--forest);font-weight:600}
+.row-a .honor{grid-column:2/-1;margin-top:0}
+.sum{display:grid;gap:12px}
+.card2{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px}
+.card2 h3{margin:0 0 10px;color:var(--ink);font-size:16px}
+.cprog{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin:8px 0;font-size:14px}
+.cprog .pbar{grid-column:1/-1;max-width:none;margin-top:2px}
+.season-card{border-color:var(--sky);background:linear-gradient(135deg,color-mix(in srgb,var(--sky) 14%,var(--card)),var(--card) 70%)}
+.season-card .big{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.season-card .left{color:var(--sky);font-weight:600;font-size:14px}
+@media (max-width:480px){.crit{columns:1;margin-left:0}}
+
+
+/* ===== Profils ===== */
+.who{display:flex;align-items:center;gap:10px;border:0;background:none;padding:4px;border-radius:14px;text-align:left}
+.who b{display:block;font-size:16px}
+.who small{display:block;font-size:12px;color:var(--muted)}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--pc,#1F5C45);box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--pc,#1F5C45)}
+.pcard{border-radius:20px;overflow:hidden;background:var(--card);border:2px solid var(--line)}
+.pban{height:84px;background:linear-gradient(135deg,var(--pc),color-mix(in srgb,var(--pc) 55%,#000))}
+.pbody{padding:0 16px 16px;margin-top:-38px}
+.pbody .av{width:76px;height:76px;font-size:40px;box-shadow:0 0 0 4px var(--card)}
+.pname{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
+.ptitle{color:var(--pc);font-weight:700;filter:saturate(1.1)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ptitle{filter:brightness(1.6)}}
+.pbio{margin:8px 0 0;color:var(--muted);font-size:14px}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.pstats div{background:var(--paper);border-radius:12px;padding:10px;text-align:center}
+.pstats b{display:block;font-size:20px}
+.pstats span{font-size:12px;color:var(--muted)}
+.vitrine{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.vit{background:var(--paper);border-radius:14px;padding:10px 8px;text-align:center;font-size:13px;font-weight:600;line-height:1.2}
+.vit i{display:block;font-style:normal;font-size:28px;margin-bottom:4px}
+.vit.empty2{color:var(--muted);font-weight:400;border:2px dashed var(--line);background:none}
+.edit{margin-top:14px}
+.edit h3{margin:16px 0 8px;font-size:15px;color:var(--ink)}
+.avgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.avgrid button{font-size:24px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--paper)}
+.avgrid button[aria-pressed="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 20%,var(--paper))}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatches button{width:38px;height:38px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 2px var(--line)}
+.swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.edit select,.edit input{width:100%;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.row.click{cursor:pointer}
+.row.click:hover{background:color-mix(in srgb,var(--sky) 8%,var(--card))}
+.row .nm .avs{margin-right:6px}
+#pdlg{width:min(94vw,440px);padding:0;background:var(--card)}
+#pdlg .pcard{border:0;border-radius:0}
+#pdlg form{padding:0 16px 16px}
+
 /* Notification de haut fait : le moment fort */
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;
   transform:translate(-50%,160%);transition:transform .45s cubic-bezier(.2,1.4,.4,1);
@@ -169,13 +274,13 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
 <div class="wrap">
   <div class="top">
     <div class="brand">Dehors<small>Les hauts faits de la vraie vie</small></div>
-    <div class="who"><b id="pseudo">—</b><button id="rename" type="button">Changer de pseudo</button></div>
+    <button class="who" id="who" type="button" aria-label="Mon profil"><span class="av" id="hAv">🧭</span><span><b id="pseudo">—</b><small id="hTitle"></small></span></button>
   </div>
 
   <div class="player">
     <div class="ring" id="ring"><div><strong id="pct">0 %</strong><span>complété</span></div></div>
     <div>
-      <div class="score" id="score">0<small>pts</small></div>
+      <div class="score"><span class="shield big" aria-hidden="true"></span><span id="score">0</span><small>points de haut fait</small></div>
       <div class="rank" id="rank">Touriste</div>
       <div class="next" id="next"></div>
     </div>
@@ -190,8 +295,10 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
     <div class="status" id="status" role="status"></div>
   </div>
 
-  <nav class="tabs" id="tabs" role="tablist"></nav>
-  <main id="view"></main>
+  <div class="book">
+    <nav class="side" id="side" aria-label="Catégories"></nav>
+    <main class="pane" id="view"></main>
+  </div>
 
   <div class="foot">Ta progression est enregistrée sur cet appareil.<br><button id="reset" type="button">Tout réinitialiser</button></div>
 </div>
@@ -202,10 +309,11 @@ dialog input{width:100%;border:2px solid var(--line);background:var(--paper);bor
   <div class="l3" id="tL3"></div>
 </div>
 
+<dialog id="pdlg" aria-label="Profil"><div id="pdlgBody"></div><form method="dialog"><button class="btn2" type="submit">Fermer</button></form></dialog>
 <dialog id="welcome">
   <form method="dialog" id="welcomeForm">
     <h2>Bienvenue, chasseur</h2>
-    <p>Chaque ville, chaque lieu, chaque exploit dehors te rapporte un haut fait. Choisis ton pseudo, puis autorise la localisation : tes découvertes se débloqueront toutes seules.</p>
+    <p>Chaque ville, chaque lieu, chaque exploit dehors te rapporte un haut fait. Choisis bien ton pseudo : il apparaîtra au classement et ne pourra plus être changé. Ensuite, autorise la localisation : tes découvertes se débloqueront toutes seules.</p>
     <input id="pseudoInput" maxlength="20" placeholder="Ton pseudo" required aria-label="Ton pseudo">
     <button class="go" type="submit">Commencer la chasse</button>
   </form>
@@ -264,10 +372,15 @@ const CITIES = [
  ["Maldives (Malé)","Maldives",4.1755,73.5093,6,1],["Abou Dhabi","Émirats arabes unis",24.4539,54.3773,15,1]
 ];
 const FLAGS={"France":"🇫🇷","Belgique":"🇧🇪","Suisse":"🇨🇭","Royaume-Uni":"🇬🇧","Espagne":"🇪🇸","Italie":"🇮🇹","Allemagne":"🇩🇪","Pays-Bas":"🇳🇱","Portugal":"🇵🇹","Maroc":"🇲🇦","États-Unis":"🇺🇸","Japon":"🇯🇵","Émirats arabes unis":"🇦🇪","Monaco":"🇲🇨","Luxembourg":"🇱🇺","Irlande":"🇮🇪","Autriche":"🇦🇹","Tchéquie":"🇨🇿","Hongrie":"🇭🇺","Pologne":"🇵🇱","Danemark":"🇩🇰","Suède":"🇸🇪","Norvège":"🇳🇴","Finlande":"🇫🇮","Islande":"🇮🇸","Grèce":"🇬🇷","Turquie":"🇹🇷","Croatie":"🇭🇷","Tunisie":"🇹🇳","Algérie":"🇩🇿","Sénégal":"🇸🇳","Côte d'Ivoire":"🇨🇮","Égypte":"🇪🇬","Afrique du Sud":"🇿🇦","Canada":"🇨🇦","Mexique":"🇲🇽","Brésil":"🇧🇷","Argentine":"🇦🇷","Thaïlande":"🇹🇭","Indonésie":"🇮🇩","Singapour":"🇸🇬","Corée du Sud":"🇰🇷","Chine":"🇨🇳","Australie":"🇦🇺","Qatar":"🇶🇦","Inde":"🇮🇳","Maldives":"🇲🇻"};
+// Ordre pensé pour la motivation : d'abord des victoires faciles et joyeuses (découvrir, manger, sortir),
+// puis le lien aux autres et le corps, puis l'ambition, et le statut (argent, luxe) en dernier pour ne décourager personne.
 const CATS=[
- {id:"voyage",label:"Voyage",icon:"🧭"},{id:"food",label:"Food",icon:"🍜"},{id:"sport",label:"Sport",icon:"🏃"},
- {id:"culture",label:"Culture",icon:"🎭"},{id:"nature",label:"Nature",icon:"🌿"},{id:"argent",label:"Argent",icon:"💰"},{id:"carriere",label:"Carrière",icon:"💼"},{id:"createurs",label:"Créateurs",icon:"📱"},
- {id:"social",label:"Social",icon:"🤝"},{id:"mental",label:"Bien-être",icon:"🧘"},{id:"luxe",label:"Luxe",icon:"💎"},{id:"defis",label:"Défis",icon:"⚡"},{id:"secrets",label:"Secrets",icon:"🔒"}
+ {id:"saison",label:"Saison",icon:"🗓️"},
+ {id:"voyage",label:"Explorer",icon:"🧭"},{id:"nature",label:"Nature",icon:"🌿"},{id:"food",label:"Food",icon:"🍜"},
+ {id:"culture",label:"Culture",icon:"🎭"},{id:"social",label:"Rencontres",icon:"🤝"},{id:"sport",label:"Sport",icon:"🏃"},
+ {id:"mental",label:"Bien-être",icon:"🧘"},{id:"defis",label:"Défis",icon:"⚡"},{id:"carriere",label:"Carrière",icon:"💼"},
+ {id:"createurs",label:"Créateurs",icon:"📱"},{id:"argent",label:"Argent",icon:"💰"},{id:"luxe",label:"Luxe",icon:"💎"},
+ {id:"secrets",label:"Secrets",icon:"🔒"}
 ];
 const VENUE_MILESTONES={
  luxe:[[1,"Adresse chic"],[5,"Habitué du luxe"]],
@@ -285,14 +398,24 @@ const RANKS=[[0,"Touriste"],[250,"Randonneur"],[1000,"Explorateur"],[3000,"Avent
 
 /* ---------- État ---------- */
 const KEY="dehors_v1";
-const fresh=()=>({pseudo:"",unlocked:{},checkins:[],home:null,days:[]});
+const fresh=()=>({pseudo:"",unlocked:{},checkins:[],home:null,days:[],profile:{avatar:"🧭",color:"#1F5C45",title:"",bio:"",showcase:[],_t:0}});
+const AVATARS=["🧭","🦊","🐺","🦅","🐻","🦁","🐯","🐼","🐸","🐙","🦉","🐢","🦄","🐉","🌵","🌊","🔥","⚡","🌙","☀️","🏔️","🚀","🎒","🛹","🎧","📸","🍜","🏄","🧗","👑"];
+const COLORS=[["Forêt","#1F5C45"],["Océan","#2F6F95"],["Coucher de soleil","#D9622B"],["Lavande","#7C5CC4"],["Or","#B8860B"],["Framboise","#C2185B"],["Nuit","#2B2D42"]];
+// Titres débloqués par certains hauts faits (affichés sous le pseudo)
+const TITLES=[["villes:1","Éclaireur"],["villes:5","Globe-trotteur"],["villes:15","Routard"],["villes:30","Cartographe"],["paysN:5","Citoyen du monde"],
+ ["meta:tdf","Tour de France"],["meta:capitales","L'Européen"],["meta:tdm","Tour du monde"],["meta:parisien","Parisien éternel"],["meta:merveilles","Gardien des merveilles"],
+ ["levetot","Lève-tôt"],["noctambule","Noctambule"],["anniv","Pendant qu'ils jouent"],["honneur:sport:marathon","Marathonien"],["honneur:sport:4000","Montagnard"],
+ ["meta:couronne","Triple couronne"],["meta:stades","Ultra des stades"],["meta:esprit","Esprit sain"],["long:serie30","Inarrêtable"],["long:serie365","365 jours dehors"],
+ ["honneur:createurs:ytargent","Créateur"],["honneur:argent:1m","Millionnaire"],["honneur:argent:1md","Milliardaire"],["cent","Complétionniste"]];
+const safeColor=c=>COLORS.some(x=>x[1]===c)?c:"#1F5C45";
+const safeAvatar=a=>AVATARS.includes(a)?a:"🧭";
 let S=load();
 let venues=[];          // lieux partenaires (base partagée)
 let board=[];           // classement
-let tab="voyage";
+let tab="recap";
 let db=null,user=null,uid=null,canEdit=false,boardReadOnly=false,pendingTag=null;
 
-function load(){try{return Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return fresh()}}
+function load(){try{const f=fresh(),o=Object.assign(f,JSON.parse(localStorage.getItem(KEY)||"{}"));o.profile=Object.assign(fresh().profile,o.profile||{});return o}catch(e){return fresh()}}
 function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 /* ---------- Outils ---------- */
@@ -306,6 +429,76 @@ function ago(t){const m=Math.round((Date.now()-t)/60000);if(m<1)return"à l'inst
 function status(msg){$("status").textContent=msg||""}
 
 /* ---------- Catalogue des hauts faits ---------- */
+
+/* ---------- Saisons ---------- */
+const SEASON_NAMES={hiver:"Hiver",printemps:"Printemps",ete:"Été",automne:"Automne"};
+const SEASON_ICONS={hiver:"❄️",printemps:"🌸",ete:"☀️",automne:"🍂"};
+function seasonInfo(t){
+  const d=new Date(t),y=d.getFullYear(),md=(d.getMonth()+1)*100+d.getDate();
+  let type,yr=y,start,end;
+  if(md>=1221||md<320){type="hiver";yr=md>=1221?y:y-1;start=new Date(yr,11,21);end=new Date(yr+1,2,20)}
+  else if(md<621){type="printemps";start=new Date(y,2,20);end=new Date(y,5,21)}
+  else if(md<923){type="ete";start=new Date(y,5,21);end=new Date(y,8,23)}
+  else{type="automne";start=new Date(y,8,23);end=new Date(y,11,21)}
+  const label=SEASON_NAMES[type]+" "+(type==="hiver"?yr+"-"+String(yr+1).slice(2):yr);
+  return{type,yr,key:type+"-"+yr,start:+start,end:+end,label};
+}
+function seasonFromKey(key){const[type,yr]=key.split("-");const t=type==="hiver"?new Date(+yr,11,25):type==="printemps"?new Date(+yr,3,15):type==="ete"?new Date(+yr,6,15):new Date(+yr,9,15);return seasonInfo(+t)}
+// Défis communs à toutes les saisons : [clé, titre, description, icône, difficulté, mesure, objectif]
+const SEASON_AUTO=[
+ ["explo","Explorateur de saison","Découvrir 3 nouvelles villes cette saison","🧭",2,"villes",3],
+ ["globe","Grand voyageur de saison","Découvrir 10 nouvelles villes cette saison","🌍",4,"villes",10],
+ ["assidu","Assidu","Être actif 20 jours différents cette saison","📆",3,"jours",20],
+ ["inarretable","Inarrêtable","Être actif 60 jours différents cette saison","🔥",5,"jours",60],
+ ["mythe","Chasseur de mythes","Débloquer 2 lieux mythiques cette saison","🏛️",3,"sites",2],
+ ["chelem","Grand chelem de saison","Débloquer 25 hauts faits cette saison","🏆",4,"tout",25]
+];
+// Défis propres à chaque saison (sur l'honneur)
+const SEASON_HONOR={
+ hiver:[["flocon","Premiers flocons","Te promener sous la neige","🌨️",1],["noel","Marché de Noël","Faire un marché de Noël","🎄",1],["bain","Plongeon du Nouvel An","Te baigner dehors en hiver","🥶",4],["raquettes","Raquettes","Faire une sortie en raquettes ou à ski","🎿",2],["patin","Patineur","Faire du patin à glace","⛸️",1],["soleil_hiver","Soleil d'hiver","Voir un lever de soleil en hiver","🌅",2]],
+ printemps:[["fleurs","Floraison","Voir des cerisiers ou un champ de fleurs","🌸",1],["jardin","Main verte","Planter quelque chose","🌱",1],["pique_printemps","Premier pique-nique","Pique-niquer au soleil","🧺",1],["velo_printemps","Remise en selle","Faire 30 km à vélo","🚲",2],["rando_printemps","Sentiers en fleurs","Faire une randonnée de 15 km","🥾",3],["vide","Chineur","Faire un vide-grenier ou une brocante","🏷️",1]],
+ ete:[["baignade_ete","Saison des bains","Te baigner 5 fois cet été","🏖️",2],["festival_ete","Festival d'été","Faire un festival en plein air","🎪",2],["etoiles_ete","Nuit des étoiles","Observer les étoiles filantes","🌠",2],["bivouac_ete","Belle étoile","Dormir dehors","⛺",3],["sunset","Coucher sur la mer","Voir le soleil se coucher sur la mer","🌇",1],["glace","Tour des glaciers","Goûter 5 glaciers différents","🍦",2]],
+ automne:[["foret_automne","Forêt rousse","Marcher en forêt parmi les feuilles","🍁",1],["cueillette_automne","Cueillette d'automne","Ramasser châtaignes, champignons ou pommes","🌰",2],["vendanges","Vendanges","Participer à des vendanges ou visiter un vignoble","🍇",2],["pluie_automne","Imperméable","Courir sous la pluie","🌧️",2],["citrouille","Soupe maison","Cuisiner une soupe de saison","🎃",1],["brume","Matin brumeux","Sortir à l'aube un matin de brume","🌫️",2]]
+};
+
+/* ---------- Hauts faits « méta » : une liste de critères à compléter ---------- */
+const METAS=[
+ ["tdf","Tour de France des métropoles","voyage","Découvrir les 10 plus grandes villes de France","🇫🇷",4,["Paris","Marseille","Lyon","Toulouse","Nice","Nantes","Strasbourg","Montpellier","Bordeaux","Lille"].map(n=>"ville:"+n)],
+ ["normandie","Normand d'adoption","voyage","Faire le tour de la Normandie","🍏",3,["Rouen","Caen","Le Havre","Deauville","Honfleur","Étretat","Le Mont-Saint-Michel"].map(n=>"ville:"+n)],
+ ["bretagne","Breton de cœur","voyage","Faire le tour de la Bretagne","⚓",3,["Rennes","Brest","Saint-Malo","Quimper","Vannes","Lorient"].map(n=>"ville:"+n)],
+ ["azur","Riviera","voyage","Arpenter la Côte d'Azur","🌴",3,["Nice","Cannes","Menton","Monaco","Saint-Tropez","Toulon"].map(n=>"ville:"+n)],
+ ["outremer","Outre-mer","voyage","Visiter les grands territoires d'outre-mer","🏝️",5,["Saint-Denis (La Réunion)","Fort-de-France","Pointe-à-Pitre","Cayenne","Nouméa","Papeete"].map(n=>"ville:"+n)],
+ ["capitales","Capitales d'Europe","voyage","Visiter 10 capitales européennes","🇪🇺",4,["Paris","Bruxelles","Londres","Madrid","Rome","Berlin","Amsterdam","Lisbonne","Vienne","Prague"].map(n=>"ville:"+n)],
+ ["nordique","Grand Nord","voyage","Visiter les capitales nordiques","🧊",4,["Copenhague","Stockholm","Oslo","Helsinki","Reykjavik"].map(n=>"ville:"+n)],
+ ["tdm","Tour du monde","voyage","Une ville sur chaque continent","🌐",5,["Paris","New York","Rio de Janeiro","Tokyo","Le Cap","Sydney"].map(n=>"ville:"+n)],
+ ["parisien","Paris éternel","culture","Voir tous les monuments de Paris","🗼",3,["eiffel","louvre","arc","sacrecoeur","notredame","versailles"].map(n=>"site:"+n)],
+ ["merveilles","Sept merveilles","culture","Voir les merveilles du monde","🗿",5,["muraille","christ","machupicchu","tajmahal","colisee","gizeh"].map(n=>"site:"+n)],
+ ["stades","Stades de légende","sport","Entrer dans les stades mythiques","🏟️",4,["sdf","parc","velodrome","bernabeu","campnou","wembley","oldtrafford"].map(n=>"site:"+n)],
+ ["couronne","Triple couronne","sport","Marathon, triathlon et sommet de 4 000 m","👑",5,["honneur:sport:marathon","honneur:sport:triathlon","honneur:sport:4000"]],
+ ["nature_sauvage","Nature sauvage","nature","Les grands paysages de France","🏞️",3,["montblanc","verdon","pilat","falaises","calanques","gavarnie"].map(n=>"site:"+n)],
+ ["esprit","Esprit sain","mental","Les fondations d'un mental solide","🧠",4,["meditation","journal","sommeil","sucre","digital","gratitude"].map(n=>"honneur:mental:"+n)],
+ ["fortune","De zéro à millionnaire","argent","Toutes les étapes vers le million","💎",5,["epargne1","10k","100k","200k","500k","1m"].map(n=>"honneur:argent:"+n)],
+ ["createur","Créateur complet","createurs","Percer sur YouTube, TikTok et Instagram","📱",5,["yt10k","tt100k","ig100k"].map(n=>"honneur:createurs:"+n)]
+];
+
+/* ---------- Défis au long cours (jours, semaines, années) ---------- */
+const LONG=[
+ ["serie30","Un mois dehors","Être actif 30 jours d'affilée","🔥",4,"streak",30],
+ ["serie100","Cent jours","Être actif 100 jours d'affilée","💯",5,"streak",100],
+ ["serie365","Une année dehors","Être actif 365 jours d'affilée","🌞",5,"streak",365],
+ ["actif50","Habitué","Être actif 50 jours au total","🥾",3,"activeDays",50],
+ ["actif100","Pilier","Être actif 100 jours au total","🧱",4,"activeDays",100],
+ ["actif365","Vétéran","Être actif 365 jours au total","🎖️",5,"activeDays",365],
+ ["semaines12","Trimestre nomade","Découvrir une ville sur 12 semaines différentes","📅",3,"cityWeeks",12],
+ ["semaines52","52 semaines, 52 villes","Découvrir une ville sur 52 semaines différentes","🗓️",5,"cityWeeks",52],
+ ["saisons4","Quatre saisons","Être actif au printemps, en été, en automne et en hiver","🍂",3,"seasonTypes",4],
+ ["annees3","Fidèle","Être actif sur 3 années différentes","🏅",4,"years",3],
+ ["annees10","Une décennie dehors","Être actif sur 10 années différentes","🏆",5,"years",10],
+ ["paysan","Un pays par an","Découvrir un nouveau pays sur 3 années différentes","🛂",4,"countryYears",3],
+ ["anciennete1","Membre depuis 1 an","Chasser des hauts faits depuis un an","🎂",3,"memberDays",365],
+ ["anciennete5","5 ans de chasse","Chasser des hauts faits depuis cinq ans","🎉",5,"memberDays",1825]
+];
+
 function catalog(){
   const L=[];
   const countries=[...new Set(CITIES.map(c=>c[1]))];
@@ -314,26 +507,44 @@ function catalog(){
   SITES.forEach(x=>L.push({id:"site:"+x[0],cat:x[2],sub:"Lieux mythiques · validés par GPS",title:x[1],desc:x[8],tier:x[6],pts:TIER_PTS[x[6]],icon:x[7],gps:true}));
   countries.forEach(n=>L.push({id:"pays:"+n,cat:"voyage",sub:"Pays",title:n,desc:"Poser le pied dans ce pays",tier:n==="France"?1:(EU.includes(n)?3:4),pts:TIER_PTS[n==="France"?1:(EU.includes(n)?3:4)],icon:FLAGS[n]||"🏳️"}));
   [[1,"Premier pas","Découvrir ta première ville"],[5,"Globe-trotteur en herbe","Découvrir 5 villes"],[15,"Routard","Découvrir 15 villes"],[30,"Cartographe","Découvrir 30 villes"]]
-    .forEach(([n,t,d])=>L.push({id:"villes:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,pts:n*5+10,icon:"🗺️",test:x=>x.cities>=n}));
+    .forEach(([n,t,d])=>L.push({id:"villes:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,tier:n>=30?4:n>=15?3:n>=5?2:1,pts:TIER_PTS[n>=30?4:n>=15?3:n>=5?2:1],icon:"🗺️",test:x=>x.cities>=n,prog:x=>[x.cities,n]}));
   [[2,"Passeport tamponné","Visiter 2 pays"],[5,"Citoyen du monde","Visiter 5 pays"]]
-    .forEach(([n,t,d])=>L.push({id:"paysN:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,pts:n*30,icon:"🛂",test:x=>x.countries>=n}));
+    .forEach(([n,t,d])=>L.push({id:"paysN:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,tier:n>=5?4:3,pts:TIER_PTS[n>=5?4:3],icon:"🛂",test:x=>x.countries>=n,prog:x=>[x.countries,n]}));
   [[100,"Évasion"],[500,"Grand départ"],[1000,"Loin, très loin"],[5000,"Autre continent"]]
-    .forEach(([n,t])=>L.push({id:"dist:"+n,cat:"voyage",sub:"Jalons",title:t,desc:"Valider une position à plus de "+fmt(n)+" km de ta première",pts:Math.round(20+n/25),icon:"✈️",test:x=>x.maxDist>=n}));
+    .forEach(([n,t])=>L.push({id:"dist:"+n,cat:"voyage",sub:"Jalons",title:t,desc:"Valider une position à plus de "+fmt(n)+" km de ta première",tier:n>=5000?5:n>=1000?4:n>=500?3:2,pts:TIER_PTS[n>=5000?5:n>=1000?4:n>=500?3:2],icon:"✈️",test:x=>x.maxDist>=n,prog:x=>[Math.round(x.maxDist),n]}));
   L.push({id:"offmap",cat:"voyage",sub:"Jalons",title:"Hors des sentiers battus",desc:"Valider ta position loin de toute ville répertoriée",pts:30,icon:"🌲"});
   // Lieux partenaires + jalons par catégorie
   venues.forEach(v=>L.push({id:"lieu:"+v.code,cat:v.cat,sub:"Lieux partenaires",title:v.name,desc:v.city?"Lieu taggé · "+v.city:"Lieu taggé",pts:20,icon:(CATS.find(c=>c.id===v.cat)||{}).icon||"📍"}));
-  Object.entries(VENUE_MILESTONES).forEach(([cat,arr])=>arr.forEach(([n,t])=>L.push({id:"lieux:"+cat+":"+n,cat,sub:"Jalons",title:t,desc:"Découvrir "+n+" lieu"+(n>1?"x":"")+" partenaire"+(n>1?"s":""),pts:n*10+15,icon:"🎖️",test:x=>(x.venues[cat]||0)>=n})));
+  Object.entries(VENUE_MILESTONES).forEach(([cat,arr])=>arr.forEach(([n,t])=>L.push({id:"lieux:"+cat+":"+n,cat,sub:"Jalons",title:t,desc:"Découvrir "+n+" lieu"+(n>1?"x":"")+" partenaire"+(n>1?"s":""),pts:n*10+15,icon:"🎖️",test:x=>(x.venues[cat]||0)>=n,prog:x=>[x.venues[cat]||0,n]})));
   // Exploits sur l'honneur
   Object.entries(HONOR).forEach(([cat,arr])=>arr.forEach(([k,t,d,ic,sb,tr])=>L.push({id:"honneur:"+cat+":"+k,cat,sub:sb||"Exploits sur l'honneur",title:t,desc:d,tier:tr||2,pts:TIER_PTS[tr||2],icon:ic,honor:true})));
   // Défis de rythme
   L.push({id:"weekend",cat:"defis",sub:"Rythme",title:"Week-end explorateur",desc:"Sortir le samedi et le dimanche du même week-end",pts:40,icon:"📅",test:x=>x.weekend});
   L.push({id:"marathon",cat:"defis",sub:"Rythme",title:"Marathon urbain",desc:"Découvrir 3 villes différentes le même jour",pts:60,icon:"🚆",test:x=>x.citiesSameDay>=3});
-  L.push({id:"serie7",cat:"defis",sub:"Rythme",title:"7 jours dehors",desc:"Débloquer au moins un haut fait 7 jours d'affilée",pts:70,icon:"🔥",test:x=>x.streak>=7});
+  L.push({id:"serie7",cat:"defis",sub:"Rythme",title:"7 jours dehors",desc:"Débloquer au moins un haut fait 7 jours d'affilée",pts:70,icon:"🔥",test:x=>x.streak>=7,prog:x=>[x.streak,7]});
   // Secrets
   L.push({id:"levetot",cat:"secrets",sub:"Secrets",title:"Lève-tôt",desc:"Valider ta position entre 5 h et 8 h",pts:30,icon:"🐓",hidden:true});
   L.push({id:"noctambule",cat:"secrets",sub:"Secrets",title:"Noctambule",desc:"Valider ta position entre 22 h et 2 h",pts:30,icon:"🦉",hidden:true});
-  L.push({id:"collection25",cat:"secrets",sub:"Secrets",title:"Collectionneur",desc:"Débloquer 25 hauts faits",pts:100,icon:"💎",hidden:true,test:x=>x.count>=25});
+  L.push({id:"collection25",cat:"secrets",sub:"Secrets",title:"Collectionneur",desc:"Débloquer 25 hauts faits",pts:100,icon:"💎",hidden:true,test:x=>x.count>=25,prog:x=>[x.count,25]});
   L.push({id:"cent",cat:"secrets",sub:"Secrets",title:"Complétionniste",desc:"Atteindre 100 % de hauts faits",pts:500,icon:"👑",hidden:true,test:x=>x.allOthers});
+  // Défis au long cours
+  LONG.forEach(([k,t,d,ic,tr,m,n])=>L.push({id:"long:"+k,cat:"defis",sub:"Au long cours",title:t,desc:d,tier:tr,pts:TIER_PTS[tr],icon:ic,test:x=>x[m]>=n,prog:x=>[Math.min(x[m],n),n]}));
+  // Secrets supplémentaires
+  [["minuit","Minuit pile","Valider ta position entre minuit et minuit cinq","🕛",2],["vendredi13","Superstitieux","Sortir un vendredi 13","🐈‍⬛",2],["nouvelan","Premier jour","Valider ta position un 1er janvier","🎆",2],["valentin","Ville de l'amour","Être à Paris un 14 février","💘",3],["anniv","Pendant qu'ils jouent","Sortir un 19 novembre, jour de la sortie de GTA 6","🎮",3],["rafale","En rafale","Débloquer 5 hauts faits le même jour","⚡",3],["mille","Mille points","Atteindre 1 000 points de haut fait","🥇",3],["dixmille","Dix mille points","Atteindre 10 000 points de haut fait","🏵️",5]]
+    .forEach(([k,t,d,ic,tr])=>L.push({id:k,cat:"secrets",sub:"Secrets",title:t,desc:d,tier:tr,pts:TIER_PTS[tr],icon:ic,hidden:true,
+      test:k==="rafale"?x=>x.maxPerDay>=5:k==="mille"?x=>x.points>=1000:k==="dixmille"?x=>x.points>=10000:null}));
+  // Saison en cours + archives des saisons passées
+  const cur=seasonInfo(Date.now());
+  const keys=new Set([cur.key]);Object.keys(S.unlocked).forEach(id=>{if(id.startsWith("saison:"))keys.add(id.split(":")[1])});
+  keys.forEach(key=>{
+    const si=key===cur.key?cur:seasonFromKey(key),legacy=key!==cur.key,sub=legacy?"Archives · "+si.label:"Saison · "+si.label;
+    SEASON_AUTO.forEach(([k,t,d,ic,tr,m,n])=>L.push({id:"saison:"+key+":"+k,cat:"saison",sub,title:t,desc:d,tier:tr,pts:TIER_PTS[tr],icon:ic,legacy,season:key,
+      test:legacy?null:x=>(x.season[m]||0)>=n,prog:legacy?null:x=>[Math.min(x.season[m]||0,n),n]}));
+    SEASON_HONOR[si.type].forEach(([k,t,d,ic,tr])=>L.push({id:"saison:"+key+":"+k,cat:"saison",sub,title:t,desc:d,tier:tr,pts:TIER_PTS[tr],icon:ic,legacy,season:key,honor:!legacy}));
+  });
+  // Méta-hauts faits
+  METAS.forEach(([k,t,cat,d,ic,tr,crit])=>L.push({id:"meta:"+k,cat,sub:"Grands accomplissements",title:t,desc:d,tier:tr,pts:TIER_PTS[tr],icon:ic,crit,
+    test:()=>crit.every(c=>S.unlocked[c]),prog:()=>[crit.filter(c=>S.unlocked[c]).length,crit.length]}));
   return L;
 }
 
@@ -352,12 +563,28 @@ function facts(L){
   let streak=0;const sorted=[...days].sort();let run=0,prev=null;
   sorted.forEach(k=>{const t=new Date(k+"T12:00").getTime();run=(prev&&Math.round((t-prev)/864e5)===1)?run+1:1;prev=t;streak=Math.max(streak,run)});
   const count=Object.keys(u).length;
-  const allOthers=L.filter(a=>a.id!=="cent").every(a=>u[a.id]);
-  return{cities,countries,maxDist,venues:venuesBy,citiesSameDay,weekend,streak,count,allOthers};
+  const allOthers=L.filter(a=>a.id!=="cent"&&!a.legacy).every(a=>u[a.id]);
+  // Saison en cours
+  const cs=seasonInfo(Date.now()),inS=t=>t>=cs.start&&t<cs.end;
+  const season={villes:0,sites:0,tout:0,jours:0};
+  Object.entries(u).forEach(([id,v])=>{if(!inS(v.at))return;season.tout++;if(id.startsWith("ville:"))season.villes++;if(id.startsWith("site:"))season.sites++});
+  S.days.forEach(k=>{if(inS(new Date(k+"T12:00").getTime()))season.jours++});
+  // Long cours
+  const wk=t=>{const d=new Date(t);const j=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-"+Math.floor((d-j)/6048e5)};
+  const cityWeeks=new Set(Object.entries(u).filter(([id])=>id.startsWith("ville:")).map(([,v])=>wk(v.at))).size;
+  const seasonTypes=new Set(S.days.map(k=>seasonInfo(new Date(k+"T12:00").getTime()).type)).size;
+  const years=new Set(S.days.map(k=>k.slice(0,4))).size;
+  const countryYears=new Set(Object.entries(u).filter(([id])=>id.startsWith("pays:")).map(([,v])=>new Date(v.at).getFullYear())).size;
+  const first=sorted.length?new Date(sorted[0]+"T12:00").getTime():Date.now();
+  const memberDays=Math.floor((Date.now()-first)/864e5);
+  const perDay={};Object.values(u).forEach(v=>{const k=dayKey(v.at);perDay[k]=(perDay[k]||0)+1});
+  const maxPerDay=Math.max(0,...Object.values(perDay));
+  let points=0;L.forEach(a=>{if(u[a.id])points+=a.pts});
+  return{cities,countries,maxDist,venues:venuesBy,citiesSameDay,weekend,streak,count,allOthers,season,cityWeeks,seasonTypes,years,countryYears,memberDays,maxPerDay,activeDays:S.days.length,points};
 }
 function totals(L){
-  let pts=0,got=0;L.forEach(a=>{if(S.unlocked[a.id]){pts+=a.pts;got++}});
-  return{pts,got,total:L.length,pct:L.length?Math.floor(got/L.length*100):0};
+  let pts=0,got=0,total=0;L.forEach(a=>{const on=!!S.unlocked[a.id];if(on)pts+=a.pts;if(!a.legacy){total++;if(on)got++}});
+  return{pts,got,total,pct:total?Math.floor(got/total*100):0};
 }
 
 /* ---------- Déblocage ---------- */
@@ -418,6 +645,9 @@ async function checkin(){
     nearHint=near?"Lieu mythique à "+(nd<1?Math.round(nd*1000)+" m":nd.toFixed(1).replace(".",",")+" km")+" : "+near[1]+" "+near[7]:"";
     if(h>=5&&h<8)unlock("levetot",L);
     if(h>=22||h<2)unlock("noctambule",L);
+    {const dd=new Date(now);if(h===0&&dd.getMinutes()<5)unlock("minuit",L);if(dd.getDay()===5&&dd.getDate()===13)unlock("vendredi13",L);
+     if(dd.getMonth()===0&&dd.getDate()===1)unlock("nouvelan",L);if(best&&best[0]==="Paris"&&dd.getMonth()===1&&dd.getDate()===14)unlock("valentin",L);
+     if(dd.getMonth()===10&&dd.getDate()===19)unlock("anniv",L);}
     const k=dayKey(now);if(!S.days.includes(k))S.days.push(k);
     commit();
     if(toastQ.length===before&&!toastBusy)status(best?"Déjà découvert : "+best[0]+". Va voir plus loin 👀":"Aucune ville répertoriée ici, mais ta position est enregistrée.");
@@ -446,60 +676,181 @@ async function useTag(raw){
 function readHash(){const h=location.hash.slice(1);if(h.startsWith("tag-"))useTag(h.slice(4))}
 
 /* ---------- Affichage ---------- */
+function shield(n){return el("div","shield",String(n))}
 function render(){
-  const L=catalog(),T=totals(L);
+  const L=catalog(),T=totals(L),F=facts(L),byId={};L.forEach(a=>byId[a.id]=a);
   $("pseudo").textContent=S.pseudo||"Sans pseudo";
-  $("score").firstChild.nodeValue=fmt(T.pts);
+  $("hAv").textContent=safeAvatar(S.profile.avatar);$("who").style.setProperty("--pc",safeColor(S.profile.color));
+  $("hTitle").textContent=S.profile.title&&S.unlocked[S.profile.title]?(TITLES.find(t=>t[0]===S.profile.title)||[,""])[1]:"";
+  $("score").textContent=fmt(T.pts);
   $("pct").textContent=T.pct+" %";$("ring").style.setProperty("--p",T.pct);
   let cur=RANKS[0],nxt=null;RANKS.forEach((r,i)=>{if(T.pts>=r[0]){cur=r;nxt=RANKS[i+1]||null}});
   $("rank").textContent=cur[1]+" · "+T.got+" / "+T.total+" hauts faits";
-  $("next").textContent=nxt?"Encore "+fmt(nxt[0]-T.pts)+" pts pour devenir "+nxt[1]:"Rang maximum atteint";
-  // onglets
-  const tabs=$("tabs");tabs.textContent="";
-  [...CATS,{id:"communaute",label:"Communauté",icon:"👥"}].forEach(c=>{
-    const b=el("button","tab");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",tab===c.id);
-    b.append(c.icon+" "+c.label);
-    if(c.id!=="communaute"){const all=L.filter(a=>a.cat===c.id);const got=all.filter(a=>S.unlocked[a.id]).length;b.append(el("em",null,got+"/"+all.length))}
-    b.onclick=()=>{tab=c.id;render()};tabs.append(b);
+  $("next").textContent=nxt?"Encore "+fmt(nxt[0]-T.pts)+" points pour devenir "+nxt[1]:"Rang maximum atteint";
+  // Colonne des catégories
+  const side=$("side");side.textContent="";
+  const si=seasonInfo(Date.now());
+  const entries=[{id:"recap",label:"Récapitulatif",icon:"📜"},{id:"profil",label:"Mon profil",icon:"👤"},{id:"saison",label:si.label,icon:SEASON_ICONS[si.type],season:true},"hr",
+    ...CATS.filter(c=>c.id!=="saison"),"hr",{id:"communaute",label:"Communauté",icon:"👥"}];
+  entries.forEach(c=>{
+    if(c==="hr"){side.append(el("hr"));return}
+    const b=el("button","cb"+(c.season?" season":""));b.type="button";b.setAttribute("aria-current",tab===c.id);
+    b.append(c.label);
+    if(!["recap","communaute","profil"].includes(c.id)){const all=L.filter(a=>a.cat===c.id&&!a.legacy);b.append(el("em",null,all.filter(a=>S.unlocked[a.id]).length+"/"+all.length))}
+    b.onclick=()=>{tab=c.id;render();if(innerWidth<820)$("view").scrollIntoView({behavior:"smooth",block:"start"})};side.append(b);
   });
   const v=$("view");v.textContent="";
   if(tab==="communaute")return renderCommunity(v);
-  const items=L.filter(a=>a.cat===tab);
-  const subs=[...new Set(items.map(a=>a.sub))];
-  if(tab!=="voyage"&&tab!=="defis"&&tab!=="secrets"&&!items.some(a=>a.sub==="Lieux partenaires")){
-    const h=el("h3");h.append(el("span",null,"Lieux partenaires"));v.append(h);
-    v.append(el("div","empty","Aucun établissement partenaire dans cette catégorie pour l'instant. Scanne le QR code d'un lieu Dehors pour débloquer son haut fait."));
+  if(tab==="recap")return renderRecap(v,L,T,F,byId);
+  if(tab==="profil")return renderProfile(v,L,T,byId);
+  const c=CATS.find(x=>x.id===tab)||CATS[0];
+  const items=L.filter(a=>a.cat===c.id);
+  v.append(el("h2","ph",c.id==="saison"?si.label:c.label));
+  if(c.id==="saison"){
+    const left=Math.max(0,Math.ceil((si.end-Date.now())/864e5));
+    v.append(el("p","pd","Ces défis ne sont disponibles que pendant la saison. Il reste "+left+" jour"+(left>1?"s":"")+" : une fois la saison terminée, ceux que tu as obtenus rejoignent tes archives, les autres sont perdus."));
+  }else{const all=items.filter(a=>!a.legacy);v.append(el("p","pd",all.filter(a=>S.unlocked[a.id]).length+" sur "+all.length+" hauts faits obtenus"))}
+  const order=["Grands accomplissements","Lieux mythiques · validés par GPS","Lieux partenaires","Jalons","Au long cours","Rythme"];
+  const subs=[...new Set(items.map(a=>a.sub))].sort((x,y)=>{const i=order.indexOf(x),j=order.indexOf(y);return(i<0?99:i)-(j<0?99:j)});
+  if(["food","sport","culture","nature","luxe"].includes(c.id)&&!items.some(a=>a.sub==="Lieux partenaires")){
+    const sec=el("section","sec"),h=el("div","sh");h.append(el("b",null,"Lieux partenaires"));sec.append(h);
+    sec.append(el("div","empty","Aucun établissement partenaire dans cette catégorie pour l'instant. Scanne le QR code d'un lieu Dehors pour débloquer son haut fait."));v.append(sec);
   }
-  subs.forEach(s=>{
-    const list=items.filter(a=>a.sub===s);const got=list.filter(a=>S.unlocked[a.id]).length;
-    const h=el("h3");h.append(el("span",null,s),el("span",null,got+" / "+list.length));v.append(h);
-    const g=el("div","grid");
-    list.sort((a,b)=>(!!S.unlocked[b.id])-(!!S.unlocked[a.id])).forEach(a=>g.append(tile(a)));v.append(g);
+  subs.forEach(sb=>{
+    const list=items.filter(a=>a.sub===sb);const got=list.filter(a=>S.unlocked[a.id]).length;
+    const sec=el("section","sec"),h=el("div","sh");h.append(el("b",null,sb),el("span",null,got+" / "+list.length));sec.append(h);
+    const ls=el("div","list");
+    list.sort((x,y)=>{const ox=!!S.unlocked[x.id],oy=!!S.unlocked[y.id];if(ox!==oy)return oy-ox;if(ox)return S.unlocked[y.id].at-S.unlocked[x.id].at;return(x.tier||0)-(y.tier||0)})
+      .forEach(a=>ls.append(row(a,F,byId)));
+    sec.append(ls);v.append(sec);
   });
 }
-function tile(a){
+function row(a,F,byId){
   const on=!!S.unlocked[a.id],hide=a.hidden&&!on;
-  const d=el("div","ach "+(on?"on":"off")+(hide?" hidden":""));
-  d.append(el("div","ic",hide?"❔":a.icon),el("div","t",hide?"Haut fait secret":a.title),el("div","d",hide?"Continue d'explorer pour le révéler.":a.desc));
-  const tn=a.tier?TIER_NAME[a.tier]+" · ":"";d.dataset.tier=a.tier||0;
-  d.append(el("div","p",on?"✓ "+tn+a.pts+" pts · "+new Date(S.unlocked[a.id].at).toLocaleDateString("fr-FR"):tn+a.pts+" pts"+(a.gps?" · 📍 auto":"")));
+  const r=el("div","row-a "+(on?"on":"off")+(a.crit?" has-crit":""));
+  r.append(el("div","ico",hide?"❔":a.icon));
+  const mid=el("div");
+  mid.append(el("div","t",hide?"Haut fait secret":a.title),el("div","d",hide?"Continue d'explorer pour le révéler.":a.desc));
+  if(!hide){
+    const tg=el("div","tags");
+    if(a.tier)tg.append(el("span","tag t"+a.tier,TIER_NAME[a.tier]));
+    if(a.gps)tg.append(el("span","tag","📍 Auto par GPS"));
+    if(a.honor&&!on)tg.append(el("span","tag","Sur l'honneur"));
+    if(a.crit)tg.append(el("span","tag",on?"Critères complétés":"Toucher pour voir les critères"));
+    mid.append(tg);
+  }
+  if(!on&&!hide&&a.prog&&F){const[c,m]=a.prog(F);if(m>1){const pb=el("div","pbar"),i=el("i");i.style.width=Math.min(100,c/m*100)+"%";pb.append(i);mid.append(pb,el("div","ptxt",fmt(c)+" / "+fmt(m)))}}
+  r.append(mid);
+  const rt=el("div","rt");rt.append(shield(hide?"?":a.pts));
+  if(on)rt.append(el("div","when",new Date(S.unlocked[a.id].at).toLocaleDateString("fr-FR")));
+  r.append(rt);
+  if(a.crit){
+    const cr=el("div","crit");a.crit.forEach(id=>{const ok=!!S.unlocked[id],x=byId[id];cr.append(el("div",ok?"ok":"",(ok?"✓ ":"○ ")+(x?x.title:id)))});
+    r.append(cr);r.onclick=e=>{if(!e.target.closest(".honor"))r.classList.toggle("open")};
+  }
   if(a.honor&&!on){
     const b=el("button","honor");b.type="button";const bar=el("i");b.append(bar,el("span",null,"Maintenir pour valider sur l'honneur"));
     let tm=null;const start=e=>{e.preventDefault();bar.style.transition="width 1.2s linear";bar.style.width="100%";tm=setTimeout(()=>{unlock(a.id,catalog());commit()},1200)};
     const stop=()=>{clearTimeout(tm);bar.style.transition="width .2s";bar.style.width="0"};
     b.addEventListener("pointerdown",start);["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,stop));
     b.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!e.repeat)start(e)});b.addEventListener("keyup",stop);
-    d.append(b);
+    r.append(b);
   }
-  return d;
+  return r;
+}
+
+/* ---------- Profils ---------- */
+function myPublicProfile(L,T,byId){
+  const pr=S.profile,tt=pr.title&&S.unlocked[pr.title]?(TITLES.find(t=>t[0]===pr.title)||[,""])[1]:"";
+  const show=(pr.showcase||[]).filter(id=>S.unlocked[id]&&byId[id]).slice(0,3).map(id=>({t:byId[id].title,icon:byId[id].icon,pts:byId[id].pts}));
+  let rank=RANKS[0][1];RANKS.forEach(r=>{if(T.pts>=r[0])rank=r[1]});
+  return{pseudo:S.pseudo,avatar:safeAvatar(pr.avatar),color:safeColor(pr.color),title:tt,bio:(pr.bio||"").slice(0,90),showcase:show,points:T.pts,count:T.got,rank,since:S.days.length?[...S.days].sort()[0]:null};
+}
+function profileCard(p){
+  const c=el("div","pcard");c.style.setProperty("--pc",safeColor(p.color));
+  const b=el("div","pbody");c.append(el("div","pban"),b);
+  b.append(el("div","av",safeAvatar(p.avatar)),el("div","pname",p.pseudo||"Chasseur"));
+  if(p.title)b.append(el("div","ptitle",p.title));
+  if(p.bio)b.append(el("p","pbio",p.bio));
+  const st=el("div","pstats");
+  [[fmt(p.points||0),"points"],[String(p.count||0),"hauts faits"],[p.rank||"—","rang"]].forEach(([x,y])=>{const d=el("div");d.append(el("b",null,x),el("span",null,y));st.append(d)});
+  b.append(st);
+  const vt=el("div","vitrine"),sh=(p.showcase||[]).slice(0,3);
+  for(let i=0;i<3;i++){const x=sh[i];if(x){const d=el("div","vit");d.append(el("i",null,String(x.icon||"🏆").slice(0,4)),String(x.t||"").slice(0,60));vt.append(d)}else vt.append(el("div","vit empty2","Emplacement libre"))}
+  b.append(vt);
+  if(p.since)b.append(el("p","pbio","Chasseur depuis le "+new Date(p.since+"T12:00").toLocaleDateString("fr-FR")));
+  return c;
+}
+function saveProfile(){S.profile._t=Date.now();lastBoardJSON="";saveLocal();render();sync()}
+function renderProfile(v,L,T,byId){
+  v.append(el("h2","ph","Mon profil"));
+  v.append(el("p","pd","C'est ce que les autres chasseurs voient quand ils touchent ton nom au classement."));
+  v.append(profileCard(myPublicProfile(L,T,byId)));
+  const ed=el("div","card2 edit");ed.append(el("h3",null,"Avatar"));
+  const ag=el("div","avgrid");AVATARS.forEach(a=>{const b=el("button",null,a);b.type="button";b.setAttribute("aria-pressed",S.profile.avatar===a);b.onclick=()=>{S.profile.avatar=a;saveProfile()};ag.append(b)});ed.append(ag);
+  ed.append(el("h3",null,"Couleur"));
+  const sw=el("div","swatches");COLORS.forEach(([n,c])=>{const b=el("button");b.type="button";b.title=n;b.setAttribute("aria-label",n);b.style.background=c;b.setAttribute("aria-pressed",S.profile.color===c);b.onclick=()=>{S.profile.color=c;saveProfile()};sw.append(b)});ed.append(sw);
+  ed.append(el("h3",null,"Titre"));
+  const got=TITLES.filter(t=>S.unlocked[t[0]]);
+  const ts=el("select");ts.setAttribute("aria-label","Titre");const o0=el("option",null,got.length?"Aucun titre":"Débloque des hauts faits pour gagner des titres");o0.value="";ts.append(o0);
+  got.forEach(([id,t])=>{const o=el("option",null,t);o.value=id;if(S.profile.title===id)o.selected=true;ts.append(o)});
+  ts.onchange=()=>{S.profile.title=ts.value;saveProfile()};ed.append(ts);
+  const lockedT=TITLES.filter(t=>!S.unlocked[t[0]]&&byId[t[0]]&&!byId[t[0]].hidden).slice(0,3);
+  if(lockedT.length)ed.append(el("p","pbio","Prochains titres : "+lockedT.map(t=>"« "+t[1]+" » ("+byId[t[0]].title+")").join(", ")));
+  ed.append(el("h3",null,"Ta phrase"));
+  const bio=el("input");bio.maxLength=90;bio.placeholder="Ex. : Je collectionne les couchers de soleil";bio.value=S.profile.bio||"";bio.setAttribute("aria-label","Ta phrase");
+  bio.onchange=()=>{S.profile.bio=bio.value.trim().slice(0,90);saveProfile()};ed.append(bio);
+  ed.append(el("h3",null,"Vitrine : tes 3 hauts faits préférés"));
+  const mine=Object.keys(S.unlocked).filter(id=>byId[id]).sort((a,b)=>byId[b].pts-byId[a].pts);
+  for(let i=0;i<3;i++){
+    const se=el("select");se.setAttribute("aria-label","Vitrine "+(i+1));const o=el("option",null,mine.length?"Emplacement libre":"Débloque un haut fait pour l'exposer");o.value="";se.append(o);
+    mine.forEach(id=>{const op=el("option",null,byId[id].icon+" "+byId[id].title+" ("+byId[id].pts+" pts)");op.value=id;if((S.profile.showcase||[])[i]===id)op.selected=true;se.append(op)});
+    se.onchange=()=>{const sc=(S.profile.showcase||[]).slice(0,3);while(sc.length<3)sc.push("");sc[i]=se.value;S.profile.showcase=sc;saveProfile()};ed.append(se);
+  }
+  ed.append(el("p","pbio","Ton pseudo est définitif : "+(S.pseudo||"—")+"."));
+  v.append(ed);
+}
+function openProfile(p){const b=$("pdlgBody");b.textContent="";b.append(profileCard(p));$("pdlg").showModal()}
+
+function renderRecap(v,L,T,F,byId){
+  v.append(el("h2","ph","Récapitulatif"));
+  v.append(el("p","pd",fmt(T.pts)+" points de haut fait · "+T.got+" sur "+T.total+" obtenus"));
+  const wrap=el("div","sum");
+  // Saison
+  const si=seasonInfo(Date.now()),left=Math.max(0,Math.ceil((si.end-Date.now())/864e5));
+  const sl=L.filter(a=>a.cat==="saison"&&!a.legacy),sg=sl.filter(a=>S.unlocked[a.id]).length;
+  const sc=el("div","card2 season-card");sc.append(el("div","big",si.label),el("div","left","Encore "+left+" jour"+(left>1?"s":"")+" pour finir les défis de saison"));
+  const sp=el("div","cprog");sp.append(el("span",null,"Défis de saison"),el("span",null,sg+" / "+sl.length));const spb=el("div","pbar"),spi=el("i");spi.style.width=(sl.length?sg/sl.length*100:0)+"%";spb.append(spi);sp.append(spb);sc.append(sp);
+  const go=el("button","btn2","Voir les défis de saison");go.type="button";go.onclick=()=>{tab="saison";render()};sc.append(go);
+  wrap.append(sc);
+  // Derniers hauts faits
+  const rc=el("div","card2");rc.append(el("h3",null,"Hauts faits récents"));
+  const rec=Object.entries(S.unlocked).filter(([id])=>byId[id]).sort((x,y)=>y[1].at-x[1].at).slice(0,5);
+  if(!rec.length)rc.append(el("div","empty","Aucun haut fait pour l'instant. Valide ta position pour débloquer ta première ville."));
+  else{const ls=el("div","list");rec.forEach(([id])=>ls.append(row(byId[id],F,byId)));rc.append(ls)}
+  wrap.append(rc);
+  // Progression par catégorie
+  const pc=el("div","card2");pc.append(el("h3",null,"Progression"));
+  const addBar=(label,got,tot,click)=>{const d=el("div","cprog");d.append(el("span",null,label),el("span",null,got+" / "+tot));const pb=el("div","pbar"),i=el("i");i.style.width=(tot?got/tot*100:0)+"%";pb.append(i);d.append(pb);if(click){d.style.cursor="pointer";d.onclick=click}pc.append(d)};
+  addBar("Total",T.got,T.total);
+  CATS.filter(c=>c.id!=="saison").forEach(c=>{const all=L.filter(a=>a.cat===c.id&&!a.legacy);addBar(c.label,all.filter(a=>S.unlocked[a.id]).length,all.length,()=>{tab=c.id;render()})});
+  wrap.append(pc);
+  // Bientôt obtenus
+  const near=L.filter(a=>!S.unlocked[a.id]&&!a.hidden&&!a.legacy&&a.prog).map(a=>{const[c,m]=a.prog(F);return{a,r:m?c/m:0}}).filter(x=>x.r>0&&x.r<1).sort((x,y)=>y.r-x.r).slice(0,4);
+  if(near.length){const nc=el("div","card2");nc.append(el("h3",null,"Presque débloqués"));const ls=el("div","list");near.forEach(x=>ls.append(row(x.a,F,byId)));nc.append(ls);wrap.append(nc)}
+  v.append(wrap);
 }
 function renderCommunity(v){
+  v.append(el("h2","ph","Communauté"));
   const h=el("h3");h.append(el("span",null,"Classement des chasseurs"));v.append(h);
   if(!db){v.append(el("div","empty","Le classement des chasseurs arrive très bientôt. En attendant, débloque un max de hauts faits : ta progression est gardée sur ton téléphone."));return}
   const top=[...board].sort((a,b)=>b.points-a.points).slice(0,30);
   if(!top.length){v.append(el("div","empty","Personne au classement pour l'instant. Débloque un haut fait pour ouvrir le bal."))}
   else{const bd=el("div","board");top.forEach((r,i)=>{const row=el("div","row"+(r.id===uid?" me":""));
-    const nm=el("div","nm",(r.pseudo||"Chasseur")+(r.id===uid?" (toi)":""));nm.append(el("span","sub",r.count+" hauts faits"));
+    const nm=el("div","nm");nm.append(el("span","avs",safeAvatar(r.avatar)),(r.pseudo||"Chasseur")+(r.id===uid?" (toi)":""));nm.append(el("span","sub",(r.title?r.title+" · ":"")+r.count+" hauts faits"));
+    row.className+=" click";row.tabIndex=0;row.setAttribute("role","button");
+    const op=()=>{let rk=RANKS[0][1];RANKS.forEach(x=>{if((r.points||0)>=x[0])rk=x[1]});openProfile(Object.assign({},r,{rank:rk}))};
+    row.onclick=op;row.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();op()}};
     row.append(el("div","n",String(i+1)),nm,el("div","pts",fmt(r.points)+" pts"));bd.append(row)});v.append(bd)}
   if(boardReadOnly)v.append(el("p","status","Ton accès à cette app est en lecture seule : ton score n'apparaît pas au classement."));
   const recent=board.filter(r=>r.last&&r.last.at).sort((a,b)=>b.last.at-a.last.at).slice(0,8);
@@ -547,9 +898,10 @@ async function doSync(){
   if(prog!==lastProgJSON){try{await db.doc("data/users/"+uid+"/progress").set({state:prog});lastProgJSON=prog}catch(e){}}
   if(boardReadOnly||!S.pseudo)return;
   const L=catalog(),T=totals(L);
-  const row={pseudo:S.pseudo.slice(0,20),points:T.pts,count:T.got,updatedAt:Date.now()};
+  const byId={};L.forEach(a=>byId[a.id]=a);const pp=myPublicProfile(L,T,byId);
+  const row={pseudo:S.pseudo.slice(0,20),points:T.pts,count:T.got,updatedAt:Date.now(),avatar:pp.avatar,color:pp.color,title:pp.title,bio:pp.bio,showcase:pp.showcase,since:pp.since};
   const mine=board.find(r=>r.id===uid);const last=lastUnlock||(mine&&mine.last)||null;if(last)row.last=last;
-  const j=JSON.stringify([row.pseudo,row.points,row.count,last]);if(j===lastBoardJSON)return;
+  const j=JSON.stringify([row.pseudo,row.points,row.count,last,row.avatar,row.color,row.title,row.bio,row.showcase]);if(j===lastBoardJSON)return;
   try{await db.doc("chasseurs/"+uid).set(row);lastBoardJSON=j}catch(e){if(e&&e.code==="invalid_argument"){boardReadOnly=true;render()}}
 }
 function merge(remote){
@@ -558,15 +910,15 @@ function merge(remote){
     const seen=new Set(S.checkins.map(c=>c.at));(r.checkins||[]).forEach(c=>{if(!seen.has(c.at))S.checkins.push(c)});
     S.checkins.sort((a,b)=>a.at-b.at);
     S.days=[...new Set([...(S.days||[]),...(r.days||[])])];
-    if(!S.home&&r.home)S.home=r.home;if(!S.pseudo&&r.pseudo)S.pseudo=r.pseudo;
+    if(!S.home&&r.home)S.home=r.home;if(r.profile&&(r.profile._t||0)>((S.profile&&S.profile._t)||0))S.profile=Object.assign(fresh().profile,r.profile);if(!S.pseudo&&r.pseudo)S.pseudo=r.pseudo;
   }catch(e){}
 }
 async function connect(){
-  if(!window.claude||!window.claude.use)return;
+  if(!window.claude||!window.claude.use){commit();return}
   try{user=await window.claude.use("user")}catch(e){}
   try{db=await window.claude.use("db")}catch(e){}
   if(user){try{uid=await user.id()}catch(e){}try{canEdit=!!(await user.canEdit())}catch(e){}}
-  if(!db){render();return}
+  if(!db){commit();return}
   if(uid){try{const s=await db.doc("data/users/"+uid+"/progress").get();if(s.exists){merge(s.data().state);if(S.pseudo)$("welcome").open&&$("welcome").close()}}catch(e){}}
   db.collection("lieux").onSnapshot(q=>{venues=q.docs.map(d=>d.data()).filter(v=>v&&v.code);render();if(pendingTag){const t=pendingTag;pendingTag=null;useTag(t)}},()=>{});
   db.collection("chasseurs").orderBy("points","desc").limit(50).onSnapshot(q=>{board=q.docs.map(d=>Object.assign({id:d.id},d.data()));if(tab==="communaute")render()},()=>{});
@@ -589,9 +941,9 @@ setInterval(()=>{if(!document.hidden)autoLocate()},10*60000);
 
 /* ---------- Démarrage ---------- */
 $("checkin").onclick=checkin;
+$("who").onclick=()=>{tab="profil";render();$("view").scrollIntoView({behavior:"smooth",block:"start"})};
 $("codeForm").onsubmit=e=>{e.preventDefault();const v=$("codeInput").value;$("codeInput").value="";useTag(v)};
-$("rename").onclick=()=>{$("pseudoInput").value=S.pseudo;$("welcome").showModal()};
-$("welcomeForm").onsubmit=()=>{const v=$("pseudoInput").value.trim().slice(0,20);if(v){const first=!S.pseudo;S.pseudo=v;lastBoardJSON="";saveLocal();render();sync();if(first)setTimeout(()=>autoLocate(true),400)}};
+$("welcomeForm").onsubmit=()=>{if(S.pseudo)return;const v=$("pseudoInput").value.trim().slice(0,20);if(v){const first=!S.pseudo;S.pseudo=v;lastBoardJSON="";saveLocal();render();sync();if(first)setTimeout(()=>autoLocate(true),400)}};
 $("reset").onclick=()=>{if(confirm("Effacer toute ta progression ?")){const p=S.pseudo;S=fresh();S.pseudo=p;saveLocal();render();lastProgJSON="";lastBoardJSON="";sync()}};
 window.addEventListener("hashchange",readHash);
 render();
