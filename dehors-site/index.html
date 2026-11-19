@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dehors — les hauts faits de la vraie vie</title>
+<meta name="description" content="Débloque des hauts faits dans la vraie vie : villes, lieux mythiques, sport, food, culture. Sors, explore, monte au classement.">
+<meta name="theme-color" content="#1F5C45">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dehors">
+<meta property="og:title" content="Dehors — les hauts faits de la vraie vie">
+<meta property="og:description" content="Pendant qu'ils jouent, toi tu débloques le monde réel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#EAF0E4; --card:#F7FAF3; --ink:#17251F; --muted:#56675D;
+  --forest:#1F5C45; --moss:#7FA37A; --gold:#E9AE00; --gold-ink:#3A2B00;
+  --sky:#2F6F95; --line:#C9D6BF; --locked:#DCE4D5; --danger:#B3402A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#0F1813; --card:#17231C; --ink:#E6EFE5; --muted:#9BB0A3;
+    --forest:#57B98C; --moss:#5E8A62; --gold:#F5BE1E; --gold-ink:#2A1F00;
+    --sky:#6FB2DA; --line:#26362D; --locked:#1E2B23; --danger:#E0745C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#0F1813; --card:#17231C; --ink:#E6EFE5; --muted:#9BB0A3;
+  --forest:#57B98C; --moss:#5E8A62; --gold:#F5BE1E; --gold-ink:#2A1F00;
+  --sky:#6FB2DA; --line:#26362D; --locked:#1E2B23; --danger:#E0745C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  font-family:"Bricolage Grotesque",ui-rounded,"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.45}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.55;
+  background:
+   repeating-radial-gradient(ellipse at 85% 8%, transparent 0 26px, var(--line) 26px 27px),
+   repeating-radial-gradient(ellipse at 5% 95%, transparent 0 30px, var(--line) 30px 31px);
+  -webkit-mask-image:linear-gradient(180deg,#000 0,transparent 40%,transparent 60%,#000 100%);
+          mask-image:linear-gradient(180deg,#000 0,transparent 40%,transparent 60%,#000 100%)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:8px}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 120px}
+
+/* En-tête */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;font-size:22px;letter-spacing:-.02em}
+.brand small{display:block;font-weight:400;font-size:13px;color:var(--muted);letter-spacing:0}
+.who{text-align:right;font-size:14px}
+.who b{display:block;font-size:16px}
+.who button{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font-size:13px}
+
+/* Carte du joueur */
+.player{margin-top:18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.ring{--p:0;width:112px;height:112px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--gold) calc(var(--p)*1%), var(--locked) 0)}
+.ring>div{width:88px;height:88px;border-radius:50%;background:var(--paper);display:grid;place-items:center;text-align:center}
+.ring strong{font-size:26px;font-weight:800;line-height:1}
+.ring span{font-size:12px;color:var(--muted)}
+.score{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.score small{font-size:18px;font-weight:600;color:var(--muted);margin-left:4px}
+.rank{margin-top:6px;font-weight:600;color:var(--forest)}
+.next{font-size:13px;color:var(--muted)}
+
+/* Actions */
+.actions{margin-top:22px;display:grid;gap:10px}
+.go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:18px;
+  padding:18px;background:var(--forest);color:#fff;font-weight:800;font-size:18px;box-shadow:0 6px 0 color-mix(in srgb,var(--forest) 55%,#000)}
+.go:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--forest) 55%,#000)}
+.go[disabled]{opacity:.6;cursor:wait}
+.code{display:flex;gap:8px}
+.code input{flex:1;min-width:0;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;text-transform:uppercase}
+.btn2{border:2px solid var(--ink);background:transparent;border-radius:14px;padding:10px 16px;font-weight:600}
+.status{min-height:22px;font-size:14px;color:var(--muted);margin:2px 2px 0}
+
+/* Onglets */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);margin:26px -16px 0;padding:10px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:2px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font-weight:600;font-size:15px;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tab em{font-style:normal;font-weight:400;opacity:.7;margin-left:4px;font-size:13px}
+
+h3{font-size:15px;font-weight:600;color:var(--muted);margin:22px 2px 10px;display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ach{position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px;min-height:118px;display:flex;flex-direction:column;gap:4px}
+.ach .ic{font-size:26px;line-height:1}
+.ach .t{font-weight:800;line-height:1.15}
+.ach .d{font-size:13px;color:var(--muted);line-height:1.3}
+.ach .p{margin-top:auto;font-size:13px;font-weight:600}
+.ach[data-tier="4"]{border-style:double;border-width:4px}
+.ach[data-tier="5"]{border-width:3px;border-color:color-mix(in srgb,var(--gold) 60%,var(--line))}
+.ach[data-tier="5"].off .t::after{content:" ★";color:var(--gold)}
+.ach.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--card))}
+.ach.on .p{color:var(--gold-ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ach.on .p{color:var(--gold)}}
+.ach.off .ic{filter:grayscale(1);opacity:.45}
+.ach.off .t{color:var(--muted)}
+.ach.hidden .t,.ach.hidden .d{color:var(--muted)}
+.honor{margin-top:6px;border:0;border-radius:10px;padding:8px;background:var(--locked);font-weight:600;font-size:13px;position:relative;overflow:hidden}
+.honor i{position:absolute;inset:0;width:0;background:var(--moss);opacity:.6}
+.honor span{position:relative}
+.empty{background:var(--card);border:2px dashed var(--line);border-radius:16px;padding:16px;color:var(--muted);font-size:14px}
+
+/* Communauté */
+.board{background:var(--card);border:2px solid var(--line);border-radius:18px;overflow:hidden}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .n{font-weight:800;color:var(--muted);text-align:center}
+.row.me{background:color-mix(in srgb,var(--gold) 14%,var(--card))}
+.row .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .sub{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.row .pts{font-weight:800}
+.feed{display:grid;gap:8px}
+.feed div{background:var(--card);border-radius:14px;padding:10px 12px;font-size:14px;border-left:4px solid var(--gold)}
+.feed time{color:var(--muted);font-size:12px;display:block}
+
+/* Espace établissements */
+.pro{margin-top:30px;border:2px solid var(--sky);border-radius:18px;padding:16px;background:var(--card)}
+.pro h2{margin:0 0 4px;font-size:18px}
+.pro p{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.pro form{display:grid;gap:8px}
+.pro input,.pro select{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 12px}
+.pro label.ck{display:flex;gap:8px;align-items:center;font-size:14px}
+.venue{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.venue code{font-size:13px;color:var(--muted);word-break:break-all}
+.venue .qr{grid-column:1/-1;display:none;justify-self:center;background:#fff;padding:10px;border-radius:10px}
+.venue .qr.open{display:block}
+.mini{border:1px solid var(--line);background:transparent;border-radius:10px;padding:6px 10px;font-size:13px}
+
+/* Notification de haut fait : le moment fort */
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;
+  transform:translate(-50%,160%);transition:transform .45s cubic-bezier(.2,1.4,.4,1);
+  display:flex;align-items:center;gap:12px;width:min(92vw,400px);padding:10px 18px 10px 10px;border-radius:99px;
+  background:#121A16;color:#F4F7F2;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.toast.show{transform:translate(-50%,0)}
+.toast .medal{flex:none;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:26px;
+  background:radial-gradient(circle at 35% 30%,#FFE58A,#E9AE00 60%,#A87700);box-shadow:0 0 0 3px #F5BE1E66}
+.toast.show .medal{animation:pop .6s .15s both}
+.toast .l1{font-size:13px;color:#C9D6BF}
+.toast .l2{font-weight:800;font-size:17px;line-height:1.15}
+.toast .l3{margin-left:auto;font-weight:800;color:#F5BE1E;white-space:nowrap}
+.toast.err .medal{background:#3A2A26;box-shadow:none}
+@keyframes pop{0%{transform:scale(.3) rotate(-30deg)}70%{transform:scale(1.15) rotate(6deg)}100%{transform:none}}
+
+dialog{border:0;border-radius:22px;padding:22px;width:min(92vw,400px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(10,20,15,.55)}
+dialog h2{margin:0 0 6px;font-size:24px;letter-spacing:-.02em}
+dialog p{margin:0 0 14px;color:var(--muted)}
+dialog input{width:100%;border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.foot{margin-top:34px;text-align:center;font-size:13px;color:var(--muted)}
+.foot button{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}.toast.show .medal{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Dehors<small>Les hauts faits de la vraie vie</small></div>
+    <div class="who"><b id="pseudo">—</b><button id="rename" type="button">Changer de pseudo</button></div>
+  </div>
+
+  <div class="player">
+    <div class="ring" id="ring"><div><strong id="pct">0 %</strong><span>complété</span></div></div>
+    <div>
+      <div class="score" id="score">0<small>pts</small></div>
+      <div class="rank" id="rank">Touriste</div>
+      <div class="next" id="next"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="go" id="checkin" type="button">📍 Valider ma position</button>
+    <form class="code" id="codeForm" autocomplete="off">
+      <input id="codeInput" placeholder="Code d'un lieu partenaire" aria-label="Code d'un lieu partenaire" maxlength="60">
+      <button class="btn2" type="submit">Valider</button>
+    </form>
+    <div class="status" id="status" role="status"></div>
+  </div>
+
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <main id="view"></main>
+
+  <div class="foot">Ta progression est enregistrée sur cet appareil.<br><button id="reset" type="button">Tout réinitialiser</button></div>
+</div>
+
+<div class="toast" id="toast" aria-live="assertive">
+  <div class="medal" id="tIcon">🏆</div>
+  <div><div class="l1" id="tL1">Haut fait débloqué</div><div class="l2" id="tL2"></div></div>
+  <div class="l3" id="tL3"></div>
+</div>
+
+<dialog id="welcome">
+  <form method="dialog" id="welcomeForm">
+    <h2>Bienvenue, chasseur</h2>
+    <p>Chaque ville, chaque lieu, chaque exploit dehors te rapporte un haut fait. Choisis ton pseudo, puis autorise la localisation : tes découvertes se débloqueront toutes seules.</p>
+    <input id="pseudoInput" maxlength="20" placeholder="Ton pseudo" required aria-label="Ton pseudo">
+    <button class="go" type="submit">Commencer la chasse</button>
+  </form>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// Lien public de l'app (sert aux QR codes des établissements)
+const ARTIFACT_URL = "https://claude.ai/artifact/JTyR9aHngpQQftDaXaFv4G";
+
+/* ---------- Données ---------- */
+// [ville, pays, lat, lng, rayon km, capitale]
+const CITIES = [
+ ["Paris","France",48.8566,2.3522,12,1],["Marseille","France",43.2965,5.3698,14],["Lyon","France",45.764,4.8357,11],
+ ["Toulouse","France",43.6047,1.4442,11],["Nice","France",43.7102,7.262,9],["Nantes","France",47.2184,-1.5536,10],
+ ["Strasbourg","France",48.5734,7.7521,9],["Montpellier","France",43.6108,3.8767,9],["Bordeaux","France",44.8378,-0.5792,11],
+ ["Lille","France",50.6292,3.0573,10],["Rennes","France",48.1173,-1.6778,9],["Reims","France",49.2583,4.0317,8],
+ ["Le Havre","France",49.4944,0.1079,8],["Saint-Étienne","France",45.4397,4.3872,8],["Toulon","France",43.1242,5.928,8],
+ ["Grenoble","France",45.1885,5.7245,8],["Dijon","France",47.322,5.0415,8],["Angers","France",47.4784,-0.5632,8],
+ ["Nîmes","France",43.8367,4.3601,8],["Clermont-Ferrand","France",45.7772,3.087,8],["Le Mans","France",48.0061,0.1996,8],
+ ["Aix-en-Provence","France",43.5297,5.4474,7],["Brest","France",48.3904,-4.4861,8],["Tours","France",47.3941,0.6848,8],
+ ["Amiens","France",49.894,2.2958,8],["Limoges","France",45.8336,1.2611,8],["Annecy","France",45.8992,6.1294,7],
+ ["Perpignan","France",42.6887,2.8948,7],["Metz","France",49.1193,6.1757,7],["Besançon","France",47.2378,6.0241,7],
+ ["Orléans","France",47.9029,1.9093,7],["Rouen","France",49.4432,1.0999,8],["Caen","France",49.1829,-0.3707,7],
+ ["Nancy","France",48.6921,6.1844,7],["Avignon","France",43.9493,4.8055,6],["La Rochelle","France",46.1603,-1.1511,6],
+ ["Biarritz","France",43.4832,-1.5586,6],["Saint-Malo","France",48.6493,-2.0257,6],["Versailles","France",48.8049,2.1204,5],
+ ["Chamonix","France",45.9237,6.8694,6],["Ajaccio","France",41.9192,8.7386,6],
+ ["Bruxelles","Belgique",50.8503,4.3517,12,1],["Genève","Suisse",46.2044,6.1432,8],["Londres","Royaume-Uni",51.5074,-0.1278,20,1],
+ ["Madrid","Espagne",40.4168,-3.7038,15,1],["Barcelone","Espagne",41.3874,2.1686,12],["Rome","Italie",41.9028,12.4964,15,1],
+ ["Milan","Italie",45.4642,9.19,12],["Berlin","Allemagne",52.52,13.405,18,1],["Amsterdam","Pays-Bas",52.3676,4.9041,12,1],
+ ["Lisbonne","Portugal",38.7223,-9.1393,12,1],["Marrakech","Maroc",31.6295,-7.9811,12],["New York","États-Unis",40.7128,-74.006,20],
+ ["Tokyo","Japon",35.6762,139.6503,25,1],["Dubaï","Émirats arabes unis",25.2048,55.2708,20],
+ ["Pau","France",43.2951,-0.3708,6],["Poitiers","France",46.5802,0.3404,6],["Calais","France",50.9513,1.8587,6],["Dunkerque","France",51.0343,2.3768,6],
+ ["Bayonne","France",43.4929,-1.4748,5],["Lourdes","France",43.0947,-0.0458,4],["Carcassonne","France",43.2130,2.3491,5],["Arles","France",43.6766,4.6278,5],
+ ["Cannes","France",43.5528,7.0174,5],["Saint-Tropez","France",43.2727,6.6406,4],["Menton","France",43.7764,7.5048,4],["Colmar","France",48.0794,7.3585,5],
+ ["Mulhouse","France",47.7508,7.3359,6],["Troyes","France",48.2973,4.0744,6],["Chartres","France",48.4439,1.4890,5],["Quimper","France",47.9960,-4.0970,5],
+ ["Vannes","France",47.6582,-2.7608,5],["Lorient","France",47.7486,-3.3700,5],["Deauville","France",49.3600,0.0750,4],["Étretat","France",49.7072,0.2033,3],
+ ["Le Mont-Saint-Michel","France",48.6361,-1.5115,3],["Honfleur","France",49.4190,0.2330,3],["Bastia","France",42.6970,9.4500,5],["Bonifacio","France",41.3874,9.1593,4],
+ ["Saint-Denis (La Réunion)","France",-20.8789,55.4481,8],["Fort-de-France","France",14.6161,-61.0588,7],["Pointe-à-Pitre","France",16.2411,-61.5331,7],["Cayenne","France",4.9224,-52.3135,7],
+ ["Nouméa","France",-22.2758,166.4580,8],["Papeete","France",-17.5516,-149.5585,7],["Monaco","Monaco",43.7384,7.4246,3,1],["Luxembourg","Luxembourg",49.6116,6.1319,6,1],
+ ["Anvers","Belgique",51.2194,4.4025,8],["Bruges","Belgique",51.2093,3.2247,5],["Liège","Belgique",50.6326,5.5797,7],["Zurich","Suisse",47.3769,8.5417,9],
+ ["Lausanne","Suisse",46.5197,6.6323,6],["Berne","Suisse",46.9480,7.4474,6,1],["Édimbourg","Royaume-Uni",55.9533,-3.1883,8],["Manchester","Royaume-Uni",53.4808,-2.2426,10],
+ ["Dublin","Irlande",53.3498,-6.2603,10,1],["Séville","Espagne",37.3891,-5.9845,9],["Valence","Espagne",39.4699,-0.3763,9],["Malaga","Espagne",36.7213,-4.4214,8],
+ ["Ibiza","Espagne",38.9067,1.4206,8],["Palma","Espagne",39.5696,2.6502,8],["Porto","Portugal",41.1579,-8.6291,9],["Venise","Italie",45.4408,12.3155,6],
+ ["Florence","Italie",43.7696,11.2558,8],["Naples","Italie",40.8518,14.2681,10],["Munich","Allemagne",48.1351,11.5820,12],["Hambourg","Allemagne",53.5511,9.9937,12],
+ ["Vienne","Autriche",48.2082,16.3738,12,1],["Prague","Tchéquie",50.0755,14.4378,11,1],["Budapest","Hongrie",47.4979,19.0402,12,1],["Varsovie","Pologne",52.2297,21.0122,12,1],
+ ["Copenhague","Danemark",55.6761,12.5683,10,1],["Stockholm","Suède",59.3293,18.0686,12,1],["Oslo","Norvège",59.9139,10.7522,10,1],["Helsinki","Finlande",60.1699,24.9384,10,1],
+ ["Reykjavik","Islande",64.1466,-21.9426,8,1],["Athènes","Grèce",37.9838,23.7275,12,1],["Santorin","Grèce",36.3932,25.4615,8],["Istanbul","Turquie",41.0082,28.9784,20],
+ ["Dubrovnik","Croatie",42.6507,18.0944,5],["Casablanca","Maroc",33.5731,-7.5898,14],["Rabat","Maroc",34.0209,-6.8416,9,1],["Tunis","Tunisie",36.8065,10.1815,10,1],
+ ["Alger","Algérie",36.7538,3.0588,12,1],["Dakar","Sénégal",14.7167,-17.4677,10,1],["Abidjan","Côte d'Ivoire",5.3600,-4.0083,14],["Le Caire","Égypte",30.0444,31.2357,20,1],
+ ["Le Cap","Afrique du Sud",-33.9249,18.4241,14],["Montréal","Canada",45.5017,-73.5673,14],["Québec","Canada",46.8139,-71.2080,9],["Los Angeles","États-Unis",34.0522,-118.2437,30],
+ ["Miami","États-Unis",25.7617,-80.1918,15],["Las Vegas","États-Unis",36.1699,-115.1398,15],["San Francisco","États-Unis",37.7749,-122.4194,12],["Mexico","Mexique",19.4326,-99.1332,20,1],
+ ["Rio de Janeiro","Brésil",-22.9068,-43.1729,18],["Buenos Aires","Argentine",-34.6037,-58.3816,18,1],["Bangkok","Thaïlande",13.7563,100.5018,20,1],["Bali (Denpasar)","Indonésie",-8.6500,115.2167,20],
+ ["Singapour","Singapour",1.3521,103.8198,15,1],["Séoul","Corée du Sud",37.5665,126.9780,18,1],["Kyoto","Japon",35.0116,135.7681,10],["Hong Kong","Chine",22.3193,114.1694,15],
+ ["Pékin","Chine",39.9042,116.4074,25,1],["Sydney","Australie",-33.8688,151.2093,20],["Doha","Qatar",25.2854,51.5310,15,1],["New Delhi","Inde",28.6139,77.2090,20,1],
+ ["Maldives (Malé)","Maldives",4.1755,73.5093,6,1],["Abou Dhabi","Émirats arabes unis",24.4539,54.3773,15,1]
+];
+const FLAGS={"France":"🇫🇷","Belgique":"🇧🇪","Suisse":"🇨🇭","Royaume-Uni":"🇬🇧","Espagne":"🇪🇸","Italie":"🇮🇹","Allemagne":"🇩🇪","Pays-Bas":"🇳🇱","Portugal":"🇵🇹","Maroc":"🇲🇦","États-Unis":"🇺🇸","Japon":"🇯🇵","Émirats arabes unis":"🇦🇪","Monaco":"🇲🇨","Luxembourg":"🇱🇺","Irlande":"🇮🇪","Autriche":"🇦🇹","Tchéquie":"🇨🇿","Hongrie":"🇭🇺","Pologne":"🇵🇱","Danemark":"🇩🇰","Suède":"🇸🇪","Norvège":"🇳🇴","Finlande":"🇫🇮","Islande":"🇮🇸","Grèce":"🇬🇷","Turquie":"🇹🇷","Croatie":"🇭🇷","Tunisie":"🇹🇳","Algérie":"🇩🇿","Sénégal":"🇸🇳","Côte d'Ivoire":"🇨🇮","Égypte":"🇪🇬","Afrique du Sud":"🇿🇦","Canada":"🇨🇦","Mexique":"🇲🇽","Brésil":"🇧🇷","Argentine":"🇦🇷","Thaïlande":"🇹🇭","Indonésie":"🇮🇩","Singapour":"🇸🇬","Corée du Sud":"🇰🇷","Chine":"🇨🇳","Australie":"🇦🇺","Qatar":"🇶🇦","Inde":"🇮🇳","Maldives":"🇲🇻"};
+const CATS=[
+ {id:"voyage",label:"Voyage",icon:"🧭"},{id:"food",label:"Food",icon:"🍜"},{id:"sport",label:"Sport",icon:"🏃"},
+ {id:"culture",label:"Culture",icon:"🎭"},{id:"nature",label:"Nature",icon:"🌿"},{id:"argent",label:"Argent",icon:"💰"},{id:"carriere",label:"Carrière",icon:"💼"},{id:"createurs",label:"Créateurs",icon:"📱"},
+ {id:"social",label:"Social",icon:"🤝"},{id:"mental",label:"Bien-être",icon:"🧘"},{id:"luxe",label:"Luxe",icon:"💎"},{id:"defis",label:"Défis",icon:"⚡"},{id:"secrets",label:"Secrets",icon:"🔒"}
+];
+const VENUE_MILESTONES={
+ luxe:[[1,"Adresse chic"],[5,"Habitué du luxe"]],
+ nature:[[1,"Lieu sauvage"],[5,"Explorateur nature"]],
+ food:[[1,"Fourchette curieuse"],[5,"Fin gourmet"],[10,"Guide culinaire vivant"]],
+ sport:[[1,"Échauffement"],[5,"Habitué des salles"],[10,"Athlète tout-terrain"]],
+ culture:[[1,"Curieux"],[5,"Esthète"],[10,"Encyclopédie ambulante"]]
+};
+const HONOR={"sport": [["5km", "Premier 5 km", "Courir 5 km d'une traite", "🏃", "Course", 2], ["10km", "Double chiffre", "Courir 10 km", "🏃‍♂️", "Course", 2], ["semi", "Semi-marathonien", "Finir un semi-marathon", "🎽", "Course", 3], ["marathon", "Marathonien", "Finir un marathon", "🏅", "Course", 4], ["trail", "Traileur", "Finir un trail en nature", "⛰️", "Course", 3], ["hyrox", "Hybride", "Finir une course Hyrox", "🔥", "Salle et fitness", 3], ["triathlon", "Homme de fer", "Finir un triathlon", "🏊", "Endurance", 4], ["rando", "Randonneur", "Marcher plus de 10 km dans la nature", "🥾", "Montagne et marche", 1], ["rando30", "Grand marcheur", "Marcher 30 km en une journée", "🦶", "Montagne et marche", 3], ["10000pas", "10 000 pas", "Faire 10 000 pas dans la journée", "👟", "Montagne et marche", 1], ["velo", "Deux roues", "Faire 20 km à vélo", "🚲", "Vélo", 1], ["velo100", "Centurion", "Faire 100 km à vélo en une journée", "🚴", "Vélo", 3], ["baignade", "Plouf", "Te baigner en mer, en lac ou en rivière", "🌊", "Eau", 1], ["froid", "Ours polaire", "Te baigner dans une eau à moins de 15 °C", "🥶", "Eau", 2], ["nouveau", "Débutant assumé", "Essayer un sport jamais pratiqué", "🥇", "Découverte", 1], ["salle30", "Habitué", "Aller 30 fois à la salle", "🏋️", "Salle et fitness", 2], ["pompes100", "Centenaire", "Faire 100 pompes dans la journée", "💪", "Salle et fitness", 2], ["traction", "Première traction", "Réussir une traction stricte", "🧗", "Salle et fitness", 2], ["escalade", "Grimpeur", "Faire une séance d'escalade", "🧗‍♀️", "Montagne et marche", 1], ["surf", "Rider", "Prendre une vague en surf", "🏄", "Glisse", 2], ["ski", "Sur les pistes", "Descendre une piste de ski", "⛷️", "Glisse", 1], ["boxe", "Premier round", "Faire un cours de boxe ou d'art martial", "🥊", "Combat", 1], ["yoga", "Souplesse", "Suivre un cours de yoga", "🧘", "Découverte", 1], ["tennis", "Jeu, set", "Jouer un match de tennis ou padel", "🎾", "Raquettes", 1], ["foot", "Sur le terrain", "Jouer un match de foot entre amis", "⚽", "Sports collectifs", 1], ["stade", "Ambiance de stade", "Assister à un match au stade", "🏟️", "Sports collectifs", 1], ["kayak", "Pagayeur", "Faire du kayak ou du paddle", "🛶", "Eau", 1], ["plongee", "Grand bleu", "Faire une plongée sous-marine", "🤿", "Eau", 2], ["parapente", "Dans les airs", "Faire du parapente", "🪂", "Sensations fortes", 2], ["saut", "Chute libre", "Faire un saut en parachute", "🪂", "Sensations fortes", 3], ["saut_elastique", "Élastique", "Faire un saut à l'élastique", "🎢", "Sensations fortes", 3], ["equitation", "Cavalier", "Monter à cheval", "🐎", "Découverte", 1], ["golf", "Swing", "Jouer un parcours de golf", "⛳", "Découverte", 1], ["sommet", "Sommet atteint", "Grimper au sommet d'une montagne", "🏔️", "Montagne et marche", 2], ["4000", "Toit de l'Europe", "Gravir un sommet de plus de 4 000 m", "🗻", "Montagne et marche", 5], ["5kmsub25", "Sub 25", "Courir 5 km en moins de 25 minutes", "⏱️", "Course", 3], ["10kmsub45", "Sub 45", "Courir 10 km en moins de 45 minutes", "⏱️", "Course", 4], ["marathonsub3", "Sub 3", "Finir un marathon en moins de 3 heures", "🏆", "Course", 5], ["ultra", "Ultra", "Finir un ultra-trail", "🦾", "Course", 5], ["ironman", "Ironman", "Finir un Ironman", "🔱", "Endurance", 5], ["col", "Grimpeur à vélo", "Monter un col mythique à vélo", "🚵", "Vélo", 3], ["velo200", "Longue route", "Faire 200 km à vélo en une journée", "🛣️", "Vélo", 4], ["nage1k", "Nageur", "Nager 1 km d'une traite", "🏊", "Eau", 2], ["traversee", "Traversée", "Traverser un lac ou une baie à la nage", "🌊", "Eau", 4], ["kite", "Kitesurfeur", "Faire du kitesurf", "🪁", "Glisse", 2], ["snow", "Snowboarder", "Descendre une piste en snowboard", "🏂", "Glisse", 1], ["noire", "Piste noire", "Descendre une piste noire", "⚫", "Glisse", 3], ["combat", "Premier combat", "Faire un combat officiel", "🥋", "Combat", 4], ["ceinture", "Ceinture noire", "Obtenir une ceinture noire", "🥋", "Combat", 5], ["dc100", "Développé 100", "Soulever 100 kg au développé couché", "🏋️‍♂️", "Salle et fitness", 4], ["sq2x", "Double poids", "Squatter deux fois ton poids", "🦵", "Salle et fitness", 5], ["tournoi", "Compétiteur", "Participer à un tournoi", "🏅", "Sports collectifs", 2], ["victoire", "Champion", "Gagner un tournoi", "🏆", "Sports collectifs", 4], ["padel", "Padel", "Jouer au padel", "🎾", "Raquettes", 1], ["via", "Via ferrata", "Faire une via ferrata", "🧗", "Montagne et marche", 2], ["gr20", "GR20", "Finir le GR20 en Corse", "🗺️", "Montagne et marche", 5], ["kili", "Kilimandjaro", "Gravir le Kilimandjaro", "🌋", "Montagne et marche", 5], ["wingsuit", "Homme-oiseau", "Faire de la soufflerie ou du wingsuit", "🦅", "Sensations fortes", 3]], "food": [["cuisine", "Palais voyageur", "Goûter une cuisine jamais goûtée", "🥢", "Exploits sur l'honneur", 1], ["marche", "Jour de marché", "Faire tes courses au marché local", "🧺", "Exploits sur l'honneur", 1], ["pique", "Pique-nique", "Manger dehors sur l'herbe", "🧺", "Exploits sur l'honneur", 1], ["streetfood", "Street food", "Manger dans la rue à l'étranger", "🌮", "Exploits sur l'honneur", 2], ["etoile", "Étoilé", "Manger dans un restaurant étoilé", "⭐", "Exploits sur l'honneur", 3], ["3etoiles", "Trois étoiles", "Manger dans un trois étoiles", "🌟", "Exploits sur l'honneur", 5], ["omakase", "Omakase", "Faire un omakase", "🍣", "Exploits sur l'honneur", 3], ["huitres", "Iodé", "Manger des huîtres", "🦪", "Exploits sur l'honneur", 1], ["truffe", "Diamant noir", "Goûter la truffe", "🍄", "Exploits sur l'honneur", 2], ["caviar", "Caviar", "Goûter le caviar", "🥄", "Exploits sur l'honneur", 3], ["vin", "Œnologue", "Faire une dégustation de vin", "🍷", "Exploits sur l'honneur", 2], ["brunch", "Brunch", "Bruncher dans un nouveau lieu", "🥞", "Exploits sur l'honneur", 1], ["bouchon", "Bouchon lyonnais", "Manger dans un bouchon", "🍲", "Exploits sur l'honneur", 2], ["crepe", "Breton d'un jour", "Manger une galette en Bretagne", "🥞", "Exploits sur l'honneur", 2], ["pizza", "Napolitaine", "Manger une pizza à Naples", "🍕", "Exploits sur l'honneur", 3], ["ramen", "Ramen-ya", "Manger des ramen au Japon", "🍜", "Exploits sur l'honneur", 4], ["cours", "Chef en herbe", "Suivre un cours de cuisine", "👨‍🍳", "Exploits sur l'honneur", 2], ["recette", "Fait maison", "Cuisiner un plat d'un autre pays", "🥘", "Exploits sur l'honneur", 1], ["pain", "Boulanger", "Faire ton propre pain", "🍞", "Exploits sur l'honneur", 2], ["ferme", "De la ferme", "Acheter directement chez un producteur", "🚜", "Exploits sur l'honneur", 1], ["cueillette", "Cueilleur", "Faire une cueillette de fruits", "🍓", "Exploits sur l'honneur", 1], ["10restos", "Testeur", "Tester 10 nouveaux restaurants", "🍽️", "Exploits sur l'honneur", 3]], "culture": [["musee", "Rat de musée", "Visiter un musée", "🖼️", "Exploits sur l'honneur", 1], ["concert", "En live", "Voir un concert", "🎤", "Exploits sur l'honneur", 1], ["festival", "Festivalier", "Faire un festival", "🎪", "Exploits sur l'honneur", 2], ["theatre", "Lever de rideau", "Aller au théâtre", "🎭", "Exploits sur l'honneur", 1], ["opera", "Grand soir", "Aller à l'opéra", "🎻", "Exploits sur l'honneur", 2], ["cinema", "Salle obscure", "Aller seul au cinéma", "🎬", "Exploits sur l'honneur", 1], ["livre", "Dernière page", "Finir un livre", "📖", "Exploits sur l'honneur", 1], ["10livres", "Bibliophile", "Lire 10 livres", "📚", "Exploits sur l'honneur", 3], ["bibli", "Carte de lecteur", "T'inscrire à une bibliothèque", "🏛️", "Exploits sur l'honneur", 1], ["chateau", "Châtelain", "Visiter un château", "🏰", "Exploits sur l'honneur", 1], ["unesco", "Patrimoine mondial", "Visiter un site UNESCO", "🌍", "Exploits sur l'honneur", 2], ["merveille", "Merveille", "Voir une des 7 merveilles du monde", "🗿", "Exploits sur l'honneur", 4], ["expo", "Vernissage", "Aller à un vernissage", "🥂", "Exploits sur l'honneur", 2], ["langue", "Polyglotte", "Tenir une conversation dans une autre langue", "🗣️", "Exploits sur l'honneur", 4], ["instrument", "Musicien", "Jouer un morceau entier d'un instrument", "🎸", "Exploits sur l'honneur", 3], ["atelier", "Artisan", "Suivre un atelier créatif", "🎨", "Exploits sur l'honneur", 1], ["visite", "Guide", "Faire une visite guidée", "🧑‍🏫", "Exploits sur l'honneur", 1], ["culture_g", "1 kg de culture", "Finir un livre de culture générale", "🧠", "Exploits sur l'honneur", 2]], "nature": [["lever", "Lève le nez", "Regarder un lever de soleil dehors", "🌅", "Exploits sur l'honneur", 1], ["coucher", "Golden hour", "Regarder un coucher de soleil", "🌇", "Exploits sur l'honneur", 1], ["etoiles", "Ciel étoilé", "Observer la Voie lactée", "🌌", "Exploits sur l'honneur", 2], ["aurore", "Aurore boréale", "Voir une aurore boréale", "🌠", "Exploits sur l'honneur", 4], ["bivouac", "Bivouac", "Dormir à la belle étoile", "⛺", "Exploits sur l'honneur", 2], ["camping", "Campeur", "Faire du camping", "🏕️", "Exploits sur l'honneur", 1], ["foret", "Bain de forêt", "Passer 2 h en forêt", "🌲", "Exploits sur l'honneur", 1], ["cascade", "Cascade", "Voir une cascade", "💧", "Exploits sur l'honneur", 1], ["glacier", "Glacier", "Marcher près d'un glacier", "🧊", "Exploits sur l'honneur", 3], ["desert", "Dunes", "Marcher dans un désert", "🏜️", "Exploits sur l'honneur", 4], ["volcan", "Volcan", "Monter sur un volcan", "🌋", "Exploits sur l'honneur", 3], ["ocean", "Deux océans", "Voir l'Atlantique et la Méditerranée", "🌊", "Exploits sur l'honneur", 2], ["dauphin", "Dauphins", "Voir des dauphins en liberté", "🐬", "Exploits sur l'honneur", 3], ["baleine", "Géant des mers", "Voir une baleine", "🐋", "Exploits sur l'honneur", 4], ["safari", "Safari", "Faire un safari", "🦁", "Exploits sur l'honneur", 4], ["arbre", "Planteur", "Planter un arbre", "🌳", "Exploits sur l'honneur", 1], ["ramassage", "Gardien", "Ramasser des déchets dans la nature", "♻️", "Exploits sur l'honneur", 1], ["neige", "Premiers flocons", "Jouer dans la neige", "☃️", "Exploits sur l'honneur", 1], ["ile", "Insulaire", "Dormir sur une île", "🏝️", "Exploits sur l'honneur", 2], ["lac", "Miroir", "Te baigner dans un lac de montagne", "🏞️", "Exploits sur l'honneur", 2]], "argent": [["budget", "Budget tenu", "Tenir ton budget un mois entier", "📊", "Exploits sur l'honneur", 1], ["epargne1", "Premier coussin", "Avoir 1 000 € d'épargne", "🐷", "Exploits sur l'honneur", 1], ["epargne5", "Coussin de sécurité", "Avoir 5 000 € d'épargne", "🛟", "Exploits sur l'honneur", 2], ["10k", "Cinq chiffres", "Avoir 10 000 € sur ton compte", "💶", "Exploits sur l'honneur", 3], ["25k", "Bien lancé", "Avoir 25 000 € sur ton compte", "💵", "Exploits sur l'honneur", 3], ["50k", "Demi-centaine", "Avoir 50 000 € sur ton compte", "💰", "Exploits sur l'honneur", 4], ["100k", "Club des 100 000", "Avoir 100 000 € sur ton compte", "🏦", "Exploits sur l'honneur", 4], ["200k", "Double centaine", "Avoir 200 000 € sur ton compte", "💼", "Exploits sur l'honneur", 5], ["500k", "Demi-million", "Avoir 500 000 € de patrimoine", "🪙", "Exploits sur l'honneur", 5], ["1m", "Millionnaire", "Avoir 1 million d'euros", "💎", "Exploits sur l'honneur", 5], ["10m", "Multimillionnaire", "Avoir 10 millions d'euros", "👑", "Exploits sur l'honneur", 5], ["dette", "Libéré", "Rembourser toutes tes dettes", "🔓", "Exploits sur l'honneur", 3], ["invest", "Investisseur", "Faire ton premier investissement en bourse", "📈", "Exploits sur l'honneur", 1], ["pea", "Plan long terme", "Ouvrir un PEA", "🧾", "Exploits sur l'honneur", 1], ["dividende", "Premier dividende", "Toucher ton premier dividende", "🌱", "Exploits sur l'honneur", 2], ["passif", "Revenu passif", "Gagner 100 € de revenu passif", "🔁", "Exploits sur l'honneur", 2], ["passif1000", "Rentier", "Gagner 1 000 € par mois de revenu passif", "🏝️", "Exploits sur l'honneur", 4], ["immo", "Propriétaire", "Acheter ton premier bien immobilier", "🏠", "Exploits sur l'honneur", 4], ["locatif", "Bailleur", "Avoir un bien en location", "🔑", "Exploits sur l'honneur", 4], ["premier_client", "Premier client", "Être payé par ton premier client", "🤝", "Exploits sur l'honneur", 2], ["ca10k", "10 k de CA", "Faire 10 000 € de chiffre d'affaires", "📦", "Exploits sur l'honneur", 3], ["ca100k", "100 k de CA", "Faire 100 000 € de chiffre d'affaires", "🚀", "Exploits sur l'honneur", 4], ["vente", "Vendeur", "Vendre un objet en ligne", "🏷️", "Exploits sur l'honneur", 1], ["abonnements", "Grand ménage", "Résilier un abonnement inutile", "✂️", "Exploits sur l'honneur", 1], ["liberte", "Liberté financière", "Pouvoir vivre de tes revenus passifs", "🕊️", "Exploits sur l'honneur", 5], ["100m", "Centimillionnaire", "Avoir 100 millions d'euros", "🏰", "Exploits sur l'honneur", 5], ["1md", "Milliardaire", "Avoir 1 milliard d'euros", "🌍", "Exploits sur l'honneur", 5], ["dep1k", "Plaisir assumé", "Dépenser 1 000 € pour une expérience", "💳", "Exploits sur l'honneur", 2], ["dep5k", "Grand train", "Dépenser 5 000 € en un mois", "💸", "Exploits sur l'honneur", 3], ["dep10k", "Gros mois", "Dépenser 10 000 € en un mois", "🛍️", "Exploits sur l'honneur", 4], ["dep40k", "Flambeur", "Dépenser 40 000 € en un mois", "🔥", "Exploits sur l'honneur", 5], ["dep100k", "Sans compter", "Dépenser 100 000 € en un an", "🤑", "Exploits sur l'honneur", 5], ["dep1m", "Train de vie royal", "Dépenser 1 million en un an", "👑", "Exploits sur l'honneur", 5]], "carriere": [["cv", "CV à jour", "Mettre ton CV à jour", "📄", "Exploits sur l'honneur", 1], ["entretien", "Face au jury", "Passer un entretien", "🎙️", "Exploits sur l'honneur", 1], ["embauche", "Embauché", "Décrocher un nouveau poste", "✅", "Exploits sur l'honneur", 2], ["augmentation", "Augmentation", "Obtenir une augmentation", "📈", "Exploits sur l'honneur", 3], ["promo", "Promu", "Obtenir une promotion", "🎖️", "Exploits sur l'honneur", 3], ["entreprise", "Patron", "Créer ton entreprise", "🏢", "Exploits sur l'honneur", 3], ["site", "En ligne", "Lancer ton site", "🌐", "Exploits sur l'honneur", 2], ["app", "Créateur d'app", "Publier une app", "📱", "Exploits sur l'honneur", 3], ["diplome", "Diplômé", "Obtenir un diplôme ou une certification", "🎓", "Exploits sur l'honneur", 3], ["formation", "Apprenant", "Finir une formation en ligne", "💻", "Exploits sur l'honneur", 2], ["code", "Développeur", "Coder ton premier projet", "👨‍💻", "Exploits sur l'honneur", 2], ["conference", "Orateur", "Parler devant un public", "🎤", "Exploits sur l'honneur", 3], ["mentor", "Mentor", "Aider quelqu'un dans sa carrière", "🧭", "Exploits sur l'honneur", 2], ["salon", "Networker", "Aller à un salon pro", "🪪", "Exploits sur l'honneur", 1], ["demission", "Grand saut", "Quitter un job pour ton projet", "🦅", "Exploits sur l'honneur", 4]], "social": [["inconnu", "Brise-glace", "Discuter 5 minutes avec un inconnu", "🗣️", "Exploits sur l'honneur", 1], ["ami", "Nouvel ami", "Te faire un nouvel ami", "🫂", "Exploits sur l'honneur", 2], ["appel", "Prendre des nouvelles", "Appeler quelqu'un perdu de vue", "📞", "Exploits sur l'honneur", 1], ["parents", "Famille", "Passer une journée avec tes parents", "👨‍👩‍👦", "Exploits sur l'honneur", 1], ["benevolat", "Bénévole", "Faire du bénévolat", "❤️", "Exploits sur l'honneur", 2], ["don", "Donneur", "Donner ton sang", "🩸", "Exploits sur l'honneur", 2], ["soiree", "Hôte", "Organiser une soirée chez toi", "🎉", "Exploits sur l'honneur", 1], ["club", "Membre", "Rejoindre un club ou une asso", "🎟️", "Exploits sur l'honneur", 1], ["rencontre", "Rencontre", "Rencontrer un autre chasseur Dehors", "🤜", "Exploits sur l'honneur", 2], ["compliment", "Gentil", "Faire un compliment sincère à un inconnu", "💐", "Exploits sur l'honneur", 1], ["aide", "Coup de main", "Aider un inconnu", "🙌", "Exploits sur l'honneur", 1], ["voisin", "Bon voisin", "Rencontrer tes voisins", "🏘️", "Exploits sur l'honneur", 1], ["lettre", "Lettre", "Écrire une lettre manuscrite", "✉️", "Exploits sur l'honneur", 1], ["surprise", "Surprise", "Organiser une surprise", "🎁", "Exploits sur l'honneur", 2], ["voyage_amis", "Road trip", "Partir en voyage entre amis", "🚐", "Exploits sur l'honneur", 2], ["solo", "Aventurier solo", "Voyager seul", "🎒", "Exploits sur l'honneur", 3]], "mental": [["meditation", "Calme", "Méditer 10 minutes", "🧘", "Exploits sur l'honneur", 1], ["med30", "Esprit clair", "Méditer 30 jours de suite", "🪷", "Exploits sur l'honneur", 3], ["journal", "Journal", "Écrire ton journal 7 jours", "📓", "Exploits sur l'honneur", 2], ["zero", "Mode avion", "Passer une demi-journée sans écran", "📵", "Exploits sur l'honneur", 1], ["digital", "Détox", "Passer un week-end sans réseaux", "🔌", "Exploits sur l'honneur", 2], ["gratitude", "Gratitude", "Noter 3 gratitudes par jour une semaine", "🙏", "Exploits sur l'honneur", 2], ["sommeil", "Gros dormeur", "Dormir 8 h 7 nuits de suite", "😴", "Exploits sur l'honneur", 2], ["matin", "5 h du mat", "Te lever à 5 h une semaine", "⏰", "Exploits sur l'honneur", 3], ["froid", "Douche froide", "Prendre une douche froide", "🚿", "Exploits sur l'honneur", 1], ["sucre", "Sans sucre", "Une semaine sans sucre ajouté", "🚫", "Exploits sur l'honneur", 2], ["alcool", "Dry month", "Un mois sans alcool", "🥤", "Exploits sur l'honneur", 3], ["tabac", "Libre", "Arrêter de fumer", "🚭", "Exploits sur l'honneur", 4], ["peur", "Courage", "Affronter une de tes peurs", "🦁", "Exploits sur l'honneur", 3], ["spa", "Spa", "Passer une journée au spa", "♨️", "Exploits sur l'honneur", 1], ["retraite", "Retraite", "Faire une retraite de silence", "🕯️", "Exploits sur l'honneur", 3], ["eau", "Hydraté", "Boire 2 L d'eau 7 jours", "💧", "Exploits sur l'honneur", 1], ["objectif", "Cap", "Écrire tes objectifs de l'année", "🎯", "Exploits sur l'honneur", 1]], "luxe": [["palace", "Palace", "Dormir dans un palace", "🏨", "Exploits sur l'honneur", 4], ["suite", "Suite", "Dormir dans une suite", "🛏️", "Exploits sur l'honneur", 3], ["business", "Business class", "Voler en classe affaires", "💺", "Exploits sur l'honneur", 3], ["first", "Première classe", "Voler en première", "🥂", "Exploits sur l'honneur", 4], ["jet", "Jet privé", "Voler en jet privé", "🛩️", "Exploits sur l'honneur", 5], ["helico", "Hélico", "Faire un tour en hélicoptère", "🚁", "Exploits sur l'honneur", 3], ["yacht", "Yacht", "Monter à bord d'un yacht", "🛥️", "Exploits sur l'honneur", 4], ["supercar", "Supercar", "Conduire une supercar", "🏎️", "Exploits sur l'honneur", 3], ["circuit", "Pilote", "Rouler sur un circuit", "🏁", "Exploits sur l'honneur", 3], ["montre", "Horloger", "T'offrir une belle montre", "⌚", "Exploits sur l'honneur", 4], ["sur_mesure", "Sur mesure", "Porter un costume sur mesure", "🤵", "Exploits sur l'honneur", 3], ["monaco_gp", "Grand Prix", "Assister au Grand Prix de Monaco", "🏎️", "Exploits sur l'honneur", 4], ["fashion", "Défilé", "Assister à un défilé", "👗", "Exploits sur l'honneur", 4], ["champagne", "Champagne", "Visiter une maison de champagne", "🍾", "Exploits sur l'honneur", 2], ["ile_privee", "Île privée", "Séjourner sur une île privée", "🏝️", "Exploits sur l'honneur", 5], ["villa", "Villa", "Louer une villa avec piscine", "🏡", "Exploits sur l'honneur", 3], ["croisiere", "Croisière", "Faire une croisière", "🚢", "Exploits sur l'honneur", 3], ["orient", "Orient-Express", "Voyager dans un train de luxe", "🚂", "Exploits sur l'honneur", 5], ["caritatif", "Mécène", "Faire un don important à une cause", "🤲", "Exploits sur l'honneur", 4]], "defis": [["soleil", "Aube", "Être dehors avant le lever du soleil", "🌄", "Exploits sur l'honneur", 1], ["pluie", "Sous la pluie", "Marcher sous la pluie sans parapluie", "🌧️", "Exploits sur l'honneur", 1], ["nuit", "Nuit blanche dehors", "Voir le jour se lever après une nuit dehors", "🌃", "Exploits sur l'honneur", 2], ["transport", "Sans voiture", "Une semaine sans voiture", "🚌", "Exploits sur l'honneur", 2], ["train", "Rail", "Faire 500 km en train", "🚄", "Exploits sur l'honneur", 2], ["autostop", "Pouce", "Faire du stop", "👍", "Exploits sur l'honneur", 3], ["couchsurfing", "Hébergé", "Dormir chez l'habitant", "🛋️", "Exploits sur l'honneur", 2], ["passeport", "Passeport", "Faire ton passeport", "🛂", "Exploits sur l'honneur", 1], ["avion", "Décollage", "Prendre l'avion", "✈️", "Exploits sur l'honneur", 1], ["continent", "Autre continent", "Poser le pied sur un autre continent", "🌐", "Exploits sur l'honneur", 3], ["5continents", "Cinq continents", "Visiter les 5 continents", "🗺️", "Exploits sur l'honneur", 5], ["hemisphere", "Sud", "Passer dans l'hémisphère sud", "🧭", "Exploits sur l'honneur", 3], ["equateur", "Équateur", "Traverser l'équateur", "🌍", "Exploits sur l'honneur", 4], ["nouvel_an", "Nouvel An ailleurs", "Fêter le Nouvel An à l'étranger", "🎆", "Exploits sur l'honneur", 3], ["dernier_minute", "Coup de tête", "Partir en voyage le jour même", "🎲", "Exploits sur l'honneur", 3], ["100defis", "Cent défis", "Débloquer 100 hauts faits", "💯", "Exploits sur l'honneur", 5]], "createurs": [["video1", "Action !", "Publier ta première vidéo", "🎬", "Débuts", 1], ["video10", "Régulier", "Publier 10 vidéos", "📼", "Débuts", 2], ["30en30", "30 en 30", "Publier une vidéo par jour pendant 30 jours", "📆", "Débuts", 4], ["live1", "En direct", "Faire ton premier live", "🔴", "Débuts", 1], ["podcast", "Au micro", "Lancer ton podcast", "🎙️", "Débuts", 2], ["newsletter", "Plume", "Lancer ta newsletter", "📰", "Débuts", 1], ["yt100", "YouTube · 100 abonnés", "Atteindre 100 abonnés YouTube", "▶️", "YouTube", 2], ["yt1k", "YouTube · 1 000 abonnés", "Atteindre 1 000 abonnés YouTube", "▶️", "YouTube", 3], ["ytmonet", "Monétisé", "Rejoindre le programme partenaire YouTube", "💰", "YouTube", 3], ["yt10k", "YouTube · 10 000 abonnés", "Atteindre 10 000 abonnés YouTube", "▶️", "YouTube", 4], ["ytargent", "Bouton argent", "Atteindre 100 000 abonnés YouTube", "🥈", "YouTube", 5], ["ytor", "Bouton or", "Atteindre 1 million d'abonnés YouTube", "🥇", "YouTube", 5], ["ytdiamant", "Bouton diamant", "Atteindre 10 millions d'abonnés YouTube", "💎", "YouTube", 5], ["tt1k", "TikTok · 1 000 abonnés", "Atteindre 1 000 abonnés TikTok", "🎵", "TikTok", 2], ["tt10k", "TikTok · 10 000 abonnés", "Atteindre 10 000 abonnés TikTok", "🎵", "TikTok", 3], ["tt100k", "TikTok · 100 000 abonnés", "Atteindre 100 000 abonnés TikTok", "🎵", "TikTok", 4], ["tt1m", "TikTok · 1 million", "Atteindre 1 million d'abonnés TikTok", "🎵", "TikTok", 5], ["ttcreator", "Fonds créateurs", "Être rémunéré par TikTok", "💸", "TikTok", 3], ["ig1k", "Instagram · 1 000 abonnés", "Atteindre 1 000 abonnés Instagram", "📸", "Instagram", 2], ["ig10k", "Instagram · 10 000 abonnés", "Atteindre 10 000 abonnés Instagram", "📸", "Instagram", 3], ["ig100k", "Instagram · 100 000 abonnés", "Atteindre 100 000 abonnés Instagram", "📸", "Instagram", 4], ["ig1m", "Instagram · 1 million", "Atteindre 1 million d'abonnés Instagram", "📸", "Instagram", 5], ["certif", "Certifié", "Obtenir le badge certifié sur un réseau", "☑️", "Instagram", 4], ["twaff", "Affilié Twitch", "Devenir affilié Twitch", "🟣", "Twitch", 2], ["twpart", "Partenaire Twitch", "Devenir partenaire Twitch", "💜", "Twitch", 4], ["li5k", "LinkedIn influent", "Atteindre 5 000 abonnés LinkedIn", "💼", "LinkedIn", 3], ["v10k", "Ça décolle", "Faire une vidéo à 10 000 vues", "📈", "Viralité", 2], ["viral", "Viral", "Faire une vidéo à 100 000 vues", "🚀", "Viralité", 3], ["v1m", "Phénomène", "Faire une vidéo à 1 million de vues", "🌪️", "Viralité", 4], ["v10m", "Tendance mondiale", "Faire une vidéo à 10 millions de vues", "🌍", "Viralité", 5], ["collab", "Collab", "Faire une vidéo avec un autre créateur", "🤝", "Business", 2], ["sponso", "Premier sponso", "Signer ton premier partenariat payé", "🤑", "Business", 3], ["agence", "Représenté", "Signer avec une agence", "🧾", "Business", 4], ["merch", "Merch", "Vendre ton propre merch", "👕", "Business", 3], ["invitepod", "Invité", "Être invité dans un podcast ou une émission", "🎧", "Business", 3], ["tele", "Vu à la télé", "Passer à la télévision", "📺", "Business", 4], ["meetup", "Rencontre fans", "Organiser une rencontre avec ta communauté", "🫶", "Business", 3], ["rencontre_yt", "Fan rencontré", "Rencontrer un créateur que tu suis", "🤳", "Business", 1]]};
+const SITES=[["louvre", "La Joconde", "culture", 48.8606, 2.3376, 250, 2, "🖼️", "Entrer au Louvre, là où t'attend Mona Lisa"], ["eiffel", "Dame de fer", "culture", 48.8584, 2.2945, 200, 1, "🗼", "Passer au pied de la tour Eiffel"], ["arc", "Arc de Triomphe", "culture", 48.8738, 2.295, 150, 1, "🏛️", "Te tenir sous l'Arc de Triomphe"], ["sacrecoeur", "Butte Montmartre", "culture", 48.8867, 2.3431, 150, 1, "⛪", "Monter jusqu'au Sacré-Cœur"], ["notredame", "Notre-Dame", "culture", 48.853, 2.3499, 150, 1, "⛪", "Voir Notre-Dame de Paris"], ["versailles", "Roi Soleil", "culture", 48.8049, 2.1204, 450, 2, "👑", "Visiter le château de Versailles"], ["msm", "Merveille de l'Occident", "culture", 48.6361, -1.5115, 500, 2, "🏰", "Rejoindre le Mont-Saint-Michel"], ["chambord", "Chambord", "culture", 47.6162, 1.517, 400, 2, "🏰", "Visiter le château de Chambord"], ["pontdugard", "Pont du Gard", "culture", 43.9475, 4.5353, 300, 2, "🌉", "Marcher jusqu'au pont du Gard"], ["carcassonne", "Cité médiévale", "culture", 43.2063, 2.3637, 300, 2, "🛡️", "Entrer dans la cité de Carcassonne"], ["colisee", "Gladiateur", "culture", 41.8902, 12.4922, 200, 3, "🏟️", "Voir le Colisée à Rome"], ["vatican", "Chapelle Sixtine", "culture", 41.9022, 12.4539, 400, 3, "✝️", "Entrer au Vatican"], ["pise", "Tour penchée", "culture", 43.723, 10.3966, 200, 3, "🗼", "Faire la photo devant la tour de Pise"], ["sagrada", "Sagrada Família", "culture", 41.4036, 2.1744, 200, 3, "⛪", "Voir la Sagrada Família"], ["alhambra", "Alhambra", "culture", 37.1761, -3.5881, 400, 3, "🕌", "Visiter l'Alhambra de Grenade"], ["bigben", "Big Ben", "culture", 51.5007, -0.1246, 200, 3, "🕰️", "Passer devant Big Ben"], ["acropole", "Acropole", "culture", 37.9715, 23.7257, 300, 3, "🏛️", "Monter sur l'Acropole d'Athènes"], ["brandebourg", "Porte de Brandebourg", "culture", 52.5163, 13.3777, 200, 3, "🏛️", "Passer la porte de Brandebourg"], ["atomium", "Atomium", "culture", 50.8949, 4.3415, 200, 2, "⚛️", "Voir l'Atomium à Bruxelles"], ["liberte", "Lady Liberty", "culture", 40.6892, -74.0445, 300, 4, "🗽", "Approcher la statue de la Liberté"], ["timessquare", "Times Square", "culture", 40.758, -73.9855, 200, 4, "🌆", "Te perdre dans Times Square"], ["goldengate", "Golden Gate", "culture", 37.8199, -122.4783, 600, 4, "🌉", "Traverser le Golden Gate"], ["gizeh", "Pharaon", "culture", 29.9792, 31.1342, 900, 4, "🔺", "Voir les pyramides de Gizeh"], ["tajmahal", "Taj Mahal", "culture", 27.1751, 78.0421, 400, 4, "🕌", "Visiter le Taj Mahal"], ["muraille", "Grande Muraille", "culture", 40.3588, 116.0204, 900, 5, "🧱", "Marcher sur la Grande Muraille"], ["christ", "Corcovado", "culture", -22.9519, -43.2105, 300, 5, "🙌", "Monter voir le Christ Rédempteur"], ["machupicchu", "Cité inca", "culture", -13.1631, -72.545, 600, 5, "🏔️", "Atteindre le Machu Picchu"], ["opera_sydney", "Opéra de Sydney", "culture", -33.8568, 151.2153, 250, 5, "🎶", "Voir l'Opéra de Sydney"], ["shibuya", "Shibuya Crossing", "culture", 35.6595, 139.7005, 150, 4, "🚦", "Traverser le carrefour de Shibuya"], ["burj", "Burj Khalifa", "luxe", 25.1972, 55.2744, 250, 3, "🏙️", "Approcher la plus haute tour du monde"], ["montecarlo", "Monte-Carlo", "luxe", 43.7393, 7.4277, 150, 3, "🎰", "Passer devant le casino de Monte-Carlo"], ["vendome", "Place Vendôme", "luxe", 48.8675, 2.3294, 120, 2, "💍", "Te promener place Vendôme"], ["montaigne", "Avenue Montaigne", "luxe", 48.8663, 2.3047, 200, 2, "👜", "Arpenter l'avenue Montaigne"], ["croisette", "La Croisette", "luxe", 43.5505, 7.023, 400, 2, "🌴", "Marcher sur la Croisette à Cannes"], ["burjarab", "Burj Al Arab", "luxe", 25.1412, 55.1853, 300, 4, "⛵", "Voir le Burj Al Arab"], ["rodeo", "Rodeo Drive", "luxe", 34.0696, -118.4053, 300, 4, "🛍️", "Faire du lèche-vitrine sur Rodeo Drive"], ["montblanc", "Toit des Alpes", "nature", 45.8786, 6.8873, 400, 3, "🏔️", "Monter à l'Aiguille du Midi face au mont Blanc"], ["verdon", "Gorges du Verdon", "nature", 43.7496, 6.3285, 3000, 2, "🏞️", "Explorer les gorges du Verdon"], ["pilat", "Dune du Pilat", "nature", 44.5893, -1.2132, 800, 2, "🏜️", "Grimper la dune du Pilat"], ["falaises", "Falaises d'Étretat", "nature", 49.7072, 0.2033, 900, 2, "🪨", "Voir les falaises d'Étretat"], ["calanques", "Calanques", "nature", 43.213, 5.456, 1500, 2, "⛵", "Randonner dans les calanques"], ["gavarnie", "Cirque de Gavarnie", "nature", 42.735, -0.01, 2000, 3, "⛰️", "Entrer dans le cirque de Gavarnie"], ["fournaise", "Piton de la Fournaise", "nature", -21.2444, 55.7089, 2000, 4, "🌋", "Approcher le Piton de la Fournaise"], ["bluelagoon", "Blue Lagoon", "nature", 63.8804, -22.4495, 400, 4, "♨️", "Te baigner au Blue Lagoon"], ["geiranger", "Fjord", "nature", 62.1008, 7.2059, 3000, 4, "🛳️", "Voir le fjord de Geiranger"], ["merzouga", "Sahara", "nature", 31.0802, -4.0133, 5000, 4, "🐪", "Dormir dans les dunes du Sahara"], ["niagara", "Niagara", "nature", 43.0962, -79.0377, 800, 4, "💦", "Voir les chutes du Niagara"], ["grandcanyon", "Grand Canyon", "nature", 36.1069, -112.1129, 3000, 5, "🏜️", "Contempler le Grand Canyon"], ["sdf", "Stade de France", "sport", 48.9245, 2.3602, 300, 1, "🏟️", "Entrer au Stade de France"], ["parc", "Parc des Princes", "sport", 48.8414, 2.253, 200, 1, "🔴", "Aller au Parc des Princes"], ["rg", "Terre battue", "sport", 48.847, 2.249, 200, 2, "🎾", "Aller à Roland-Garros"], ["velodrome", "Vélodrome", "sport", 43.2698, 5.3959, 250, 2, "🔵", "Vibrer au Vélodrome"], ["bernabeu", "Santiago Bernabéu", "sport", 40.4531, -3.6883, 250, 3, "⚪", "Entrer au Bernabéu"], ["campnou", "Camp Nou", "sport", 41.3809, 2.1228, 250, 3, "🔵", "Entrer au Camp Nou"], ["wembley", "Wembley", "sport", 51.556, -0.2796, 250, 3, "🏟️", "Entrer à Wembley"], ["oldtrafford", "Old Trafford", "sport", 53.4631, -2.2913, 250, 3, "🔴", "Entrer à Old Trafford"], ["lemans", "24 Heures", "sport", 47.956, 0.207, 1500, 3, "🏁", "Aller sur le circuit du Mans"], ["alpedhuez", "21 virages", "sport", 45.092, 6.07, 1500, 4, "🚵", "Atteindre l'Alpe d'Huez"], ["tourmalet", "Tourmalet", "sport", 42.9089, 0.1453, 400, 4, "⛰️", "Atteindre le col du Tourmalet"], ["bocuse", "Halles Bocuse", "food", 45.763, 4.8508, 120, 2, "🧀", "Manger aux Halles Paul Bocuse"], ["boqueria", "La Boqueria", "food", 41.3817, 2.1716, 100, 2, "🍊", "Goûter au marché de la Boqueria"], ["borough", "Borough Market", "food", 51.5055, -0.091, 120, 3, "🥧", "Manger au Borough Market"], ["tsukiji", "Tsukiji", "food", 35.6655, 139.7707, 200, 4, "🍣", "Manger des sushis au marché de Tsukiji"]];
+const TIER_PTS=[0,10,25,50,100,250];
+const TIER_NAME=["","Facile","Moyen","Difficile","Épique","Légendaire"];
+const EU=["France","Belgique","Suisse","Royaume-Uni","Espagne","Italie","Allemagne","Pays-Bas","Portugal","Monaco","Luxembourg","Irlande","Autriche","Tchéquie","Hongrie","Pologne","Danemark","Suède","Norvège","Finlande","Islande","Grèce","Croatie"];
+const RANKS=[[0,"Touriste"],[250,"Randonneur"],[1000,"Explorateur"],[3000,"Aventurier"],[8000,"Légende du monde réel"]];
+
+/* ---------- État ---------- */
+const KEY="dehors_v1";
+const fresh=()=>({pseudo:"",unlocked:{},checkins:[],home:null,days:[]});
+let S=load();
+let venues=[];          // lieux partenaires (base partagée)
+let board=[];           // classement
+let tab="voyage";
+let db=null,user=null,uid=null,canEdit=false,boardReadOnly=false,pendingTag=null;
+
+function load(){try{return Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return fresh()}}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ---------- Outils ---------- */
+const $=id=>document.getElementById(id);
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function km(a,b,c,d){const R=6371,r=Math.PI/180,x=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+const dayKey=t=>{const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const fmt=n=>n.toLocaleString("fr-FR");
+function slug(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30)}
+function ago(t){const m=Math.round((Date.now()-t)/60000);if(m<1)return"à l'instant";if(m<60)return"il y a "+m+" min";const h=Math.round(m/60);if(h<24)return"il y a "+h+" h";return"il y a "+Math.round(h/24)+" j"}
+function status(msg){$("status").textContent=msg||""}
+
+/* ---------- Catalogue des hauts faits ---------- */
+function catalog(){
+  const L=[];
+  const countries=[...new Set(CITIES.map(c=>c[1]))];
+  // Voyage
+  CITIES.forEach(c=>L.push({id:"ville:"+c[0],cat:"voyage",sub:"Villes",title:c[0],desc:(c[5]?"Capitale · ":"")+c[1],tier:c[1]==="France"?1:(EU.includes(c[1])?2:3),pts:TIER_PTS[c[1]==="France"?1:(EU.includes(c[1])?2:3)],icon:c[5]?"🏛️":"🏙️"}));
+  SITES.forEach(x=>L.push({id:"site:"+x[0],cat:x[2],sub:"Lieux mythiques · validés par GPS",title:x[1],desc:x[8],tier:x[6],pts:TIER_PTS[x[6]],icon:x[7],gps:true}));
+  countries.forEach(n=>L.push({id:"pays:"+n,cat:"voyage",sub:"Pays",title:n,desc:"Poser le pied dans ce pays",tier:n==="France"?1:(EU.includes(n)?3:4),pts:TIER_PTS[n==="France"?1:(EU.includes(n)?3:4)],icon:FLAGS[n]||"🏳️"}));
+  [[1,"Premier pas","Découvrir ta première ville"],[5,"Globe-trotteur en herbe","Découvrir 5 villes"],[15,"Routard","Découvrir 15 villes"],[30,"Cartographe","Découvrir 30 villes"]]
+    .forEach(([n,t,d])=>L.push({id:"villes:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,pts:n*5+10,icon:"🗺️",test:x=>x.cities>=n}));
+  [[2,"Passeport tamponné","Visiter 2 pays"],[5,"Citoyen du monde","Visiter 5 pays"]]
+    .forEach(([n,t,d])=>L.push({id:"paysN:"+n,cat:"voyage",sub:"Jalons",title:t,desc:d,pts:n*30,icon:"🛂",test:x=>x.countries>=n}));
+  [[100,"Évasion"],[500,"Grand départ"],[1000,"Loin, très loin"],[5000,"Autre continent"]]
+    .forEach(([n,t])=>L.push({id:"dist:"+n,cat:"voyage",sub:"Jalons",title:t,desc:"Valider une position à plus de "+fmt(n)+" km de ta première",pts:Math.round(20+n/25),icon:"✈️",test:x=>x.maxDist>=n}));
+  L.push({id:"offmap",cat:"voyage",sub:"Jalons",title:"Hors des sentiers battus",desc:"Valider ta position loin de toute ville répertoriée",pts:30,icon:"🌲"});
+  // Lieux partenaires + jalons par catégorie
+  venues.forEach(v=>L.push({id:"lieu:"+v.code,cat:v.cat,sub:"Lieux partenaires",title:v.name,desc:v.city?"Lieu taggé · "+v.city:"Lieu taggé",pts:20,icon:(CATS.find(c=>c.id===v.cat)||{}).icon||"📍"}));
+  Object.entries(VENUE_MILESTONES).forEach(([cat,arr])=>arr.forEach(([n,t])=>L.push({id:"lieux:"+cat+":"+n,cat,sub:"Jalons",title:t,desc:"Découvrir "+n+" lieu"+(n>1?"x":"")+" partenaire"+(n>1?"s":""),pts:n*10+15,icon:"🎖️",test:x=>(x.venues[cat]||0)>=n})));
+  // Exploits sur l'honneur
+  Object.entries(HONOR).forEach(([cat,arr])=>arr.forEach(([k,t,d,ic,sb,tr])=>L.push({id:"honneur:"+cat+":"+k,cat,sub:sb||"Exploits sur l'honneur",title:t,desc:d,tier:tr||2,pts:TIER_PTS[tr||2],icon:ic,honor:true})));
+  // Défis de rythme
+  L.push({id:"weekend",cat:"defis",sub:"Rythme",title:"Week-end explorateur",desc:"Sortir le samedi et le dimanche du même week-end",pts:40,icon:"📅",test:x=>x.weekend});
+  L.push({id:"marathon",cat:"defis",sub:"Rythme",title:"Marathon urbain",desc:"Découvrir 3 villes différentes le même jour",pts:60,icon:"🚆",test:x=>x.citiesSameDay>=3});
+  L.push({id:"serie7",cat:"defis",sub:"Rythme",title:"7 jours dehors",desc:"Débloquer au moins un haut fait 7 jours d'affilée",pts:70,icon:"🔥",test:x=>x.streak>=7});
+  // Secrets
+  L.push({id:"levetot",cat:"secrets",sub:"Secrets",title:"Lève-tôt",desc:"Valider ta position entre 5 h et 8 h",pts:30,icon:"🐓",hidden:true});
+  L.push({id:"noctambule",cat:"secrets",sub:"Secrets",title:"Noctambule",desc:"Valider ta position entre 22 h et 2 h",pts:30,icon:"🦉",hidden:true});
+  L.push({id:"collection25",cat:"secrets",sub:"Secrets",title:"Collectionneur",desc:"Débloquer 25 hauts faits",pts:100,icon:"💎",hidden:true,test:x=>x.count>=25});
+  L.push({id:"cent",cat:"secrets",sub:"Secrets",title:"Complétionniste",desc:"Atteindre 100 % de hauts faits",pts:500,icon:"👑",hidden:true,test:x=>x.allOthers});
+  return L;
+}
+
+/* ---------- Calculs ---------- */
+function facts(L){
+  const u=S.unlocked;
+  const cities=L.filter(a=>a.id.startsWith("ville:")&&u[a.id]).length;
+  const countries=L.filter(a=>a.id.startsWith("pays:")&&u[a.id]).length;
+  let maxDist=0;
+  if(S.home)S.checkins.forEach(c=>{maxDist=Math.max(maxDist,km(S.home.lat,S.home.lng,c.lat,c.lng))});
+  const venuesBy={};venues.forEach(v=>{if(u["lieu:"+v.code])venuesBy[v.cat]=(venuesBy[v.cat]||0)+1});
+  const byDay={};Object.entries(u).forEach(([id,v])=>{if(id.startsWith("ville:")){const k=dayKey(v.at);byDay[k]=(byDay[k]||0)+1}});
+  const citiesSameDay=Math.max(0,...Object.values(byDay));
+  const days=new Set(S.days);
+  let weekend=false;days.forEach(k=>{const d=new Date(k+"T12:00");if(d.getDay()===6){const n=new Date(d.getTime()+864e5);if(days.has(dayKey(n)))weekend=true}});
+  let streak=0;const sorted=[...days].sort();let run=0,prev=null;
+  sorted.forEach(k=>{const t=new Date(k+"T12:00").getTime();run=(prev&&Math.round((t-prev)/864e5)===1)?run+1:1;prev=t;streak=Math.max(streak,run)});
+  const count=Object.keys(u).length;
+  const allOthers=L.filter(a=>a.id!=="cent").every(a=>u[a.id]);
+  return{cities,countries,maxDist,venues:venuesBy,citiesSameDay,weekend,streak,count,allOthers};
+}
+function totals(L){
+  let pts=0,got=0;L.forEach(a=>{if(S.unlocked[a.id]){pts+=a.pts;got++}});
+  return{pts,got,total:L.length,pct:L.length?Math.floor(got/L.length*100):0};
+}
+
+/* ---------- Déblocage ---------- */
+let toastQ=[],toastBusy=false,lastUnlock=null,nearHint="";
+function unlock(id,L){
+  if(S.unlocked[id])return false;
+  const a=L.find(x=>x.id===id);if(!a)return false;
+  S.unlocked[id]={at:Date.now()};
+  const k=dayKey(Date.now());if(!S.days.includes(k))S.days.push(k);
+  lastUnlock={t:a.title,at:Date.now()};
+  toastQ.push(a);return true;
+}
+function cascade(){
+  const L=catalog();let changed=true,guard=0;
+  while(changed&&guard++<10){changed=false;const f=facts(L);L.forEach(a=>{if(a.test&&!S.unlocked[a.id]&&a.test(f)){unlock(a.id,L);changed=true}})}
+}
+function commit(){cascade();saveLocal();render();runToasts();sync()}
+
+/* ---------- Notification ---------- */
+let audio=null;
+function chime(){
+  try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();const t=audio.currentTime;
+    [523.25,659.25,783.99,1046.5].forEach((f,i)=>{const o=audio.createOscillator(),g=audio.createGain();o.type="triangle";o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+i*.09);g.gain.linearRampToValueAtTime(.18,t+i*.09+.02);g.gain.exponentialRampToValueAtTime(.001,t+i*.09+.5);
+      o.connect(g).connect(audio.destination);o.start(t+i*.09);o.stop(t+i*.09+.55)})}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}
+}
+function showToast(icon,l1,l2,l3,err){
+  const t=$("toast");t.classList.toggle("err",!!err);$("tIcon").textContent=icon;$("tL1").textContent=l1;$("tL2").textContent=l2;$("tL3").textContent=l3||"";
+  t.classList.remove("show");void t.offsetWidth;t.classList.add("show");
+}
+function runToasts(){
+  if(toastBusy||!toastQ.length)return;toastBusy=true;
+  const a=toastQ.shift();chime();showToast(a.icon,"Haut fait débloqué",a.title,"+"+a.pts+" pts");
+  setTimeout(()=>{$("toast").classList.remove("show");setTimeout(()=>{toastBusy=false;runToasts()},450)},3200);
+}
+function fail(msg){showToast("⚠️","Pas cette fois",msg,"",true);setTimeout(()=>$("toast").classList.remove("show"),3600)}
+
+/* ---------- Position ---------- */
+function locate(){
+  return new Promise((res,rej)=>{
+    if(!navigator.geolocation)return rej("Ton navigateur ne donne pas accès à la position.");
+    navigator.geolocation.getCurrentPosition(p=>res(p.coords),e=>rej(e.code===1?"Autorise la localisation dans ton navigateur pour valider tes découvertes.":"Position introuvable. Réessaie dehors, loin des murs épais."),{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
+  });
+}
+async function checkin(){
+  const b=$("checkin");b.disabled=true;b.textContent="📡 Localisation…";status("");
+  try{
+    const c=await locate(),L=catalog(),now=Date.now();
+    let best=null,bd=1e9;CITIES.forEach(x=>{const d=km(c.latitude,c.longitude,x[2],x[3]);if(d<=x[4]&&d<bd){bd=d;best=x}});
+    if(!S.home)S.home={lat:c.latitude,lng:c.longitude};
+    S.checkins.push({city:best?best[0]:null,lat:+c.latitude.toFixed(3),lng:+c.longitude.toFixed(3),at:now});
+    if(S.checkins.length>300)S.checkins=S.checkins.slice(-300);
+    const before=toastQ.length,h=new Date(now).getHours();
+    if(best){unlock("ville:"+best[0],L);unlock("pays:"+best[1],L)}else unlock("offmap",L);
+    SITES.forEach(x=>{if(km(c.latitude,c.longitude,x[3],x[4])*1000<=x[5]+Math.min(c.accuracy||0,150))unlock("site:"+x[0],L)});
+    let near=null,nd=50;SITES.forEach(x=>{if(S.unlocked["site:"+x[0]])return;const d=km(c.latitude,c.longitude,x[3],x[4]);if(d<nd){nd=d;near=x}});
+    nearHint=near?"Lieu mythique à "+(nd<1?Math.round(nd*1000)+" m":nd.toFixed(1).replace(".",",")+" km")+" : "+near[1]+" "+near[7]:"";
+    if(h>=5&&h<8)unlock("levetot",L);
+    if(h>=22||h<2)unlock("noctambule",L);
+    const k=dayKey(now);if(!S.days.includes(k))S.days.push(k);
+    commit();
+    if(toastQ.length===before&&!toastBusy)status(best?"Déjà découvert : "+best[0]+". Va voir plus loin 👀":"Aucune ville répertoriée ici, mais ta position est enregistrée.");
+    else status(best?"Tu es à "+best[0]+".":"");
+    if(nearHint)setTimeout(()=>status(nearHint),toastQ.length*3700+600);
+  }catch(e){fail(typeof e==="string"?e:"Impossible de te localiser.")}
+  b.disabled=false;b.textContent="📍 Valider ma position";
+}
+
+/* ---------- Lieux partenaires (tags) ---------- */
+async function useTag(raw){
+  const code=String(raw||"").trim().toLowerCase();if(!code)return;
+  if(!db&&!venues.length){pendingTag=code;status("Chargement des lieux partenaires…");return}
+  const v=venues.find(x=>x.code===code);
+  if(!v)return fail("Ce code ne correspond à aucun lieu partenaire.");
+  const L=catalog();
+  if(S.unlocked["lieu:"+v.code])return status("Tu as déjà découvert "+v.name+".");
+  if(typeof v.lat==="number"){
+    status("Vérification de ta présence sur place…");
+    try{const c=await locate();const d=km(c.latitude,c.longitude,v.lat,v.lng);
+      if(d>0.3)return fail("Tu dois être sur place pour débloquer "+v.name+".");
+    }catch(e){return fail(typeof e==="string"?e:"Impossible de vérifier ta position.")}
+  }
+  unlock("lieu:"+v.code,L);status("");commit();
+}
+function readHash(){const h=location.hash.slice(1);if(h.startsWith("tag-"))useTag(h.slice(4))}
+
+/* ---------- Affichage ---------- */
+function render(){
+  const L=catalog(),T=totals(L);
+  $("pseudo").textContent=S.pseudo||"Sans pseudo";
+  $("score").firstChild.nodeValue=fmt(T.pts);
+  $("pct").textContent=T.pct+" %";$("ring").style.setProperty("--p",T.pct);
+  let cur=RANKS[0],nxt=null;RANKS.forEach((r,i)=>{if(T.pts>=r[0]){cur=r;nxt=RANKS[i+1]||null}});
+  $("rank").textContent=cur[1]+" · "+T.got+" / "+T.total+" hauts faits";
+  $("next").textContent=nxt?"Encore "+fmt(nxt[0]-T.pts)+" pts pour devenir "+nxt[1]:"Rang maximum atteint";
+  // onglets
+  const tabs=$("tabs");tabs.textContent="";
+  [...CATS,{id:"communaute",label:"Communauté",icon:"👥"}].forEach(c=>{
+    const b=el("button","tab");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",tab===c.id);
+    b.append(c.icon+" "+c.label);
+    if(c.id!=="communaute"){const all=L.filter(a=>a.cat===c.id);const got=all.filter(a=>S.unlocked[a.id]).length;b.append(el("em",null,got+"/"+all.length))}
+    b.onclick=()=>{tab=c.id;render()};tabs.append(b);
+  });
+  const v=$("view");v.textContent="";
+  if(tab==="communaute")return renderCommunity(v);
+  const items=L.filter(a=>a.cat===tab);
+  const subs=[...new Set(items.map(a=>a.sub))];
+  if(tab!=="voyage"&&tab!=="defis"&&tab!=="secrets"&&!items.some(a=>a.sub==="Lieux partenaires")){
+    const h=el("h3");h.append(el("span",null,"Lieux partenaires"));v.append(h);
+    v.append(el("div","empty","Aucun établissement partenaire dans cette catégorie pour l'instant. Scanne le QR code d'un lieu Dehors pour débloquer son haut fait."));
+  }
+  subs.forEach(s=>{
+    const list=items.filter(a=>a.sub===s);const got=list.filter(a=>S.unlocked[a.id]).length;
+    const h=el("h3");h.append(el("span",null,s),el("span",null,got+" / "+list.length));v.append(h);
+    const g=el("div","grid");
+    list.sort((a,b)=>(!!S.unlocked[b.id])-(!!S.unlocked[a.id])).forEach(a=>g.append(tile(a)));v.append(g);
+  });
+}
+function tile(a){
+  const on=!!S.unlocked[a.id],hide=a.hidden&&!on;
+  const d=el("div","ach "+(on?"on":"off")+(hide?" hidden":""));
+  d.append(el("div","ic",hide?"❔":a.icon),el("div","t",hide?"Haut fait secret":a.title),el("div","d",hide?"Continue d'explorer pour le révéler.":a.desc));
+  const tn=a.tier?TIER_NAME[a.tier]+" · ":"";d.dataset.tier=a.tier||0;
+  d.append(el("div","p",on?"✓ "+tn+a.pts+" pts · "+new Date(S.unlocked[a.id].at).toLocaleDateString("fr-FR"):tn+a.pts+" pts"+(a.gps?" · 📍 auto":"")));
+  if(a.honor&&!on){
+    const b=el("button","honor");b.type="button";const bar=el("i");b.append(bar,el("span",null,"Maintenir pour valider sur l'honneur"));
+    let tm=null;const start=e=>{e.preventDefault();bar.style.transition="width 1.2s linear";bar.style.width="100%";tm=setTimeout(()=>{unlock(a.id,catalog());commit()},1200)};
+    const stop=()=>{clearTimeout(tm);bar.style.transition="width .2s";bar.style.width="0"};
+    b.addEventListener("pointerdown",start);["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,stop));
+    b.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!e.repeat)start(e)});b.addEventListener("keyup",stop);
+    d.append(b);
+  }
+  return d;
+}
+function renderCommunity(v){
+  const h=el("h3");h.append(el("span",null,"Classement des chasseurs"));v.append(h);
+  if(!db){v.append(el("div","empty","Le classement des chasseurs arrive très bientôt. En attendant, débloque un max de hauts faits : ta progression est gardée sur ton téléphone."));return}
+  const top=[...board].sort((a,b)=>b.points-a.points).slice(0,30);
+  if(!top.length){v.append(el("div","empty","Personne au classement pour l'instant. Débloque un haut fait pour ouvrir le bal."))}
+  else{const bd=el("div","board");top.forEach((r,i)=>{const row=el("div","row"+(r.id===uid?" me":""));
+    const nm=el("div","nm",(r.pseudo||"Chasseur")+(r.id===uid?" (toi)":""));nm.append(el("span","sub",r.count+" hauts faits"));
+    row.append(el("div","n",String(i+1)),nm,el("div","pts",fmt(r.points)+" pts"));bd.append(row)});v.append(bd)}
+  if(boardReadOnly)v.append(el("p","status","Ton accès à cette app est en lecture seule : ton score n'apparaît pas au classement."));
+  const recent=board.filter(r=>r.last&&r.last.at).sort((a,b)=>b.last.at-a.last.at).slice(0,8);
+  if(recent.length){const h2=el("h3");h2.append(el("span",null,"Derniers hauts faits"));v.append(h2);
+    const f=el("div","feed");recent.forEach(r=>{const d=el("div");d.append((r.pseudo||"Un chasseur")+" a débloqué « "+r.last.t+" »");d.append(el("time",null,ago(r.last.at)));f.append(d)});v.append(f)}
+  if(canEdit)v.append(proPanel());
+}
+
+/* ---------- Espace établissements (propriétaire) ---------- */
+function tagLink(code){return (ARTIFACT_URL||"[lien de l'app]")+"#tag-"+code}
+function proPanel(){
+  const p=el("section","pro");p.append(el("h2",null,"Espace établissements"),el("p",null,"Ajoute un lieu partenaire : il obtient un code et un QR code à afficher sur place. Chaque nouveau visiteur qui le scanne débloque un haut fait."));
+  const f=el("form");f.autocomplete="off";
+  const name=el("input");name.placeholder="Nom du lieu";name.required=true;name.maxLength=50;
+  const city=el("input");city.placeholder="Ville";city.maxLength=40;
+  const cat=el("select");[["food","Food"],["sport","Sport"],["culture","Culture"]].forEach(([v,l])=>{const o=el("option",null,l);o.value=v;cat.append(o)});
+  const lab=el("label","ck");const geo=el("input");geo.type="checkbox";lab.append(geo," Exiger la présence sur place (ta position actuelle, 300 m)");
+  const sub=el("button","go","Créer le lieu");sub.type="submit";
+  f.append(name,city,cat,lab,sub);
+  f.onsubmit=async e=>{e.preventDefault();sub.disabled=true;
+    try{const code=cat.value+"-"+slug(name.value)+"-"+Math.random().toString(36).slice(2,5);
+      const doc={code,name:name.value.trim(),city:city.value.trim(),cat:cat.value,createdAt:Date.now()};
+      if(geo.checked){const c=await locate();doc.lat=+c.latitude.toFixed(6);doc.lng=+c.longitude.toFixed(6)}
+      await db.doc("lieux/"+code).set(doc);f.reset();status("Lieu créé : "+doc.name);
+    }catch(err){fail(typeof err==="string"?err:"Création impossible pour l'instant.")}
+    sub.disabled=false};
+  p.append(f);
+  [...venues].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).forEach(v=>{
+    const r=el("div","venue");const info=el("div");info.append(el("b",null,v.name),el("div",null,(CATS.find(c=>c.id===v.cat)||{}).label+(v.city?" · "+v.city:"")+(typeof v.lat==="number"?" · présence exigée":"")),el("code",null,"Code : "+v.code.toUpperCase()));
+    const bx=el("div");const qb=el("button","mini","QR code");qb.type="button";const del=el("button","mini","Supprimer");del.type="button";bx.append(qb," ",del);
+    const qr=el("div","qr");r.append(info,bx,qr);
+    qb.onclick=()=>{if(!qr.dataset.done&&window.QRCode){new QRCode(qr,{text:tagLink(v.code),width:180,height:180});qr.dataset.done=1}qr.classList.toggle("open")};
+    del.onclick=async()=>{if(confirm("Supprimer "+v.name+" ?")){try{await db.doc("lieux/"+v.code).delete()}catch(e){fail("Suppression impossible.")}}};
+    p.append(r);
+  });
+  return p;
+}
+
+/* ---------- Synchronisation ---------- */
+let syncT=null,lastBoardJSON="",lastProgJSON="";
+function sync(){clearTimeout(syncT);syncT=setTimeout(doSync,900)}
+async function doSync(){
+  if(!db||!uid)return;
+  const prog=JSON.stringify(S);
+  if(prog!==lastProgJSON){try{await db.doc("data/users/"+uid+"/progress").set({state:prog});lastProgJSON=prog}catch(e){}}
+  if(boardReadOnly||!S.pseudo)return;
+  const L=catalog(),T=totals(L);
+  const row={pseudo:S.pseudo.slice(0,20),points:T.pts,count:T.got,updatedAt:Date.now()};
+  const mine=board.find(r=>r.id===uid);const last=lastUnlock||(mine&&mine.last)||null;if(last)row.last=last;
+  const j=JSON.stringify([row.pseudo,row.points,row.count,last]);if(j===lastBoardJSON)return;
+  try{await db.doc("chasseurs/"+uid).set(row);lastBoardJSON=j}catch(e){if(e&&e.code==="invalid_argument"){boardReadOnly=true;render()}}
+}
+function merge(remote){
+  try{const r=JSON.parse(remote);
+    Object.entries(r.unlocked||{}).forEach(([k,v])=>{if(!S.unlocked[k]||v.at<S.unlocked[k].at)S.unlocked[k]=v});
+    const seen=new Set(S.checkins.map(c=>c.at));(r.checkins||[]).forEach(c=>{if(!seen.has(c.at))S.checkins.push(c)});
+    S.checkins.sort((a,b)=>a.at-b.at);
+    S.days=[...new Set([...(S.days||[]),...(r.days||[])])];
+    if(!S.home&&r.home)S.home=r.home;if(!S.pseudo&&r.pseudo)S.pseudo=r.pseudo;
+  }catch(e){}
+}
+async function connect(){
+  if(!window.claude||!window.claude.use)return;
+  try{user=await window.claude.use("user")}catch(e){}
+  try{db=await window.claude.use("db")}catch(e){}
+  if(user){try{uid=await user.id()}catch(e){}try{canEdit=!!(await user.canEdit())}catch(e){}}
+  if(!db){render();return}
+  if(uid){try{const s=await db.doc("data/users/"+uid+"/progress").get();if(s.exists){merge(s.data().state);if(S.pseudo)$("welcome").open&&$("welcome").close()}}catch(e){}}
+  db.collection("lieux").onSnapshot(q=>{venues=q.docs.map(d=>d.data()).filter(v=>v&&v.code);render();if(pendingTag){const t=pendingTag;pendingTag=null;useTag(t)}},()=>{});
+  db.collection("chasseurs").orderBy("points","desc").limit(50).onSnapshot(q=>{board=q.docs.map(d=>Object.assign({id:d.id},d.data()));if(tab==="communaute")render()},()=>{});
+  saveLocal();commit();
+}
+
+
+/* ---------- Géolocalisation automatique ---------- */
+let lastAuto=0;
+async function autoLocate(force){
+  if(!navigator.geolocation)return;
+  try{
+    if(!force&&navigator.permissions){const st=await navigator.permissions.query({name:"geolocation"});if(st.state==="denied"){status("Active la localisation pour débloquer automatiquement tes découvertes.");return}}
+  }catch(e){}
+  if(Date.now()-lastAuto<5*60000&&!force)return;lastAuto=Date.now();
+  checkin();
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)autoLocate()});
+setInterval(()=>{if(!document.hidden)autoLocate()},10*60000);
+
+/* ---------- Démarrage ---------- */
+$("checkin").onclick=checkin;
+$("codeForm").onsubmit=e=>{e.preventDefault();const v=$("codeInput").value;$("codeInput").value="";useTag(v)};
+$("rename").onclick=()=>{$("pseudoInput").value=S.pseudo;$("welcome").showModal()};
+$("welcomeForm").onsubmit=()=>{const v=$("pseudoInput").value.trim().slice(0,20);if(v){const first=!S.pseudo;S.pseudo=v;lastBoardJSON="";saveLocal();render();sync();if(first)setTimeout(()=>autoLocate(true),400)}};
+$("reset").onclick=()=>{if(confirm("Effacer toute ta progression ?")){const p=S.pseudo;S=fresh();S.pseudo=p;saveLocal();render();lastProgJSON="";lastBoardJSON="";sync()}};
+window.addEventListener("hashchange",readHash);
+render();
+if(!S.pseudo)$("welcome").showModal();else setTimeout(()=>autoLocate(true),800);
+readHash();
+connect();
+setTimeout(()=>{if(pendingTag&&!venues.length){pendingTag=null;fail("Les lieux partenaires n'ont pas pu être chargés.")}},10000);
+</script>
+</body>
+</html>
