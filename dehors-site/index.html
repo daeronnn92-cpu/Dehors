@@ -528,9 +528,11 @@ const SUPA_URL = "https://xyyffpfrzfeimddieoti.supabase.co";
 const SUPA_KEY = "sb_publishable__IvqVXXzRKDmT3LnhfLmsw_71lABbUm";
 const SUPA_ON = !!(SUPA_URL && SUPA_KEY) && !(window.claude && window.claude.use);
 // Connexion avec Google ou un e-mail : activée une fois configurée dans Supabase
-const AUTH_EMAIL = false;
+const AUTH_EMAIL = true;
 const AUTH_GOOGLE = false;
-const AUTH_ON = SUPA_ON && (AUTH_EMAIL || AUTH_GOOGLE);
+// Dans l'app ajoutée à l'écran d'accueil d'un iPhone, Google s'ouvre dans Safari et la connexion s'y perd : e-mail seulement
+const AUTH_G = AUTH_GOOGLE && navigator.standalone !== true;
+const AUTH_ON = SUPA_ON && (AUTH_EMAIL || AUTH_G);
 
 /* ---------- Données ---------- */
 // [ville, pays, lat, lng, rayon km, capitale]
@@ -1699,7 +1701,7 @@ function authErr(e){
 }
 function authShow(step){
   $("authMain").hidden=step!=="main";$("authMailForm").hidden=step!=="mail";$("authCodeForm").hidden=step!=="code";$("authMerge").hidden=step!=="merge";
-  $("authGoogle").hidden=!AUTH_GOOGLE;$("authMail").hidden=!AUTH_EMAIL;
+  $("authGoogle").hidden=!AUTH_G;$("authMail").hidden=!AUTH_EMAIL;$("authMail").classList.toggle("alt",AUTH_G);
   $("authAlt").hidden=!(authMode==="login"&&step==="main");$("authFine").hidden=step==="merge";
   $("authMailErr").textContent="";$("authCodeErr").textContent="";
 }
