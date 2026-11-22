@@ -75,6 +75,7 @@ create table public.venues (
   created_at timestamptz not null default now(),
   check ((lat is null) = (lng is null))
 );
+create index venues_created_by_idx on public.venues (created_by);
 
 -- Administrateurs (espace établissements)
 create table public.admins (
