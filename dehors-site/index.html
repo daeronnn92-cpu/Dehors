@@ -309,6 +309,21 @@ dialog input::placeholder{color:var(--faint)}
 .board.mine{margin-top:8px}
 .board.mine .row .n{color:var(--muted)}
 
+.big:disabled{opacity:.6}
+.big.alt{background:var(--s2);color:var(--ink);box-shadow:var(--edge)}
+#authDlg .authart{display:flex;justify-content:center;margin:2px 0 14px}
+#authDlg h2{text-wrap:balance}
+.authbtns{display:grid;gap:10px}
+.fine{margin:14px 0 0;font-size:12.5px;line-height:1.45;color:var(--faint);text-align:center}
+#authDlg .linkbtn{margin-top:6px}
+.unsecured{display:grid;gap:6px;margin:0 0 14px;padding:16px;border-radius:20px;background:var(--lemon);color:var(--on);box-shadow:var(--edge)}
+.unsecured b{font-size:18px;line-height:1.22;font-weight:800;text-wrap:balance}
+.unsecured span{font-size:14px;line-height:1.4;opacity:.85}
+.unsecured .big{margin-top:8px;background:var(--on);color:#F5F5F2;box-shadow:none}
+.secured{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 14px 10px 10px;border-radius:18px;background:var(--s2);font-weight:600;font-size:14.5px;line-height:1.35;color:var(--ink);overflow-wrap:anywhere}
+.secured small{display:block;font-weight:500;font-size:13px;color:var(--muted)}
+.acct>.linkbtn{margin-top:10px}
+
 /* ===== Accueil des nouveaux ===== */
 #welcome{text-align:center;padding:26px 24px 22px}
 .obstep h2{font-weight:800;font-size:25px;line-height:1.15;margin:12px 0 8px}
@@ -464,6 +479,31 @@ dialog input::placeholder{color:var(--faint)}
   <button class="linkbtn" type="button" onclick="this.closest('dialog').close()">Annuler</button>
 </dialog>
 
+<dialog id="authDlg" aria-labelledby="authH">
+  <div class="authart" id="authArt"></div>
+  <h2 id="authH">Sécurise ta progression</h2>
+  <p id="authP"></p>
+  <div class="authbtns" id="authMain">
+    <button class="big" type="button" id="authGoogle">Continuer avec Google</button>
+    <button class="big alt" type="button" id="authMail">Continuer avec mon e-mail</button>
+  </div>
+  <form id="authMailForm" hidden novalidate>
+    <input id="authEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="ton@email.fr" aria-label="Ton adresse e-mail" aria-describedby="authMailErr">
+    <p class="ferr" id="authMailErr" role="alert"></p>
+    <button class="big" type="submit" id="authSend">Recevoir mon code</button>
+  </form>
+  <form id="authCodeForm" hidden novalidate>
+    <input id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Code à 6 chiffres" aria-label="Code reçu par e-mail" aria-describedby="authCodeErr">
+    <p class="ferr" id="authCodeErr" role="alert"></p>
+    <button class="big" type="submit" id="authVerify">Valider</button>
+    <button class="linkbtn" type="button" id="authResend">Renvoyer le code</button>
+  </form>
+  <div class="authbtns" id="authMerge" hidden><button class="big" type="button" id="authMergeGo">Rejoindre ce compte</button></div>
+  <p class="fine" id="authFine">Gratuit, sans mot de passe. Aucun e-mail promotionnel sans ton accord.</p>
+  <button class="linkbtn" type="button" id="authAlt" hidden>J'ai un code de récupération</button>
+  <button class="linkbtn" type="button" id="authLater">Plus tard</button>
+</dialog>
+
 <dialog id="welcome" aria-label="Bienvenue" tabindex="-1">
   <div class="dots" id="obDots"><i></i><i></i><i></i></div>
   <div class="obstep" data-s="0"><div class="obart" id="ob0"></div><h2>Le monde réel a ses trophées</h2><p>Chaque ville, chaque lieu, chaque sortie te rapporte un haut fait. À toi de les collectionner.</p></div>
@@ -487,6 +527,10 @@ const SITE_URL = "https://dehors-sandy.vercel.app/";
 const SUPA_URL = "https://xyyffpfrzfeimddieoti.supabase.co";
 const SUPA_KEY = "sb_publishable__IvqVXXzRKDmT3LnhfLmsw_71lABbUm";
 const SUPA_ON = !!(SUPA_URL && SUPA_KEY) && !(window.claude && window.claude.use);
+// Connexion avec Google ou un e-mail : activée une fois configurée dans Supabase
+const AUTH_EMAIL = false;
+const AUTH_GOOGLE = false;
+const AUTH_ON = SUPA_ON && (AUTH_EMAIL || AUTH_GOOGLE);
 
 /* ---------- Données ---------- */
 // [ville, pays, lat, lng, rayon km, capitale]
@@ -678,7 +722,7 @@ function iconKey(a){
   if(id.startsWith("lieu:"))return"pin";if(id.startsWith("lieux:"))return"qr";if(id.startsWith("meta:"))return"crown";
   if(id.startsWith("long:"))return has("serie")?"flame":has("actif","semaines")?"calendar":has("saisons")?"leaf":has("paysan")?"flag":"clock";
   if(id.startsWith("saison:")){const m={explo:"compass",globe:"globe",assidu:"calendar",inarretable:"flame",mythe:"monument",chelem:"trophy"};return m[k]||SEASON_SVG[id.split(":")[1].split("-")[0]]||"leaf"}
-  const sec={levetot:"sun",noctambule:"moon",collection25:"star",cent:"crown",minuit:"clock",vendredi13:"key",nouvelan:"spark",valentin:"heart",anniv:"bolt",rafale:"bolt",mille:"star",dixmille:"trophy",weekend:"calendar",marathon:"city",serie7:"flame"};
+  const sec={levetot:"sun",noctambule:"moon",collection25:"star",cent:"crown",minuit:"clock",vendredi13:"key",nouvelan:"spark",valentin:"heart",anniv:"bolt",rafale:"bolt",mille:"star",dixmille:"trophy",weekend:"calendar",marathon:"city",serie7:"flame",coffre:"lock"};
   if(sec[id])return sec[id];
   if(id.startsWith("honneur:")){
     if(SUB_ICON[a.sub])return SUB_ICON[a.sub];
@@ -789,6 +833,7 @@ function catalog(){
   L.push({id:"weekend",cat:"defis",sub:"Rythme",title:"Week-end explorateur",desc:"Sortir le samedi et le dimanche du même week-end",pts:40,icon:"📅",test:x=>x.weekend});
   L.push({id:"marathon",cat:"defis",sub:"Rythme",title:"Marathon urbain",desc:"Découvrir 3 villes différentes le même jour",pts:60,icon:"🚆",test:x=>x.citiesSameDay>=3});
   L.push({id:"serie7",cat:"defis",sub:"Rythme",title:"7 jours dehors",desc:"Débloquer au moins un haut fait 7 jours d'affilée",pts:70,icon:"🔥",test:x=>x.streak>=7,prog:x=>[x.streak,7]});
+  if(AUTH_ON)L.push({id:"coffre",cat:"defis",sub:"Ton compte",title:"Coffre-fort",desc:"Sécuriser ta progression avec Google ou ton e-mail",pts:25,icon:"🔐",test:x=>x.secured});
   // Secrets
   L.push({id:"levetot",cat:"secrets",sub:"Secrets",title:"Lève-tôt",desc:"Valider ta position entre 5 h et 8 h",pts:30,icon:"🐓",hidden:true});
   L.push({id:"noctambule",cat:"secrets",sub:"Secrets",title:"Noctambule",desc:"Valider ta position entre 22 h et 2 h",pts:30,icon:"🦉",hidden:true});
@@ -847,7 +892,7 @@ function facts(L){
   const perDay={};Object.values(u).forEach(v=>{const k=dayKey(v.at);perDay[k]=(perDay[k]||0)+1});
   const maxPerDay=Math.max(0,...Object.values(perDay));
   let points=0;L.forEach(a=>{if(u[a.id])points+=a.pts});
-  return{cities,countries,maxDist,venues:venuesBy,citiesSameDay,weekend,streak,count,allOthers,season,cityWeeks,seasonTypes,years,countryYears,memberDays,maxPerDay,activeDays:S.days.length,points};
+  return{cities,countries,maxDist,venues:venuesBy,citiesSameDay,weekend,streak,count,allOthers,season,cityWeeks,seasonTypes,years,countryYears,memberDays,maxPerDay,activeDays:S.days.length,points,secured:!!acctEmail};
 }
 function totals(L){
   let pts=0,got=0,total=0;L.forEach(a=>{const on=!!S.unlocked[a.id];if(on)pts+=a.pts;if(!a.legacy){total++;if(on)got++}});
@@ -895,7 +940,7 @@ function runToasts(){
   const a=toastQ.shift();chime();
   if(a._rank){setCol($("toast"),["#F3EF5C","#D9D53F"]);showToast("crown","Nouveau rang !",a.title,"")}
   else{setCol($("toast"),colOf(a));showToast(iconKey(a),"Haut fait débloqué",a.title,"+"+a.pts+" pts")}
-  setTimeout(()=>{$("toast").classList.remove("show");setTimeout(()=>{toastBusy=false;runToasts()},450)},3200);
+  setTimeout(()=>{$("toast").classList.remove("show");setTimeout(()=>{toastBusy=false;runToasts();if(!toastBusy)setTimeout(maybeAskSecure,700)},450)},3200);
 }
 function fail(msg){$("toast").style.removeProperty("--c1");$("toast").style.removeProperty("--c2");showToast("alert","Pas cette fois",msg,"",true);setTimeout(()=>$("toast").classList.remove("show"),3600)}
 
@@ -1374,20 +1419,34 @@ let showKey=false;
 function accountCard(){
   const ac=el("section","card acct");ac.append(el("div","ctitle","Ton compte"));
   if(acctOk&&acctKey){
-    ac.append(el("p","note0","Ton code de récupération ramène ta progression sur un autre téléphone, ou dans l'app ajoutée à ton écran d'accueil. Garde-le pour toi."));
+    if(acctEmail){const ok=el("div","secured"),tx=el("div");tx.append("Progression sécurisée",el("small",null,acctEmail));ok.append(fakeMedal("lock",CAT_COL.nature,38),tx);ac.append(ok)}
+    else if(AUTH_ON){const w=el("div","unsecured"),go=el("button","big","Sécuriser ma progression");go.type="button";go.onclick=()=>openAuth("link","profile");
+      w.append(el("b",null,fmt(totals(catalog()).pts)+" points qui ne tiennent qu'à ce téléphone."),el("span",null,"Relie ton compte à Google ou à ton e-mail : tu ne les perdras jamais."),go);ac.append(w)}
+    ac.append(el("p","note0",acctEmail?"Ton code de récupération reste un plan B si tu n'as plus accès à cette adresse.":"Ton code de récupération ramène ta progression sur un autre téléphone, ou dans l'app ajoutée à ton écran d'accueil. Garde-le pour toi."));
     const kb=el("div","keybox");kb.append(el("code",null,showKey?fmtKey(acctKey):"••••-••••-••••-••••"));
     const sh=el("button","mini",showKey?"Masquer":"Afficher");sh.type="button";sh.onclick=()=>{showKey=!showKey;render()};
     const cp=el("button","mini","Copier");cp.type="button";
     cp.onclick=async()=>{try{await navigator.clipboard.writeText(fmtKey(acctKey));status("Code copié. Range-le en lieu sûr.")}catch(e){showKey=true;render();status("Copie impossible : note le code affiché.")}};
     kb.append(sh,cp);ac.append(kb);
+    if(acctEmail){const lo=el("button","linkbtn","Se déconnecter de cet appareil");lo.type="button";lo.onclick=logoutDevice;ac.append(lo)}
   }else ac.append(el("p","note0",netDown?"Hors connexion pour l'instant : ta progression reste sur ce téléphone et partira en ligne dès que possible.":"Ton compte se prépare…"));
   return ac;
+}
+async function logoutDevice(){
+  if(!confirm("Te déconnecter de cet appareil ? Ta progression reste en ligne : tu la retrouveras en te reconnectant avec "+acctEmail+"."))return;
+  let r=null;try{r=await rpc("logout_device",{p_key:acctKey})}catch(e){return fail("Connexion impossible. Réessaie dans un instant.")}
+  if(!r||!r.ok)return fail("Déconnexion impossible pour l'instant.");
+  acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";acctEmail=null;canEdit=false;saveAcct();
+  try{localStorage.removeItem("dehors_secure")}catch(e){}
+  S=fresh();lastBoardJSON="";lastProgJSON="";saveLocal();editOpen=false;showKey=false;
+  go("recap");openWelcome();status("Tu es déconnecté de cet appareil.");
 }
 async function deleteAccount(){
   if(!confirm("Supprimer ton compte ? Ton pseudo, ton profil et ta progression seront effacés partout, définitivement."))return;
   let r=null;try{r=await rpc("delete_account",{p_key:acctKey})}catch(e){return fail("Connexion impossible. Réessaie dans un instant.")}
   if(!r||!r.ok)return fail("Suppression impossible pour l'instant.");
-  const old=uid;acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";canEdit=false;saveAcct();
+  const old=uid;acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";acctEmail=null;canEdit=false;saveAcct();
+  try{localStorage.removeItem("dehors_secure")}catch(e){}
   board=board.filter(x=>x.id!==old);S=fresh();lastBoardJSON="";lastProgJSON="";saveLocal();editOpen=false;showKey=false;
   go("recap");openWelcome();status("Ton compte a été supprimé.");
 }
@@ -1512,7 +1571,7 @@ async function connectClaude(){
 /* ---------- Compte en ligne (site public, Supabase) ---------- */
 // Pas d'e-mail ni de mot de passe : le téléphone crée une clé secrète (le code de récupération),
 // la base n'en garde qu'une empreinte. Les positions envoyées sont arrondies à ~1 km.
-let online=SUPA_ON?"supa":null,acctKey=null,acctOk=false,acctHash="",progRev=null,netDown=false,pseudoFix=false;
+let online=SUPA_ON?"supa":null,acctKey=null,acctOk=false,acctHash="",progRev=null,netDown=false,pseudoFix=false,acctEmail=null;
 let boardAt=0,boardErr=false,myPos=null,adminVenues=null,regTry=0,acctAt=0,syncing=false,syncAgain=false,mergedRemote=false,conflicts=0;
 const KEY_ABC="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 function newKey(){const b=new Uint8Array(16);crypto.getRandomValues(b);let k="";b.forEach(x=>{k+=KEY_ABC[x%32]});return k}
@@ -1520,12 +1579,13 @@ function normKey(x){return String(x||"").toUpperCase().replace(/[^0-9A-Z]/g,"").
 function fmtKey(k){return String(k||"").replace(/(.{4})(?=.)/g,"$1-")}
 function hashStr(x){let h=2166136261;for(let i=0;i<x.length;i++){h^=x.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)+"."+x.length}
 function loadAcct(){try{const a=JSON.parse(localStorage.getItem("dehors_acct")||"null");
-  if(a&&/^[0-9A-HJKMNP-TV-Z]{16}$/.test(a.k)){acctKey=a.k;acctOk=!!a.ok;progRev=typeof a.rev==="number"?a.rev:null;uid=a.id||null;acctHash=a.h||""}}catch(e){}}
-function saveAcct(){try{if(acctKey)localStorage.setItem("dehors_acct",JSON.stringify({k:acctKey,ok:acctOk,rev:progRev,id:uid,h:acctHash}));else localStorage.removeItem("dehors_acct")}catch(e){}}
-async function sb(path,body){
+  if(a&&/^[0-9A-HJKMNP-TV-Z]{16}$/.test(a.k)){acctKey=a.k;acctOk=!!a.ok;progRev=typeof a.rev==="number"?a.rev:null;uid=a.id||null;acctHash=a.h||"";acctEmail=a.e||null}}catch(e){}}
+function saveAcct(){try{if(acctKey)localStorage.setItem("dehors_acct",JSON.stringify({k:acctKey,ok:acctOk,rev:progRev,id:uid,h:acctHash,e:acctEmail}));else localStorage.removeItem("dehors_acct")}catch(e){}}
+async function sb(path,body,token){
   const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),15000);
   try{
-    const r=await fetch(SUPA_URL+"/rest/v1/"+path,{method:body?"POST":"GET",headers:body?{apikey:SUPA_KEY,"Content-Type":"application/json"}:{apikey:SUPA_KEY},
+    const h={apikey:SUPA_KEY};if(body)h["Content-Type"]="application/json";if(token)h.Authorization="Bearer "+token;
+    const r=await fetch(SUPA_URL+"/rest/v1/"+path,{method:body?"POST":"GET",headers:h,
       body:body?JSON.stringify(body):undefined,cache:"no-store",signal:ctl.signal});
     const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){}
     if(!r.ok){const er=new Error((j&&j.message)||("HTTP "+r.status));er.status=r.status;throw er}
@@ -1533,12 +1593,12 @@ async function sb(path,body){
   }catch(e){if(!e.status)netDown=true;throw e}
   finally{clearTimeout(tm)}
 }
-function rpc(fn,args){return sb("rpc/"+fn,args||{})}
+function rpc(fn,args,token){return sb("rpc/"+fn,args||{},token)}
 function serverState(){const o=JSON.parse(JSON.stringify(S)),r2=x=>Math.round(x*100)/100;
   if(o.home&&typeof o.home.lat==="number")o.home={lat:r2(o.home.lat),lng:r2(o.home.lng)};
   (o.checkins||[]).forEach(c=>{if(typeof c.lat==="number"&&typeof c.lng==="number"){c.lat=r2(c.lat);c.lng=r2(c.lng)}});return o}
 async function register(pseudo){
-  if(!acctKey||acctOk){acctKey=newKey();acctOk=false;progRev=null;uid=null;acctHash="";saveAcct()}
+  if(!acctKey||acctOk){acctKey=newKey();acctOk=false;progRev=null;uid=null;acctHash="";acctEmail=null;saveAcct()}
   let r=null;try{r=await rpc("register",{p_key:acctKey,p_pseudo:pseudo})}catch(e){return{ok:false,error:"net"}}
   if(r&&r.ok){acctOk=true;uid=r.id;progRev=typeof r.rev==="number"?r.rev:null;acctAt=Date.now();saveAcct();return{ok:true,pseudo:r.pseudo}}
   if(r&&r.error==="taken"){ // peut-être notre propre demande, arrivée sans que la réponse revienne
@@ -1557,8 +1617,8 @@ async function ensureRegistered(){
 async function openAccount(){
   let me;try{me=await rpc("me",{p_key:acctKey,p_rev:progRev})}catch(e){return false}
   acctAt=Date.now();
-  if(!me){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";saveAcct();return ensureRegistered()}
-  uid=me.id;canEdit=!!me.admin;
+  if(!me){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";acctEmail=null;saveAcct();return ensureRegistered()}
+  uid=me.id;canEdit=!!me.admin;acctEmail=me.email||null;
   if(me.state){merge(me.state);acctHash=""}
   progRev=me.rev;if(me.pseudo)S.pseudo=me.pseudo;saveAcct();saveLocal();return true;
 }
@@ -1568,6 +1628,7 @@ async function connectSupa(){
   if(acctKey&&acctOk)await openAccount();else if(S.pseudo)await ensureRegistered();
   if(tab==="communaute")loadBoard(true);
   saveLocal();commit(true);
+  setTimeout(maybeAskSecure,1500);
 }
 async function syncSupa(){
   if(!acctOk||!acctKey){if(S.pseudo&&!pseudoFix&&Date.now()-regTry>60000)ensureRegistered();return}
@@ -1587,7 +1648,7 @@ async function syncSupa(){
       if(args.p_player){lastBoardJSON=pj;const mine=board.find(x=>x.id===uid);if(mine)Object.assign(mine,player,{pseudo:S.pseudo})}
       saveAcct();
     }else if(r&&r.error==="conflict"&&conflicts<4){conflicts++;merge(r.state);progRev=r.rev;saveAcct();mergedRemote=true;syncAgain=true}
-    else if(r&&r.error==="key"){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";saveAcct();regTry=0;syncAgain=true}
+    else if(r&&r.error==="key"){acctKey=null;acctOk=false;uid=null;progRev=null;acctHash="";acctEmail=null;saveAcct();regTry=0;syncAgain=true}
   }catch(e){}
   finally{syncing=false;if(syncAgain){syncAgain=false;if(mergedRemote){mergedRemote=false;commit(true)}else sync()}}
 }
@@ -1611,6 +1672,149 @@ async function loadVenues(){
   }catch(e){}
 }
 setInterval(()=>{if(SUPA_ON&&tab==="communaute"&&!document.hidden)loadBoard()},60000);
+
+/* ---------- Connexion Google / e-mail (Supabase Auth) ---------- */
+// La connexion sert seulement à relier le compte, ou à le retrouver sur un autre appareil :
+// ensuite la session est refermée et l'appareil continue avec sa propre clé.
+let authMode="link",authEmailVal="",authToken=null,authBusy=false,oauthPending=new URLSearchParams(location.search).has("code");
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+async function authPost(path,body,token){
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const h={apikey:SUPA_KEY,"Content-Type":"application/json"};if(token)h.Authorization="Bearer "+token;
+    const r=await fetch(SUPA_URL+"/auth/v1/"+path,{method:"POST",headers:h,body:JSON.stringify(body||{}),signal:ctl.signal});
+    const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){}
+    if(!r.ok){const er=new Error((j&&(j.msg||j.message||j.error_description))||("HTTP "+r.status));er.status=r.status;er.code=String((j&&(j.error_code||j.error))||"");throw er}
+    return j;
+  }finally{clearTimeout(tm)}
+}
+function authErr(e){
+  const c=String((e&&e.code)||""),st=(e&&e.status)||0;
+  if(!st)return"Connexion impossible. Vérifie ton réseau et réessaie.";
+  if(st===429||/rate_limit/.test(c))return"Trop de demandes d'un coup. Réessaie dans une minute.";
+  if(/email_address_invalid|validation_failed/.test(c))return"Cette adresse e-mail n'est pas valide.";
+  if(/otp_expired|otp|invalid_grant|bad_code|flow_state/.test(c)||st===403)return"Code incorrect ou expiré.";
+  if(/not_authorized|smtp|email_send/.test(c)||st>=500)return"L'envoi des e-mails ne fonctionne pas pour l'instant. Réessaie plus tard.";
+  return"Ça n'a pas marché. Réessaie dans un instant.";
+}
+function authShow(step){
+  $("authMain").hidden=step!=="main";$("authMailForm").hidden=step!=="mail";$("authCodeForm").hidden=step!=="code";$("authMerge").hidden=step!=="merge";
+  $("authGoogle").hidden=!AUTH_GOOGLE;$("authMail").hidden=!AUTH_EMAIL;
+  $("authAlt").hidden=!(authMode==="login"&&step==="main");$("authFine").hidden=step==="merge";
+  $("authMailErr").textContent="";$("authCodeErr").textContent="";
+}
+function openAuth(mode,ctx){
+  if(!AUTH_ON)return;
+  authMode=mode;dropAuthToken();
+  const art=$("authArt");art.textContent="";art.append(fakeMedal(mode==="login"?"key":"lock",mode==="login"?CAT_COL.voyage:CAT_COL.defis,68));
+  if(mode==="login"){$("authH").textContent="Retrouver mon compte";$("authP").textContent="Connecte-toi avec l'adresse reliée à ton compte : ta progression revient aussitôt.";$("authLater").textContent="Annuler"}
+  else{const T=totals(catalog());
+    $("authH").textContent=ctx==="rank"?"Tu viens de passer "+rankInfo(T.pts).cur[1]+". Ce serait bête de tout perdre.":fmt(T.pts)+" points qui ne tiennent qu'à ce téléphone.";
+    $("authP").textContent="S'il casse, se perd ou se fait voler, tout s'envole. Sécurise ta progression en 10 secondes : elle te suivra partout. Et le haut fait Coffre-fort (+25 pts) est pour toi.";
+    $("authLater").textContent="Plus tard"}
+  authShow("main");if(!$("authDlg").open)$("authDlg").showModal();
+}
+// Une erreur s'affiche dans la fenêtre ouverte (un message en bas de l'écran passerait dessous)
+function authFail(msg){
+  if($("authDlg").open){const t=!$("authCodeForm").hidden?$("authCodeErr"):!$("authMailForm").hidden?$("authMailErr"):null;if(t)t.textContent=msg;else $("authP").textContent=msg;return}
+  if(document.querySelector("dialog[open]")){openAuth(authMode==="login"?"login":"link");$("authP").textContent=msg;return}
+  fail(msg);
+}
+function dropAuthToken(){if(authToken){const t=authToken;authToken=null;authPost("logout",{},t).catch(()=>{})}}
+function secureState(){try{return JSON.parse(localStorage.getItem("dehors_secure")||"{}")||{}}catch(e){return{}}}
+// 1re demande juste après le 5e haut fait (une fois la fête finie) ; ensuite seulement à un nouveau rang
+// ou 10 hauts faits plus tard, jamais deux fois en 3 jours, et 4 fois au plus.
+function maybeAskSecure(){
+  if(!AUTH_ON||oauthPending||!acctOk||acctEmail||!S.pseudo||toastBusy||toastQ.length||locating||typingNow())return;
+  if(document.querySelector("dialog[open]"))return;
+  const T=totals(catalog());if(T.got<5)return;
+  const st=secureState(),n=st.n||0,ri=rankInfo(T.pts).i,now=Date.now();let ctx=null;
+  if(!n)ctx="first";
+  else if(n<4&&now-(st.at||0)>3*864e5){if(ri>(st.r||0))ctx="rank";else if(T.got>=(st.g||0)+10)ctx="more"}
+  if(!ctx)return;
+  try{localStorage.setItem("dehors_secure",JSON.stringify({n:n+1,at:now,g:T.got,r:ri}))}catch(e){}
+  openAuth("link",ctx);
+}
+$("authLater").onclick=()=>$("authDlg").close();
+$("authDlg").addEventListener("close",dropAuthToken);
+$("authAlt").onclick=()=>{$("authDlg").close();openRestore()};
+$("authMail").onclick=()=>{authShow("mail");$("authEmail").value=authEmailVal;setTimeout(()=>{try{$("authEmail").focus()}catch(e){}},60)};
+$("authMailForm").onsubmit=async e=>{e.preventDefault();if(authBusy)return;
+  const v=$("authEmail").value.trim().toLowerCase();if(!EMAIL_RE.test(v)){$("authMailErr").textContent="Cette adresse e-mail n'est pas valide.";return}
+  authBusy=true;const b=$("authSend");b.disabled=true;b.textContent="Envoi…";
+  try{await authPost("otp",{email:v,create_user:true});authEmailVal=v;authShow("code");
+    $("authP").textContent="Code envoyé à "+v+". Il arrive en moins d'une minute (regarde aussi dans les spams).";$("authCode").value="";
+    setTimeout(()=>{try{$("authCode").focus()}catch(x){}},60)}
+  catch(x){$("authMailErr").textContent=authErr(x)}
+  finally{authBusy=false;b.disabled=false;b.textContent="Recevoir mon code"}
+};
+$("authResend").onclick=async()=>{if(authBusy||!authEmailVal)return;authBusy=true;
+  try{await authPost("otp",{email:authEmailVal,create_user:true});$("authCodeErr").textContent="";status("Nouveau code envoyé.")}
+  catch(x){$("authCodeErr").textContent=authErr(x)}finally{authBusy=false}};
+$("authCodeForm").onsubmit=async e=>{e.preventDefault();if(authBusy)return;
+  const c=$("authCode").value.replace(/\D/g,"");if(c.length<6){$("authCodeErr").textContent="Le code compte 6 chiffres.";return}
+  authBusy=true;const b=$("authVerify");b.disabled=true;b.textContent="Vérification…";
+  let sess=null;try{sess=await authPost("verify",{type:"email",email:authEmailVal,token:c})}catch(x){$("authCodeErr").textContent=authErr(x)}
+  if(sess&&sess.access_token)await afterAuth(sess.access_token,authMode);
+  authBusy=false;b.disabled=false;b.textContent="Valider";
+};
+function b64url(u8){let x="";u8.forEach(n=>{x+=String.fromCharCode(n)});return btoa(x).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+$("authGoogle").onclick=async()=>{
+  try{
+    const v=b64url(crypto.getRandomValues(new Uint8Array(32)));
+    const c=b64url(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v))));
+    localStorage.setItem("dehors_oauth",JSON.stringify({v,mode:authMode,at:Date.now()}));
+    location.href=SUPA_URL+"/auth/v1/authorize?provider=google&redirect_to="+encodeURIComponent(location.origin+location.pathname)+"&code_challenge="+c+"&code_challenge_method=s256";
+  }catch(e){fail("La connexion Google n'est pas possible sur cet appareil.")}
+};
+// Retour de Google : on récupère la session, puis on relie le compte (ou on s'y connecte)
+async function oauthReturn(){
+  const q=new URLSearchParams(location.search),code=q.get("code"),err=q.get("error");
+  if(!code&&!err)return;
+  let st=null;try{st=JSON.parse(localStorage.getItem("dehors_oauth")||"null");localStorage.removeItem("dehors_oauth")}catch(e){}
+  try{history.replaceState(null,"",location.pathname+location.hash)}catch(e){}
+  try{
+    if(!st)return;
+    authMode=st.mode;
+    if(err)return authFail("Connexion Google annulée.");
+    if(Date.now()-st.at>15*60000)return authFail("La connexion Google a expiré. Réessaie.");
+    let sess=null;try{sess=await authPost("token?grant_type=pkce",{auth_code:code,code_verifier:st.v})}catch(e){return authFail(authErr(e))}
+    if(sess&&sess.access_token)await afterAuth(sess.access_token,st.mode);
+  }finally{oauthPending=false}
+}
+async function afterAuth(token,mode){
+  let keep=false;
+  try{
+    if(mode==="link"&&acctOk&&acctKey){
+      const r=await rpc("link_account",{p_key:acctKey},token);
+      if(r&&r.ok){acctEmail=r.email||acctEmail;saveAcct();if($("authDlg").open)$("authDlg").close();commit();status("Compte sécurisé : ta progression te suit partout.");return true}
+      if(r&&r.error==="other"){keep=true;authToken=token;showMerge(r.pseudo);return false}
+      authFail(r&&r.error==="already"?"Ton compte est déjà relié à "+(r.email||"une autre adresse")+".":"Impossible de sécuriser ton compte pour l'instant.");return false;
+    }
+    return await loginWithToken(token,false);
+  }catch(e){authFail(authErr(e));return false}
+  finally{if(!keep)authPost("logout",{},token).catch(()=>{})}
+}
+function showMerge(other){
+  if(!$("authDlg").open)$("authDlg").showModal();
+  authShow("merge");$("authH").textContent="Cette adresse est déjà reliée à « "+other+" »";
+  $("authP").textContent="C'est aussi toi ? Rejoins ce compte : tes hauts faits d'ici s'y ajoutent, et le pseudo « "+S.pseudo+" » est libéré.";
+  $("authMergeGo").textContent="Rejoindre « "+other+" »";$("authLater").textContent="Annuler";
+}
+$("authMergeGo").onclick=async()=>{const t=authToken;authToken=null;if(!t)return;
+  try{await loginWithToken(t,true)}catch(e){authFail(authErr(e))}finally{authPost("logout",{},t).catch(()=>{})}};
+// Cet appareil rejoint le compte relié à l'adresse (avec sa propre clé)
+async function loginWithToken(token,mergeOld){
+  const k=newKey(),me=await rpc("login_device",{p_new_key:k},token);
+  if(!me||!me.ok){authFail(me&&me.error==="none"?"Aucun compte Dehors n'est relié à cette adresse. Choisis d'abord ton pseudo, puis sécurise-le.":"Connexion impossible pour l'instant.");return false}
+  const oldKey=acctKey,oldOk=acctOk;
+  acctKey=k;acctOk=true;uid=me.id;canEdit=!!me.admin;progRev=me.rev;acctHash="";acctEmail=me.email||null;acctAt=Date.now();
+  if(me.state)merge(me.state);S.pseudo=me.pseudo;pseudoFix=false;lastBoardJSON="";saveAcct();saveLocal();
+  if(mergeOld&&oldOk&&oldKey)rpc("delete_account",{p_key:oldKey}).catch(()=>{});   // l'ancien compte, fusionné, disparaît
+  ["authDlg","restoreDlg","welcome"].forEach(id=>{if($(id).open)$(id).close()});
+  commit();loadBoard(true);status("Bon retour, "+me.pseudo+" !");setTimeout(()=>autoLocate(true),600);
+  return true;
+}
 
 /* ---------- Géolocalisation automatique ---------- */
 let lastAuto=0;
@@ -1671,7 +1875,8 @@ $("welcomeForm").onsubmit=async e=>{e.preventDefault();if(obBusy)return;
   const first=!S.pseudo;S.pseudo=final;pseudoFix=false;lastBoardJSON="";saveLocal();$("welcome").close();render();sync();loadBoard(true);
   if(first)setTimeout(()=>autoLocate(true),400);
 };
-$("obRestore").onclick=()=>{$("restoreErr").textContent="";$("restoreInput").value="";$("restoreDlg").showModal()};
+function openRestore(){$("restoreErr").textContent="";$("restoreInput").value="";$("restoreDlg").showModal()}
+$("obRestore").onclick=()=>{if(AUTH_ON)openAuth("login");else openRestore()};
 $("restoreForm").onsubmit=async e=>{e.preventDefault();
   const k=normKey($("restoreInput").value),er=$("restoreErr"),b=$("restoreGo");
   if(k.length!==16){er.textContent="Le code compte 16 caractères (les tirets sont facultatifs).";return}
@@ -1679,18 +1884,18 @@ $("restoreForm").onsubmit=async e=>{e.preventDefault();
   let me=null,netErr=false;try{me=await rpc("me",{p_key:k})}catch(x){netErr=true}
   b.disabled=false;b.textContent="Retrouver ma progression";
   if(!me){er.textContent=netErr?"Connexion impossible. Vérifie ton réseau et réessaie.":"Ce code ne correspond à aucun compte.";return}
-  acctKey=k;acctOk=true;uid=me.id;canEdit=!!me.admin;progRev=me.rev;acctHash="";acctAt=Date.now();
+  acctKey=k;acctOk=true;uid=me.id;canEdit=!!me.admin;progRev=me.rev;acctHash="";acctAt=Date.now();acctEmail=me.email||null;
   if(me.state)merge(me.state);S.pseudo=me.pseudo;pseudoFix=false;lastBoardJSON="";saveAcct();saveLocal();
   $("restoreDlg").close();if($("welcome").open)$("welcome").close();
   commit();loadBoard(true);status("Bon retour, "+me.pseudo+" !");setTimeout(()=>autoLocate(true),600);
 };
-["sheet","pdlg","codeDlg","restoreDlg"].forEach(id=>{const d=$(id);d.addEventListener("click",e=>{if(e.target!==d||e.detail===0)return;const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()})});
+["sheet","pdlg","codeDlg","restoreDlg","authDlg"].forEach(id=>{const d=$(id);d.addEventListener("click",e=>{if(e.target!==d||e.detail===0)return;const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()})});
 addEventListener("scroll",()=>$("topbar").classList.toggle("scrolled",scrollY>6),{passive:true});
 window.addEventListener("hashchange",readHash);
 render();
 if(!S.pseudo)openWelcome();else setTimeout(()=>autoLocate(true),800);
 readHash();
-connect();
+connect().catch(()=>{}).then(()=>{if(AUTH_ON)oauthReturn()});
 setTimeout(()=>{if(pendingTag&&!venues.length){pendingTag=null;fail("Les lieux partenaires n'ont pas pu être chargés.")}},10000);
 </script>
 </body>
